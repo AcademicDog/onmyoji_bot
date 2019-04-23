@@ -101,7 +101,11 @@ def watchdog(ts,hwnd):
             print('60s 后关闭电脑')
             os.system("shutdown -s -t  60 ")
         elif(done==1):
-            ts.SetWindowState(hwnd,13)
+            if(mode==0):
+                ts.SetWindowState(hwnd,13)
+            elif(mode==1):
+                ts_d.SetWindowState(HWND[0],13)
+                ts_f.SetWindowState(HWND[1],13)
         exit()
 
 def mysleep(slpa, slpb = 0): 
@@ -437,7 +441,7 @@ def dual_yuhun(ts_d, ts_f):
         print('joined, new cycle!')
     
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     print('python version:', sys.version)
 
     # 需要提前在 windows 中注册 TSPlug.dll
@@ -461,7 +465,7 @@ if __name__ == "__main__":
                 dual_yuhun(ts_d, ts_f)
         else:
             ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)       
-    except KeyboardInterrupt: 
+    except KeyboardInterrupt:        
         print('terminated')
         if(mode==0):
             print('UnBindWindow return:', ts.UnBindWindow())
