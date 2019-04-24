@@ -5,6 +5,7 @@ import random
 import os
 import ctypes
 import threading
+import logsystem
 
 # 参数
 col_button_yellow = 'f3b25e'
@@ -28,6 +29,23 @@ global hwnd
 global done
 LASTIME=[0,0]
 HWND=[0,0]
+
+def quit():
+    #退出并清理窗口
+    if(done==2):
+        logsystem.logging.warning('Attention, shutdown in 60 s')
+        os.system("shutdown -s -t  60 ")
+    elif(done==1):
+        if(mode==0):
+            logsystem.logging.warning('Attention, one window will be colsed')
+            ts.SetWindowState(hwnd,13)
+        elif(mode==1):
+            logsystem.logging.warning('Attention, two windows will be colsed')
+            ts_d.SetWindowState(HWND[0],13)
+            ts_f.SetWindowState(HWND[1],13)
+        exit()
+    elif(done==0):
+        exit()
 
 def init():
     global mode
@@ -63,20 +81,23 @@ def init():
         # 模式选择
         mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n1-本地双开\n2-组队司机\n3-组队打手\n'))
         if(mode==2) or (mode==3):
-            print('未开发，告辞！')
+            logsystem.logging.warning('未开发，告辞！')
             exit()
         elif((mode!=1) and (mode!=0)):
             mode=0
+        logsystem.logging.info('Mode = %d',mode)
 
         # 点怪设置
         emyc=int(input('\n是否点怪？\n0-不点怪\n1-点中间怪\n2-点右边怪\n'))
         if((emyc!=0) and (emyc!=1) and (emyc!=2)):
             emyc=0
+        logsystem.logging.info('Emyc = %d',emyc)
 
         # 结束设置
         done=int(input('\n结束后如何处理？\n0-不做操作\n1-退出\n2-关机\n'))
         if(not((done==0) or (done==1) or (done==2))):
             done=1
+        logsystem.logging.info('Postoperation = %d',done)
     except:
         mode=0
         emyc=0
@@ -96,17 +117,8 @@ def watchdog(ts,hwnd):
     
     #处理故障
     if (period >= 300):
-        print('Wait too long, quit!')
-        if(done==2):
-            print('60s 后关闭电脑')
-            os.system("shutdown -s -t  60 ")
-        elif(done==1):
-            if(mode==0):
-                ts.SetWindowState(hwnd,13)
-            elif(mode==1):
-                ts_d.SetWindowState(HWND[0],13)
-                ts_f.SetWindowState(HWND[1],13)
-        exit()
+        logsystem.logging.warning('Wait too long, quit!')
+        quit()
 
 def mysleep(slpa, slpb = 0): 
     '''
@@ -132,7 +144,7 @@ def rejxs(ts):
     #print(colxs)
     if colxs == "df715e":
         crnd(ts, 750-5, 750+5, 458-5, 458+5)
-        print("successfully rejected XUAN-SHANG")
+        logsystem.logging.info("Successfully rejected bounty")
         mysleep(1000)
     mysleep(50)
 
@@ -178,35 +190,35 @@ def yuhun(ts):
     # 检测天使插件 COM Object 是否建立成功
     need_ver = '4.019'
     if(ts.ver() != need_ver): 
-        print('Register failed')
+        logsystem.logging.warning('Register failed')
         return 
-    print('Register successful')
+    logsystem.logging.info('Register successful')
 
     # 绑定窗口
     hwnd = ts.FindWindow("", "阴阳师-网易游戏")
     ts_ret = ts.BindWindow(hwnd, 'dx2', 'windows', 'windows', 0)
     if(ts_ret != 1): 
-        print('binding failed')
+        logsystem.logging.warning('Binding failed')
         return 
-    print('binding successful')
+    logsystem.logging.info('Binding successful')
 	
     mysleep(2000)
 
     # 颜色 Debug 测试 
     while True:
         tscoldebug = ts.GetColor(1, 1)
-        print(tscoldebug)
+        logsystem.logging.info(tscoldebug)
         if tscoldebug != "000000" and tscoldebug != "ffffff":
             break
         mysleep(200)
-    print('passed color debug')
+    logsystem.logging.info('Passed color debug')
 
     # 御魂战斗主循环
     while True:
         LASTIME[1]=time.time()
         # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
         wtfc1(ts, 807, 442, "f3b25e", 807, 881, 442, 459, 0, 1, hwnd)
-        print('Already clicked TIAO-ZHAN')
+        logsystem.logging.info('Already clicked TIAO-ZHAN')
 
         #wtfc1(ts, 1033, 576, "e6c78f", 1004, 1073, 465, 521, 0, 1)
         #print('already clicked ZHUN-BEI')
@@ -219,7 +231,7 @@ def yuhun(ts):
             if colib == "f7f2df":
                 break
             mysleep(500)
-        print("now we are in the battle")
+        logsystem.logging.info("Now we are in the battle")
 
         # 在战斗中，自动点怪
         while True:
@@ -240,7 +252,7 @@ def yuhun(ts):
           colib = ts.GetColor(71, 577)
           if colib != "f7f2df":
               break
-        print("battle finished")
+        logsystem.logging.info("Battle finished")
 		
 		# 显示时间
         print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(LASTIME[0])))
@@ -256,41 +268,41 @@ def yuhun(ts):
           if coljs == "f3b25e":
               break
           mysleep(500, 500)
-        print("back to YUHUN level selection")
+        logsystem.logging.info("back to YUHUN level selection")
 
 def bind_two_windows(ts_d, ts_f): 
     hwnd_raw = ts_d.EnumWindowByProcess("onmyoji.exe", "", "", 16)
     HWND = hwnd_raw.split(',')
-    print('windows handle:', HWND)
+    logsystem.logging.info('windows handle:', HWND)
 
     if len(HWND)!=2: 
-        print('Need 2 windows!')
+        logsystem.logging.warning('Need 2 windows!')
         return 10 
 
     # 绑定窗口
     ts_ret = ts_d.BindWindow(HWND[0], 'dx2', 'windows', 'windows', 0) 
     if(ts_ret != 1): 
-        print('first window binding failed')
+        logsystem.logging.warning('first window binding failed')
         return 1
     ts_ret = ts_f.BindWindow(HWND[1], 'dx2', 'windows', 'windows', 0) 
     if(ts_ret != 1): 
-        print('second window binding failed')
+        logsystem.logging.warning('second window binding failed')
         return 2
     mysleep(500)
 
     if ts_f.GetColor(*pos_button_start_battle) == col_button_yellow: 
         #ts_d, ts_f = ts_f, ts_d
-        print("handle swapped, don't worry")
+        logsystem.logging.info("handle swapped, don't worry")
         HWND[1], HWND[0]=HWND[0], HWND[1]
         ts_ret = ts_d.BindWindow(HWND[0], 'dx2', 'windows', 'windows', 0) 
         ts_ret = ts_f.BindWindow(HWND[1], 'dx2', 'windows', 'windows', 0) 
     elif ts_d.GetColor(*pos_button_start_battle) == col_button_yellow: 
         pass 
     else: 
-        print("didn't find KAI-SHI-ZHAN-DOU, can't distinguish which one is driver ")
+        logsystem.logging.warning("didn't find KAI-SHI-ZHAN-DOU, can't distinguish which one is driver ")
         return 20
 
-    print('binding successful')
+    logsystem.logging.info('binding successful')
     return 0
 
 def unbind_two_windows(ts_d, ts_f): 
@@ -321,19 +333,19 @@ def fighter_jiesuan(ts, hwnd):
         #print(type(ffc_ret), ffc_ret)
 
         if ffc_ret[0] == 0: 
-            print('fighter (auto) accept found at', ffc_ret)
+            logsystem.logging.info('fighter (auto) accept found at', ffc_ret)
             wtfc1(ts, ffc_ret[1], ffc_ret[2], col_to_be_found, 
                 ffc_ret[1]-5, ffc_ret[1]+5, ffc_ret[2]-5, ffc_ret[2]+5, 
                 0, 1, hwnd)
-            print('fighter clicked (auto) accept')
+            logsystem.logging.info('fighter clicked (auto) accept')
 
         coljs = ts.GetColor(*pos_button_start_battle)
         if coljs == col_fighter_start_battle_blank: 
-            print('fighter in XIE ZHAN DUI WU!')
+            logsystem.logging.info('fighter in XIE ZHAN DUI WU!')
             battle_failed_status = 0 
             stats = 1 
             break 
-    print('fighter stats =', stats)
+    logsystem.logging.info('fighter stats =', stats)
 
 def driver_jiesuan(ts, hwnd): 
     stats = 0
@@ -347,26 +359,26 @@ def driver_jiesuan(ts, hwnd):
             if ts.GetColor(499, 321) == '725f4d': 
                 # 这里意味着 勾选 继续邀请队友
                 wtfc1(ts, 499, 321, '725f4d', 499-5, 499+5, 321-5, 321+5, 0, 1, hwnd)
-                print('ticked MO REN YAO QING DUI YOU')
+                logsystem.logging.info('ticked MO REN YAO QING DUI YOU')
             else: 
                 # 如果没有这个选项，说明战斗失败，这里不需要打勾
-                print('failed')
+                logsystem.logging.warning('failed')
                 global battle_failed_status 
                 battle_failed_status = 1 
             wtfc1(ts, *pos_button_continue_invite, col_button_yellow, 
                 pos_button_continue_invite[0]-5, pos_button_continue_invite[0]+5, 
                 pos_button_continue_invite[1]-5, pos_button_continue_invite[1]+5, 
                 0, 1, hwnd)
-            print('clidked QUE REN, JI XU YAO QING DUI YOU')
+            logsystem.logging.info('clidked QUE REN, JI XU YAO QING DUI YOU')
             #stats = 1
             #break 
         
         coljs = ts.GetColor(*pos_button_start_battle)
         if coljs == col_button_yellow: 
-            print('driver is in XIE ZHAN DUI WU')
+            logsystem.logging.info('driver is in XIE ZHAN DUI WU')
             stats = 2 
             break 
-    print('driver stats =', stats)
+    logsystem.logging.info('driver stats =', stats)
 
 # 双人模式
 def dual_yuhun(ts_d, ts_f): 
@@ -375,9 +387,9 @@ def dual_yuhun(ts_d, ts_f):
     # 检测 COM Object 是否建立成功
     need_ver = '4.019'
     if ts_d.ver() != need_ver or ts_f.ver() != need_ver: 
-        print('register failed')
+        logsystem.logging.warning('register failed')
         return 
-    print('register successful')
+    logsystem.logging.info('register successful')
 
     # 绑定两个游戏窗口, ts_d = driver = 司机, ts_f = fighter = 打手
     btw_ret = bind_two_windows(ts_d, ts_f)
@@ -391,7 +403,7 @@ def dual_yuhun(ts_d, ts_f):
         LASTIME[1]=time.time()
         wtfc1(ts_d, *pos_button_start_battle, col_button_yellow, 
             868, 986, 523, 545, 0, 1, HWND[0])
-        print('clicked KAI-SHI-ZHAN-DOU!')
+        logsystem.logging.info('clicked KAI-SHI-ZHAN-DOU!')
 
         #判断是否已经进入战斗 
         while True: 
@@ -402,7 +414,7 @@ def dual_yuhun(ts_d, ts_f):
             mysleep(50)
             watchdog(ts_d, HWND[0])
             watchdog(ts_f, HWND[1])
-        print('in the battle!')
+        logsystem.logging.info('in the battle!')
 
         # 已经进入战斗，司机自动点怪
         while True:
@@ -427,7 +439,7 @@ def dual_yuhun(ts_d, ts_f):
             col_f = ts_f.GetColor(pos_zidong[0], pos_zidong[1])
             if col_d != col_zidong and col_f != col_zidong: 
                 break
-        print('battle finished!')
+        logsystem.logging.info('battle finished!')
 
         thr_f_j = threading.Thread(target=fighter_jiesuan, args=(ts_f,HWND[1],))
         thr_d_j = threading.Thread(target=driver_jiesuan, args=(ts_d,HWND[0],))
@@ -438,11 +450,11 @@ def dual_yuhun(ts_d, ts_f):
         thr_f_j.join()
         thr_d_j.join()
 
-        print('joined, new cycle!')
+        logsystem.logging.info('joined, new cycle!')
     
 
 if __name__ == "__main__":    
-    print('python version:', sys.version)
+    logsystem.logging.info('python version:', sys.version)
 
     # 需要提前在 windows 中注册 TSPlug.dll
     # 方法: regsvr32.exe TSPlug.dll
@@ -453,7 +465,7 @@ if __name__ == "__main__":
     try:
         if is_admin():
         # 注册插件，获取权限
-            print('UAC pass')
+            logsystem.logging.info('UAC pass')
             os.system('regsvr32.exe C://TSPlug.dll')
             init()
             if(mode==0):
@@ -466,20 +478,11 @@ if __name__ == "__main__":
         else:
             ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)       
     except KeyboardInterrupt:        
-        print('terminated')
+        logsystem.logging.info('terminated')
         if(mode==0):
-            print('UnBindWindow return:', ts.UnBindWindow())
+            logsystem.logging.info('UnBindWindow return:', ts.UnBindWindow())
         elif(mode==1):
-            print("unbind results:", unbind_two_windows(ts_d, ts_f))
+            logsystem.logging.info("unbind results:", unbind_two_windows(ts_d, ts_f))
         os.system('regsvr32.exe /u C://TSPlug.dll')
     else:
-        if(done==2):
-            print('60s 后关闭电脑')
-            os.system("shutdown -s -t  60 ")
-        elif(done==1):
-            if(mode==0):
-                ts.SetWindowState(hwnd,13)
-            elif(mode==1):
-                ts_d.SetWindowState(HWND[0],13)
-                ts_f.SetWindowState(HWND[1],13)
-            exit()
+        quit()
