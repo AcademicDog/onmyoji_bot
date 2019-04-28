@@ -6,6 +6,7 @@ import os
 import ctypes
 import threading
 import logsystem
+import watchdog
 
 # 参数
 col_button_yellow = 'f3b25e'
@@ -27,8 +28,8 @@ global mode
 global emyc
 global hwnd
 global done
-LASTIME=[0,0]
 HWND=[0,0]
+dog = watchdog.Watchdog()
 
 def quit():
     #退出并清理窗口
@@ -52,30 +53,6 @@ def init():
     global emyc
     global hwnd
     global done
-
-    # 广告位
-    print('''#############################################################
-###################################################   #######
-###############################################   /~\\   #####
-############################################   _- `~~~', ####
-##########################################  _-~       )  ####
-#######################################  _-~          |  ####
-####################################  _-~            ;  #####
-##########################  __---___-~              |   #####
-#######################   _~   ,,                  ;  `,,  ##
-#####################  _-~    ;'                  |  ,'  ; ##
-###################  _~      '                    `~'   ; ###
-############   __---;                                 ,' ####
-########   __~~  ___                                ,' ######
-#####  _-~~   -~~ _                               ,' ########
-##### `-_         _                              ; ##########
-#######  ~~----~~~   ;                          ; ###########
-#########  /          ;                        ; ############
-#######  /             ;                      ; #############
-#####  /                `                    ; ##############
-###  /            广 告 位 招 租             ; ###############
-#                          20190421          ################''')
-
     
     try:
         # 模式选择
@@ -102,6 +79,12 @@ def init():
         mode=0
         emyc=0
         done=1
+        logsystem.logging.info('Use default parameters')
+
+def dog_response():
+    if(dog.bark() == 1):
+        logsystem.logging.warning("Dog barked!")
+        quit()
 
 def is_admin():
     #UAC申请，获得管理员权限
@@ -109,16 +92,6 @@ def is_admin():
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
-
-def watchdog(ts,hwnd):
-    #计算时间，新 旧
-    LASTIME[0]=time.time()
-    period=int(LASTIME[0]-LASTIME[1])
-    
-    #处理故障
-    if (period >= 300):
-        logsystem.logging.warning('Wait too long, quit!')
-        quit()
 
 def mysleep(slpa, slpb = 0): 
     '''
@@ -166,7 +139,7 @@ def wtfc1(ts, colx, coly, coll, x1, x2, y1, y2, zzz, adv, hwnd):
   flgj =0
   while j == 0:
     rejxs(ts)
-    watchdog(ts,hwnd)
+    dog_response()
     coltest = ts.GetColor(colx, coly)
     #print(colx, coly, coltest)
     if (coltest == coll and zzz == 0) or (coltest != coll and zzz == 1):
@@ -215,7 +188,7 @@ def yuhun(ts):
 
     # 御魂战斗主循环
     while True:
-        LASTIME[1]=time.time()
+        dog.feed()
         # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
         wtfc1(ts, 807, 442, "f3b25e", 807, 881, 442, 459, 0, 1, hwnd)
         logsystem.logging.info('Already clicked TIAO-ZHAN')
@@ -226,7 +199,7 @@ def yuhun(ts):
         # 检测是否进入战斗
         while True:
             rejxs(ts)
-            watchdog(ts,hwnd)
+            dog_response()
             colib = ts.GetColor(71, 577)
             if colib == "f7f2df":
                 break
@@ -236,7 +209,7 @@ def yuhun(ts):
         # 在战斗中，自动点怪
         while True:
           rejxs(ts)
-          watchdog(ts,hwnd)
+          dog_response()
 
           # 点击中间怪物
           if emyc == 1:
@@ -255,12 +228,12 @@ def yuhun(ts):
         logsystem.logging.info("Battle finished")
 		
 		# 显示时间
-        print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(LASTIME[0])))
+        print(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(dog.lastime[0])))
         print()
 
         # 在战斗结算页面
         while True: 
-          watchdog(ts,hwnd)
+          dog_response()
           rejxs(ts)
           crnd(ts, 980, 1030, 225, 275)
 
@@ -316,7 +289,7 @@ def fighter_jiesuan(ts, hwnd):
     stats = 0 
     while stats == 0: 
         rejxs(ts)
-        watchdog(ts, hwnd)
+        dog_response()
         crnd(ts, *pos_jiesuan)
 
         mysleep(500, 500)
@@ -351,7 +324,7 @@ def driver_jiesuan(ts, hwnd):
     stats = 0
     while stats == 0: 
         rejxs(ts)
-        watchdog(ts, hwnd)
+        dog_response()
         crnd(ts, *pos_jiesuan)
         mysleep(500, 500)
         coljs = ts.GetColor(*pos_button_continue_invite)
@@ -400,7 +373,7 @@ def dual_yuhun(ts_d, ts_f):
     while True: 
         # 司机点击开始战斗
         # 需要锁定阵容！
-        LASTIME[1]=time.time()
+        dog.feed()
         wtfc1(ts_d, *pos_button_start_battle, col_button_yellow, 
             868, 986, 523, 545, 0, 1, HWND[0])
         logsystem.logging.info('clicked KAI-SHI-ZHAN-DOU!')
@@ -412,16 +385,14 @@ def dual_yuhun(ts_d, ts_f):
             if col_d == col_zidong or col_f == col_zidong: 
                 break
             mysleep(50)
-            watchdog(ts_d, HWND[0])
-            watchdog(ts_f, HWND[1])
+            dog_response()
         logsystem.logging.info('in the battle!')
 
         # 已经进入战斗，司机自动点怪
         while True:
             rejxs(ts_d)
             rejxs(ts_f)
-            watchdog(ts_d, HWND[0])
-            watchdog(ts_f, HWND[1])
+            dog_response()
 
             # 点击中间怪物
             if emyc == 1:
@@ -454,7 +425,7 @@ def dual_yuhun(ts_d, ts_f):
     
 
 if __name__ == "__main__":    
-    logsystem.logging.info('python version:', sys.version)
+    logsystem.logging.info('python version: %s', sys.version)
 
     # 需要提前在 windows 中注册 TSPlug.dll
     # 方法: regsvr32.exe TSPlug.dll
