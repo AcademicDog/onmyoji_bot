@@ -8,6 +8,37 @@ import logsystem
 log = logsystem.WriteLog()
 dog = watchdog.Watchdog()
 
+class Mood:
+    '''
+    用于模拟随机的点击频率，每5分钟更换一次点击规律\n
+    energetic: 状态极佳，点击延迟在1-1.5s\n
+    joyful: 状态不错，点击延迟在1.3-2.1s\n
+    normal: 状态一般，点击延迟在1.8-3s\n
+    tired: 状态疲劳，点击延迟在2.5-4\n
+    exhausted: CHSM，点击延迟在3-5s\n
+    '''    
+    def __init__(self):
+        Mood.lastime = time.time()
+        Mood.mymood = {
+            1 : (1000, 500),
+            2 : (1300, 800),
+            3 : (1800, 1200),
+            4 : (2500, 1500),
+            5 : (3000, 2000)}
+        a = random.randint(1, 5)
+        Mood.lastmood = Mood.mymood[a]
+        log.writeinfo("Now you mood is level %d", a)
+
+    def getmood(self):
+        if (time.time() - Mood.lastime >= 300):
+            Mood.lastime = time.time()
+            a = random.randint(1, 5)
+            Mood.lastmood = Mood.mymood[a]
+            log.writeinfo("Now you mood is level %d", a)
+        return Mood.lastmood
+
+mood = Mood()
+
 def mysleep(slpa, slpb = 0): 
     '''
     randomly sleep for a short time between `slpa` and `slpa + slpb` \n
@@ -23,11 +54,12 @@ def crnd(ts, x1, x2, y1, y2):
     xr = random.randint(x1, x2)
     yr = random.randint(y1, y2)
     ts.MoveTo(xr, yr)
-    mysleep(10, 10)
+    mysleep(100, 100)
     ts.LeftClick() 
-    mysleep(10, 10)
+    mysleep(100, 100)
 
-def rejxs(ts):     
+def rejxs(ts):
+    '''拒绝悬赏'''
     colxs = ts.GetColor(750, 458)
     #print(colxs)
     if colxs == "df715e":
@@ -63,7 +95,7 @@ def wtfc1(ts, colx, coly, coll, x1, x2, y1, y2, zzz, adv):
         if flgj == 1:
             rejxs(ts)
             crnd(ts, x1, x2, y1, y2)
-            mysleep(1000, 333)
+            mysleep(*mood.getmood())
             if adv == 0:
                 j = 1
             rejxs(ts)
