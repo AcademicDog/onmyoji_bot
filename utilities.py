@@ -1,7 +1,12 @@
 import time
 import random
+import os
+
 import watchdog
 import logsystem
+
+log = logsystem.WriteLog()
+dog = watchdog.Watchdog()
 
 def mysleep(slpa, slpb = 0): 
     '''
@@ -22,8 +27,7 @@ def crnd(ts, x1, x2, y1, y2):
     ts.LeftClick() 
     mysleep(10, 10)
 
-def rejxs(ts): 
-    log = logsystem.WriteLog()
+def rejxs(ts):     
     colxs = ts.GetColor(750, 458)
     #print(colxs)
     if colxs == "df715e":
@@ -49,11 +53,9 @@ def wtfc1(ts, colx, coly, coll, x1, x2, y1, y2, zzz, adv):
     '''
     j = 0
     flgj =0
-    dog = watchdog.Watchdog()  
     while j == 0:
         rejxs(ts)
-        if(dog.bark() == 1):
-            return 0
+        dog.dog_response()
         coltest = ts.GetColor(colx, coly)
         #print(colx, coly, coltest)
         if (coltest == coll and zzz == 0) or (coltest != coll and zzz == 1):

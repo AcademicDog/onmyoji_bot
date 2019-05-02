@@ -5,8 +5,8 @@ import ctypes
 import threading
 import logsystem
 import watchdog
-import fighter
 import utilities
+import single_fight
 
 # 参数
 col_button_yellow = 'f3b25e'
@@ -32,7 +32,6 @@ hwnd = 0
 HWND=[0,0]
 
 #初始化对象
-dog = watchdog.Watchdog()
 log = logsystem.WriteLog()
 
 def quit():
@@ -84,11 +83,6 @@ def init():
         done=1
         log.writeinfo('Use default parameters')
 
-def dog_response():
-    if(dog.bark() == 1):
-        log.writewarning("Dog barked!")
-        quit()
-
 def is_admin():
     #UAC申请，获得管理员权限
     try:
@@ -98,77 +92,8 @@ def is_admin():
 
 # 单人模式
 def yuhun(ts): 
-    global emyc
-
-    # 检测天使插件 COM Object 是否建立成功
-    single_fighter = fighter.Fighter(ts)
-    if(not single_fighter.ready):
-        log.writewarning('Register failed')
-        return 
-    log.writeinfo('Register successful')
-
-    # 绑定窗口
-    if(not single_fighter.fighter_binding()):    
-        log.writewarning('Binding failed')
-        return 
-    log.writeinfo('Binding successful')
-
-    # 颜色 Debug 测试 
-    single_fighter.fighter_test()
-    log.writeinfo('Passed color debug')
-
-    # 御魂战斗主循环
-    while True:
-        dog.feed()
-        # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
-        utilities.wtfc1(ts, 807, 442, "f3b25e", 807, 881, 442, 459, 0, 1)
-        log.writeinfo('Already clicked TIAO-ZHAN')
-
-        #wtfc1(ts, 1033, 576, "e6c78f", 1004, 1073, 465, 521, 0, 1)
-        #print('already clicked ZHUN-BEI')
-
-        # 检测是否进入战斗
-        while True:
-            utilities.rejxs(ts)
-            dog_response()
-            colib = ts.GetColor(71, 577)
-            if colib == "f7f2df":
-                break
-            utilities.mysleep(500)
-        log.writeinfo("Now we are in the battle")
-
-        # 在战斗中，自动点怪
-        while True:
-          utilities.rejxs(ts)
-          dog_response()
-
-          # 点击中间怪物
-          if emyc == 1:
-            utilities.crnd(ts, 509, 579, 153, 181)
-
-          # 点击右边怪物
-          elif emyc == 2:
-            utilities.crnd(ts, 773, 856, 159, 190)
-
-          utilities.mysleep(500, 500)
-
-          utilities.rejxs(ts)
-          colib = ts.GetColor(71, 577)
-          if colib != "f7f2df":
-              break
-        log.writeinfo("Battle finished")
-
-        # 在战斗结算页面
-        while True: 
-          dog_response()
-          utilities.rejxs(ts)
-          utilities.crnd(ts, 980, 1030, 225, 275)
-
-          coljs = ts.GetColor(807, 442)
-          if coljs == "f3b25e":
-              break
-          utilities.mysleep(500, 500)
-        log.writeinfo("back to YUHUN level selection")
+    fight = single_fight.SingleFight(mode, done, ts)
+    fight.start()
 
 def bind_two_windows(ts_d, ts_f): 
     hwnd_raw = ts_d.EnumWindowByProcess("onmyoji.exe", "", "", 16)
@@ -383,4 +308,4 @@ if __name__ == "__main__":
             log.writeinfo("unbind results:", unbind_two_windows(ts_d, ts_f))
         os.system('regsvr32.exe /u C://TSPlug.dll')
     else:
-        quit()
+        pass

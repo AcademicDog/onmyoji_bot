@@ -1,6 +1,6 @@
 import utilities
 
-class Fighter():
+class Fighter:
     emyc = 0
 
     def __init__(self, ts):
@@ -18,7 +18,7 @@ class Fighter():
         if(ts_ret != 1):             
             return 0         
         utilities.mysleep(2000)
-        return 1
+        return self.hwnd
 
     def fighter_test(self):
         # 颜色 Debug 测试 
