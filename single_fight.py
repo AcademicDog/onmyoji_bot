@@ -34,10 +34,14 @@ class SingleFight(fighter.Fighter):
 
     def start(self):
         '''单人战斗主循环'''
+        mood1 = utilities.Mood()
+        mood2 = utilities.Mood()
+        mood3 = utilities.Mood()
+        post_pos = utilities.Position()
         while True:
             self.dog.feed()
             # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
-            utilities.wtfc1(self.ts, 807, 442, "f3b25e", 807, 881, 442, 459, 0, 1)
+            utilities.wtfc1(self.ts, 807, 442, "f3b25e", 807, 881, 442, 459, 0, 1, mood1.getmood())
             log.writeinfo('Already clicked TIAO-ZHAN')
 
             #wtfc1(ts, 1033, 576, "e6c78f", 1004, 1073, 465, 521, 0, 1)
@@ -66,7 +70,7 @@ class SingleFight(fighter.Fighter):
                 elif fighter.Fighter.emyc == 2:
                     utilities.crnd(self.ts, 773, 856, 159, 190)
 
-                utilities.mysleep(1000, 500)
+                mood2.moodsleep()
 
                 utilities.rejxs(self.ts)
                 colib = self.ts.GetColor(71, 577)
@@ -75,13 +79,16 @@ class SingleFight(fighter.Fighter):
             log.writeinfo("Battle finished")
 
             # 在战斗结算页面
-            while True: 
+            mood3.moodsleep()
+            utilities.crnd(self.ts, *post_pos.get_firstpos())
+            mood3.moodsleep()
+            utilities.crnd(self.ts, *post_pos.get_secondpos())
+            while True:
                 self.dog.dog_response()
                 utilities.rejxs(self.ts)
-                utilities.crnd(self.ts, 980, 1030, 225, 275)
-
                 coljs = self.ts.GetColor(807, 442)
                 if coljs == "f3b25e":
                     break
-                utilities.mysleep(500, 500)
+                utilities.crnd(self.ts, *post_pos.get_pos())
+                mood3.moodsleep()
             log.writeinfo("back to YUHUN level selection")

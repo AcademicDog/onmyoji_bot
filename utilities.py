@@ -18,7 +18,7 @@ class Mood:
     exhausted: CHSM，点击延迟在3-5s\n
     '''    
     def __init__(self):
-        Mood.lastime = time.time()
+        self.lastime = time.time()
         Mood.mymood = {
             1 : (1000, 500),
             2 : (1300, 800),
@@ -26,18 +26,51 @@ class Mood:
             4 : (2500, 1500),
             5 : (3000, 2000)}
         a = random.randint(1, 5)
-        Mood.lastmood = Mood.mymood[a]
-        log.writeinfo("Now you mood is level %d", a)
+        self.lastmood = Mood.mymood[a]
 
     def getmood(self):
-        if (time.time() - Mood.lastime >= 300):
-            Mood.lastime = time.time()
+        if (time.time() - self.lastime >= 300):
+            self.lastime = time.time()
             a = random.randint(1, 5)
-            Mood.lastmood = Mood.mymood[a]
+            self.lastmood = Mood.mymood[a]
             log.writeinfo("Now you mood is level %d", a)
-        return Mood.lastmood
+        return self.lastmood
 
-mood = Mood()
+    def moodsleep(self):
+        mysleep(*self.getmood())
+
+class Position:
+    '''
+    用于模拟随机的点击位置\n
+    坐标格式(x1, x2, y1, y2)
+    '''
+    def __init__(self):
+        Position.pos = {
+            1 : (968, 1125, 70, 491),   #右
+            2 : (31, 195, 145, 650),    #左
+            3 : (150, 1120, 50, 147),   #上
+        }
+
+        Position.secondpos = {
+            1 : (968, 1125, 70, 491),   #右
+            2 : (31, 195, 145, 650),    #左
+            3 : (150, 1120, 50, 147),   #上
+            4 : (31, 735, 530, 650)}    #下
+
+        Position.firstpos = {
+            1 : (968, 1125, 70, 491),   #右
+            2 : (31, 195, 145, 650),    #左
+            3 : (150, 1120, 50, 320),   #上
+            4 : (31, 735, 530, 650)}    #下
+
+    def get_pos(self):
+        return Position.pos[random.randint(1, 3)]
+
+    def get_firstpos(self):
+        return Position.firstpos[random.randint(1, 4)]
+
+    def get_secondpos(self):
+        return Position.secondpos[random.randint(1,4)]
 
 def mysleep(slpa, slpb = 0): 
     '''
@@ -69,7 +102,7 @@ def rejxs(ts):
     mysleep(50)
 
 
-def wtfc1(ts, colx, coly, coll, x1, x2, y1, y2, zzz, adv):
+def wtfc1(ts, colx, coly, coll, x1, x2, y1, y2, zzz, adv, mood):
     '''
     Usage: 
     等待并且持续判断点 (colx, coly) 的颜色，直到该点颜色
@@ -95,7 +128,7 @@ def wtfc1(ts, colx, coly, coll, x1, x2, y1, y2, zzz, adv):
         if flgj == 1:
             rejxs(ts)
             crnd(ts, x1, x2, y1, y2)
-            mysleep(*mood.getmood())
+            mysleep(*mood)
             if adv == 0:
                 j = 1
             rejxs(ts)
