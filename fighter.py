@@ -11,14 +11,13 @@ class Fighter:
         self.ready = 1
         self.ts = ts
 
-    def fighter_binding(self):
-        # 绑定窗口
-        self.hwnd = self.ts.FindWindow("", "阴阳师-网易游戏")
-        ts_ret = self.ts.BindWindow(self.hwnd, 'dx2', 'windows', 'windows', 0)
-        if(ts_ret != 1):             
-            return 0         
+    def fighter_binding(self, ts, hwnd):
+        # 绑定窗口        
+        ts_ret = self.ts.BindWindow(hwnd, 'dx2', 'windows', 'windows', 0)
+        if(ts_ret != 1):
+            return 0
         utilities.mysleep(2000)
-        return self.hwnd
+        return 1
 
     def fighter_test(self):
         # 颜色 Debug 测试 

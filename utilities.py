@@ -6,7 +6,6 @@ import watchdog
 import logsystem
 
 log = logsystem.WriteLog()
-dog = watchdog.Watchdog()
 
 class Mood:
     '''
@@ -119,8 +118,7 @@ def wtfc1(ts, colx, coly, coll, x1, x2, y1, y2, zzz, adv, mood):
     j = 0
     flgj =0
     while j == 0:
-        rejxs(ts)
-        dog.dog_response()
+        rejxs(ts)        
         coltest = ts.GetColor(colx, coly)
         #print(colx, coly, coltest)
         if (coltest == coll and zzz == 0) or (coltest != coll and zzz == 1):

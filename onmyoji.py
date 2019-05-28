@@ -3,15 +3,16 @@ import sys
 import os
 import ctypes
 import threading
+
 import logsystem
 import watchdog
 import utilities
 import single_fight
 
 # 参数
-col_button_yellow = 'f3b25e'
+
 col_fighter_start_battle_blank = 'c7bdb4'
-pos_button_start_battle = (987, 528)
+
 col_zidong = 'f7f2df'
 pos_zidong = (71, 577)
 pos_button_continue_invite = (724, 396)
@@ -84,57 +85,26 @@ def init():
         log.writeinfo('Use default parameters')
 
 def is_admin():
-    #UAC申请，获得管理员权限
+    # UAC申请，获得管理员权限
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
 
-# 单人模式
-def yuhun(ts): 
-    fight = single_fight.SingleFight(mode, done, ts)
-    fight.start()
+def yuhun(ts):
+    '''单人模式'''
+    # 启动看门狗
+    dog = watchdog.Watchdog()
+    fight = single_fight.SingleFight(done, ts, dog)
+    t1 = threading.Thread(target = fight.start)
+    t2 = threading.Thread(target = dog.bark)
 
-def bind_two_windows(ts_d, ts_f): 
-    hwnd_raw = ts_d.EnumWindowByProcess("onmyoji.exe", "", "", 16)
-    HWND = hwnd_raw.split(',')
-    log.writeinfo('windows handle:', HWND)
+    t1.start()
+    t2.start()
 
-    if len(HWND)!=2: 
-        log.writewarning('Need 2 windows!')
-        return 10 
-
-    # 绑定窗口
-    ts_ret = ts_d.BindWindow(HWND[0], 'dx2', 'windows', 'windows', 0) 
-    if(ts_ret != 1): 
-        log.writewarning('first window binding failed')
-        return 1
-    ts_ret = ts_f.BindWindow(HWND[1], 'dx2', 'windows', 'windows', 0) 
-    if(ts_ret != 1): 
-        log.writewarning('second window binding failed')
-        return 2
-    utilities.mysleep(500)
-
-    if ts_f.GetColor(*pos_button_start_battle) == col_button_yellow: 
-        #ts_d, ts_f = ts_f, ts_d
-        log.writeinfo("handle swapped, don't worry")
-        HWND[1], HWND[0]=HWND[0], HWND[1]
-        ts_ret = ts_d.BindWindow(HWND[0], 'dx2', 'windows', 'windows', 0) 
-        ts_ret = ts_f.BindWindow(HWND[1], 'dx2', 'windows', 'windows', 0) 
-    elif ts_d.GetColor(*pos_button_start_battle) == col_button_yellow: 
-        pass 
-    else: 
-        log.writewarning("didn't find KAI-SHI-ZHAN-DOU, can't distinguish which one is driver ")
-        return 20
-
-    log.writeinfo('binding successful')
-    return 0
-
-def unbind_two_windows(ts_d, ts_f): 
-    return (
-        ts_d.UnBindWindow(), 
-        ts_f.UnBindWindow() 
-    )
+    t1.join()
+    t2.join()
+    
 
 def fighter_jiesuan(ts, hwnd): 
     global battle_failed_status

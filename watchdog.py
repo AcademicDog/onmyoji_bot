@@ -11,24 +11,27 @@ class Watchdog:
         self.log = logsystem.WriteLog()
 
     def setdog(self, mode, done, ts, hwnd):
-        Watchdog.mode = mode
-        Watchdog.done = done
-        Watchdog.ts = ts
-        Watchdog.hwnd = hwnd
+        self.mode = mode
+        self.done = done
+        self.ts = ts
+        self.hwnd = hwnd
 
     def feed(self):
         Watchdog.lastime[1] = time.time()
 
-    def bark(self):
-        Watchdog.lastime[0] = time.time()
-        period = int(Watchdog.lastime[0] - Watchdog.lastime[1])
-        if(period > 300):
-            return 1
-        else:
-            return 0
+    def bark(self):        
+        while(True):
+            Watchdog.lastime[0] = time.time()
+            period = int(Watchdog.lastime[0] - Watchdog.lastime[1])
+            if(period > 300):
+                self.clean()
+                return
+            else:
+                time.sleep(50)
 
     def clean(self):
         #退出并清理窗口
+        self.log.writewarning("Dog barked!")
         if(self.done==2):
             self.log.writewarning('Attention, shutdown in 60 s')
             os.system("shutdown -s -t  60 ")
@@ -43,8 +46,3 @@ class Watchdog:
             os._exit(0)
         elif(self.done==0):
             os._exit(0)
-
-    def dog_response(self):
-        if(self.bark() == 1):
-            self.log.writewarning("Dog barked!")
-            self.clean()
