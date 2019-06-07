@@ -1,7 +1,6 @@
 import threading
 
 import fighter
-import watchdog
 import utilities
 
 class SingleFight(fighter.Fighter):

@@ -5,6 +5,7 @@ import ctypes
 import threading
 
 import fighter_driver
+import fighter_passenger
 import logsystem
 import utilities
 import single_fight
@@ -43,10 +44,10 @@ def init():
     try:
         # 模式选择
         mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n1-本地双开\n2-组队司机\n3-组队打手\n'))
-        if(mode==1) or (mode==3):
+        if(mode==1):
             log.writewarning('未开发，告辞！')
-            exit()
-        elif((mode!=2) and (mode!=0)):
+            os._exit(0)
+        elif(mode != 2 and mode != 0 and mode != 3):
             mode=0
         
         # 点怪设置
@@ -82,149 +83,14 @@ def yuhun():
         fight.start()
     
     if mode == 2:
+        # 司机
         fight = fighter_driver.DriverFighter(mode, done, emyc)
         fight.single_start()
-        # 司机
-
-def fighter_jiesuan(ts, hwnd): 
-    global battle_failed_status
-    stats = 0 
-    while stats == 0: 
-        utilities.rejxs(ts)
-        dog_response()
-        utilities.crnd(ts, *pos_jiesuan)
-
-        utilities.mysleep(500, 500)
-
-        #print('battle_failed_status =', battle_failed_status)
-        if battle_failed_status == 0: 
-            col_to_be_found = col_fighter_auto_accept
-        else: 
-            col_to_be_found = col_normal_accept
-
-        # 找色，打手的自动接受齿轮 或 普通接受对勾
-        intx, inty = None, None
-        ffc_ret = ts.FindColor(16, 122, 366, 465, col_to_be_found, 1.0, 0, intx, inty)
-        #print(type(ffc_ret), ffc_ret)
-
-        if ffc_ret[0] == 0: 
-            log.writeinfo('fighter (auto) accept found at', ffc_ret)
-            utilities.wtfc1(ts, ffc_ret[1], ffc_ret[2], col_to_be_found, 
-                ffc_ret[1]-5, ffc_ret[1]+5, ffc_ret[2]-5, ffc_ret[2]+5, 
-                0, 1)
-            log.writeinfo('fighter clicked (auto) accept')
-
-        coljs = ts.GetColor(*pos_button_start_battle)
-        if coljs == col_fighter_start_battle_blank: 
-            log.writeinfo('fighter in XIE ZHAN DUI WU!')
-            battle_failed_status = 0 
-            stats = 1 
-            break 
-    log.writeinfo('fighter stats =', stats)
-
-def driver_jiesuan(ts, hwnd): 
-    stats = 0
-    while stats == 0: 
-        utilities.rejxs(ts)
-        dog_response()
-        utilities.crnd(ts, *pos_jiesuan)
-        utilities.mysleep(500, 500)
-        coljs = ts.GetColor(*pos_button_continue_invite)
-        if coljs == col_button_yellow:
-            if ts.GetColor(499, 321) == '725f4d': 
-                # 这里意味着 勾选 继续邀请队友
-                utilities.wtfc1(ts, 499, 321, '725f4d', 499-5, 499+5, 321-5, 321+5, 0, 1)
-                log.writeinfo('ticked MO REN YAO QING DUI YOU')
-            else: 
-                # 如果没有这个选项，说明战斗失败，这里不需要打勾
-                log.writewarning('failed')
-                global battle_failed_status 
-                battle_failed_status = 1 
-            utilities.wtfc1(ts, *pos_button_continue_invite, col_button_yellow, 
-                pos_button_continue_invite[0]-5, pos_button_continue_invite[0]+5, 
-                pos_button_continue_invite[1]-5, pos_button_continue_invite[1]+5, 
-                0, 1)
-            log.writeinfo('clidked QUE REN, JI XU YAO QING DUI YOU')
-            #stats = 1
-            #break 
-        
-        coljs = ts.GetColor(*pos_button_start_battle)
-        if coljs == col_button_yellow: 
-            log.writeinfo('driver is in XIE ZHAN DUI WU')
-            stats = 2 
-            break 
-    log.writeinfo('driver stats =', stats)
-
-# 双人模式
-def dual_yuhun(ts_d, ts_f): 
-    global emyc
-
-    # 检测 COM Object 是否建立成功
-    need_ver = '4.019'
-    if ts_d.ver() != need_ver or ts_f.ver() != need_ver: 
-        log.writewarning('register failed')
-        return 
-    log.writeinfo('register successful')
-
-    # 绑定两个游戏窗口, ts_d = driver = 司机, ts_f = fighter = 打手
-    btw_ret = bind_two_windows(ts_d, ts_f)
-    if btw_ret != 0: 
-        return 
-
-    # 御魂战斗主循环
-    while True: 
-        # 司机点击开始战斗
-        # 需要锁定阵容！
-        dog.feed()
-        utilities.wtfc1(ts_d, *pos_button_start_battle, col_button_yellow, 
-            868, 986, 523, 545, 0, 1)
-        log.writeinfo('clicked KAI-SHI-ZHAN-DOU!')
-
-        #判断是否已经进入战斗 
-        while True: 
-            col_d = ts_d.GetColor(pos_zidong[0], pos_zidong[1])
-            col_f = ts_f.GetColor(pos_zidong[0], pos_zidong[1])
-            if col_d == col_zidong or col_f == col_zidong: 
-                break
-            utilities.mysleep(50)
-            dog_response()
-        log.writeinfo('in the battle!')
-
-        # 已经进入战斗，司机自动点怪
-        while True:
-            utilities.rejxs(ts_d)
-            utilities.rejxs(ts_f)
-            dog_response()
-
-            # 点击中间怪物
-            if emyc == 1:
-                utilities.crnd(ts_d, *pos_middle_monster)
-
-            # 点击右边怪物
-            elif emyc == 2:
-                utilities.crnd(ts_d, *pos_right_monster)
-
-            utilities.mysleep(500, 500)
-
-            utilities.rejxs(ts_d)
-            utilities.rejxs(ts_f)
-            col_d = ts_d.GetColor(pos_zidong[0], pos_zidong[1])
-            col_f = ts_f.GetColor(pos_zidong[0], pos_zidong[1])
-            if col_d != col_zidong and col_f != col_zidong: 
-                break
-        log.writeinfo('battle finished!')
-
-        thr_f_j = threading.Thread(target=fighter_jiesuan, args=(ts_f,HWND[1],))
-        thr_d_j = threading.Thread(target=driver_jiesuan, args=(ts_d,HWND[0],))
-
-        thr_f_j.start() 
-        thr_d_j.start() 
-
-        thr_f_j.join()
-        thr_d_j.join()
-
-        log.writeinfo('joined, new cycle!')
     
+    if mode == 3:
+        # 打手
+        fight = fighter_passenger.FighterPassenger(mode, done, emyc)        
+        fight.single_start()    
 
 if __name__ == "__main__":    
     log.writeinfo('python version: %s', sys.version)

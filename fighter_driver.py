@@ -1,6 +1,5 @@
 import fighter
 import utilities
-import watchdog
 
 # 参数
 pos_button_start_battle = (987, 528)
