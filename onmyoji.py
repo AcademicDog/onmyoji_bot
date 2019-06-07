@@ -4,8 +4,8 @@ import os
 import ctypes
 import threading
 
+import fighter_driver
 import logsystem
-import watchdog
 import utilities
 import single_fight
 
@@ -43,10 +43,10 @@ def init():
     try:
         # 模式选择
         mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n1-本地双开\n2-组队司机\n3-组队打手\n'))
-        if(mode==2) or (mode==3):
+        if(mode==1) or (mode==3):
             log.writewarning('未开发，告辞！')
             exit()
-        elif((mode!=1) and (mode!=0)):
+        elif((mode!=2) and (mode!=0)):
             mode=0
         
         # 点怪设置
@@ -74,20 +74,17 @@ def is_admin():
     except:
         return False
 
-def yuhun(ts):
-    '''单人模式'''
-    # 启动看门狗
-    dog = watchdog.Watchdog()
-    fight = single_fight.SingleFight(done, ts, emyc, dog)
-    t1 = threading.Thread(target = fight.start)
-    t2 = threading.Thread(target = dog.bark)
-
-    t1.start()
-    t2.start()
-
-    t1.join()
-    t2.join()
+def yuhun():
+    '''御魂战斗'''
+    if mode == 0:
+        # 单刷
+        fight = single_fight.SingleFight(done, emyc)
+        fight.start()
     
+    if mode == 2:
+        fight = fighter_driver.DriverFighter(mode, done, emyc)
+        fight.single_start()
+        # 司机
 
 def fighter_jiesuan(ts, hwnd): 
     global battle_failed_status
@@ -239,14 +236,17 @@ if __name__ == "__main__":
     # 建立 COM Object
     
     try:
+        # 检测管理员权限
         if is_admin():
-        # 注册插件，获取权限
+            # 注册插件，获取权限
             log.writeinfo('UAC pass')
             os.system('regsvr32.exe C://TSPlug.dll')
+
+            # 设置战斗参数
             init()
-            if(mode==0):
-                ts = win32com.client.Dispatch("ts.tssoft")
-                yuhun(ts)
+
+            # 开始战斗              
+            yuhun()
             if(mode==1):
                 ts_d = win32com.client.Dispatch("ts.tssoft") 
                 ts_f = win32com.client.Dispatch("ts.tssoft") 
