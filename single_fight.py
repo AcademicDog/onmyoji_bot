@@ -1,37 +1,25 @@
 import threading
 
 import fighter
-import logsystem
 import watchdog
 import utilities
 
 class SingleFight(fighter.Fighter):
-    '''单人御魂战斗，参数mode, done, ts'''
-    def __init__(self, done, ts, dog):
+    '''单人御魂战斗，参数mode, done, emyc, dog'''
+    def __init__(self, done, ts, emyc, dog):
         #初始化
-        self.log = logsystem.WriteLog()
-        fighter.Fighter.__init__(self, ts)
-
-        # 检测天使插件 COM Object 是否建立成功
-        if(not self.ready):
-            self.log.writewarning('Register failed')
-            return 
-        self.log.writeinfo('Register successful')
+        fighter.Fighter.__init__(self, ts, emyc)
 
         # 绑定窗口
         self.hwnd = ts.FindWindow("", "阴阳师-网易游戏")
-        if(not self.fighter_binding(ts, self.hwnd)):    
+        if(not self.fighter_binding(ts, self.hwnd)):
             self.log.writewarning('Binding failed')
-            return 
+            return
         self.log.writeinfo('Binding successful')
-
-        # 颜色 Debug 测试 
-        self.fighter_test()
-        self.log.writeinfo('Passed color debug')
 
         # 启动看门狗
         self.dog = dog
-        self.dog.setdog(0, done, self.ts, self.hwnd)        
+        self.dog.setdog(0, done, self.ts, self.hwnd)
 
     def start(self):
         '''单人战斗主循环'''
@@ -62,11 +50,11 @@ class SingleFight(fighter.Fighter):
                 utilities.rejxs(self.ts)                
 
                 # 点击中间怪物
-                if fighter.Fighter.emyc == 1:
+                if self.emyc == 1:
                     utilities.crnd(self.ts, 509, 579, 153, 181)
 
                 # 点击右边怪物
-                elif fighter.Fighter.emyc == 2:
+                elif self.emyc == 2:
                     utilities.crnd(self.ts, 773, 856, 159, 190)
 
                 mood2.moodsleep()

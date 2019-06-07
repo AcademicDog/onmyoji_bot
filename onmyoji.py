@@ -35,23 +35,6 @@ HWND=[0,0]
 #初始化对象
 log = logsystem.WriteLog()
 
-def quit():
-    #退出并清理窗口
-    if(done==2):
-        log.writewarning('Attention, shutdown in 60 s')
-        os.system("shutdown -s -t  60 ")
-    elif(done==1):
-        if(mode==0):
-            log.writewarning('Attention, one window will be colsed')
-            ts.SetWindowState(hwnd,13)
-        elif(mode==1):
-            log.writewarning('Attention, two windows will be colsed')
-            ts_d.SetWindowState(HWND[0],13)
-            ts_f.SetWindowState(HWND[1],13)
-        os._exit()
-    elif(done==0):
-        os._exit()
-
 def init():
     global mode
     global emyc
@@ -95,7 +78,7 @@ def yuhun(ts):
     '''单人模式'''
     # 启动看门狗
     dog = watchdog.Watchdog()
-    fight = single_fight.SingleFight(done, ts, dog)
+    fight = single_fight.SingleFight(done, ts, emyc, dog)
     t1 = threading.Thread(target = fight.start)
     t2 = threading.Thread(target = dog.bark)
 

@@ -1,15 +1,17 @@
 import utilities
+import logsystem
 
 class Fighter:
-    emyc = 0
 
-    def __init__(self, ts):
+    def __init__(self, ts, emyc = 0):
+        self.log = logsystem.WriteLog()
         # 检测天使插件 COM Object 是否建立成功
         need_ver = '4.019'
-        if(ts.ver() != need_ver): 
-            self.ready = 0
-        self.ready = 1
+        if(ts.ver() != need_ver):
+            self.log.writewarning('Register failed')
+        self.log.writeinfo('Register successful')
         self.ts = ts
+        self.emyc = emyc
 
     def fighter_binding(self, ts, hwnd):
         # 绑定窗口        
@@ -24,6 +26,6 @@ class Fighter:
         while True:
             tscoldebug = self.ts.GetColor(1, 1)
             if tscoldebug != "000000" and tscoldebug != "ffffff":
-                break
-            utilities.mysleep(200)
-        return tscoldebug
+                self.log.writeinfo('Passed color debug')
+                return
+            utilities.mysleep(500)
