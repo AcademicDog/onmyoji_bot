@@ -42,9 +42,17 @@
 
 第三步，开打
 
-1、双击运行run.bat，会弹出注册dll的界面，点击确认后再根据个人情况选择参数。
+1、双击运行run.bat，会弹出注册dll的界面，点击确认后再根据个人情况选择参数；
+
+2、如果不想安装环境，可以访问下载最新已[编译](https://github.com/AcademicDog/onmyoji_bot/releases)版本。
 
 ## 下一步计划
 1、下一步会逐渐抛弃dll插件，用win32api，同时用图像识别替代简单找色，完善点怪操作。
 
 2、如果有必要，可以再更新双开部分。
+
+## 协议 (License)
+
+该源代码使用了 [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) 开源协议。
+
+This project is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) license.
