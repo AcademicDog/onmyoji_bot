@@ -90,8 +90,6 @@ class DriverFighter(fighter.Fighter):
                 else: 
                     # 如果没有这个选项，说明战斗失败，这里不需要打勾
                     self.log.writewarning('Failed')
-                    global battle_failed_status
-                    battle_failed_status = 1
                 utilities.wtfc1(self.ts, *pos_button_continue_invite, col_button_yellow, 
                     pos_button_continue_invite[0]-5, pos_button_continue_invite[0]+5, 
                     pos_button_continue_invite[1]-5, pos_button_continue_invite[1]+5, 
