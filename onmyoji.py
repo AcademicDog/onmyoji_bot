@@ -10,21 +10,6 @@ import logsystem
 import utilities
 import single_fight
 
-# 参数
-
-col_fighter_start_battle_blank = 'c7bdb4'
-
-col_zidong = 'f7f2df'
-pos_zidong = (71, 577)
-pos_button_continue_invite = (724, 396)
-col_fighter_auto_accept = 'edc791'
-pos_jiesuan = (105, 345, 20, 85)
-col_normal_accept = '54b05f'
-pos_middle_monster = (509, 579, 153, 181)
-pos_right_monster = (773, 856, 159, 190)
-
-battle_failed_status = 0 
-
 # 设置
 global mode
 global emyc
@@ -113,18 +98,12 @@ if __name__ == "__main__":
 
             # 开始战斗              
             yuhun()
-            if(mode==1):
-                ts_d = win32com.client.Dispatch("ts.tssoft") 
-                ts_f = win32com.client.Dispatch("ts.tssoft") 
-                dual_yuhun(ts_d, ts_f)
+
         else:
             ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)       
     except KeyboardInterrupt:        
         log.writeinfo('terminated')
-        if(mode==0):
-            log.writeinfo('UnBindWindow return:', ts.UnBindWindow())
-        elif(mode==1):
-            log.writeinfo("unbind results:", unbind_two_windows(ts_d, ts_f))
         os.system('regsvr32.exe /u C://TSPlug.dll')
+        os._exit(0)
     else:
         pass
