@@ -7,7 +7,6 @@ import threading
 import fighter_driver
 import fighter_passenger
 import logsystem
-import utilities
 import single_fight
 
 # 设置
@@ -41,9 +40,9 @@ def init():
             emyc=0
         
         # 结束设置
-        done=int(input('\n结束后如何处理？\n0-不做操作\n1-退出\n2-关机\n'))
-        if(not((done==0) or (done==1) or (done==2))):
-            done=1
+        done=int(input('\n结束后如何处理？\n0-退出\n1-关机\n'))
+        if not ((done == 0) or (done == 1)):
+            done = 0
         log.writeinfo('Mode = %d',mode)
         log.writeinfo('Emyc = %d',emyc)
         log.writeinfo('Postoperation = %d',done)
@@ -70,28 +69,21 @@ def yuhun():
     if mode == 2:
         # 司机
         fight = fighter_driver.DriverFighter(mode, done, emyc)
-        fight.single_start()
+        fight.start()
     
     if mode == 3:
-        # 打手
+        # 乘客
         fight = fighter_passenger.FighterPassenger(mode, done, emyc)        
-        fight.single_start()    
+        fight.start()    
 
 if __name__ == "__main__":    
     log.writeinfo('python version: %s', sys.version)
-
-    # 需要提前在 windows 中注册 TSPlug.dll
-    # 方法: regsvr32.exe TSPlug.dll
-
-    # Reference: http://timgolden.me.uk/pywin32-docs/html/com/win32com/HTML/QuickStartClientCom.html
-    # 建立 COM Object
     
     try:
         # 检测管理员权限
         if is_admin():
             # 注册插件，获取权限
-            log.writeinfo('UAC pass')
-            os.system('regsvr32.exe C://TSPlug.dll')
+            log.writeinfo('UAC pass')            
 
             # 设置战斗参数
             init()
@@ -103,7 +95,6 @@ if __name__ == "__main__":
             ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)       
     except KeyboardInterrupt:        
         log.writeinfo('terminated')
-        os.system('regsvr32.exe /u C://TSPlug.dll')
         os._exit(0)
     else:
         pass

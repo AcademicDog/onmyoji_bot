@@ -2,7 +2,6 @@ import time
 import random
 import os
 
-import watchdog
 import logsystem
 
 log = logsystem.WriteLog()
@@ -16,21 +15,22 @@ class Mood:
     tired: 状态疲劳，点击延迟在2.5-4\n
     exhausted: CHSM，点击延迟在3-5s\n
     '''    
-    def __init__(self):
+    def __init__(self, state = 5):
         self.lastime = time.time()
+        self.state = state
         Mood.mymood = {
             1 : (1000, 500),
             2 : (1300, 800),
             3 : (1800, 1200),
             4 : (2500, 1500),
             5 : (3000, 2000)}
-        a = random.randint(1, 5)
+        a = random.randint(1, self.state)
         self.lastmood = Mood.mymood[a]
 
     def getmood(self):
         if (time.time() - self.lastime >= 300):
             self.lastime = time.time()
-            a = random.randint(1, 5)
+            a = random.randint(1, self.state)
             self.lastmood = Mood.mymood[a]
             log.writeinfo("Now you mood is level %d", a)
         return self.lastmood
@@ -38,38 +38,37 @@ class Mood:
     def moodsleep(self):
         mysleep(*self.getmood())
 
-class Position:
+    def get1mood(self):
+        return random.randint(self.getmood()[0], self.getmood()[0] + self.getmood()[1])
+
+def firstposition():
     '''
-    用于模拟随机的点击位置\n
-    坐标格式(x1, x2, y1, y2)
+    获得点击位置，扣除御魂部分
+        :return: 返回随机位置坐标
     '''
-    def __init__(self):
-        Position.pos = {
-            1 : (968, 1125, 70, 491),   #右
-            2 : (31, 195, 145, 650),    #左
-            3 : (150, 1120, 50, 147),   #上
-        }
+    w = 1136
+    h = 640
+    while True:
+        position = (random.randint(0, w), random.randint(0,h))
+        if position[0] < 332 or position[0] > 931:
+            return position
+        elif position[1] < 350 or position[1] > 462:
+            return position
 
-        Position.secondpos = {
-            1 : (968, 1125, 70, 491),   #右
-            2 : (31, 195, 145, 650),    #左
-            3 : (150, 1120, 50, 147),   #上
-            4 : (31, 735, 530, 650)}    #下
+def secondposition():
+    '''
+    获得点击位置，扣除御魂部分
+        :return: 返回随机位置坐标
+    '''
+    w = 1136
+    h = 640
+    while True:
+        position = (random.randint(0, w), random.randint(50,h))
+        if position[0] < 210 or position[0] > 952:
+            return position
+        elif position[1] < 112 or position[1] > 490:
+            return position
 
-        Position.firstpos = {
-            1 : (968, 1125, 70, 491),   #右
-            2 : (31, 195, 145, 650),    #左
-            3 : (150, 1120, 50, 320),   #上
-            4 : (31, 735, 530, 650)}    #下
-
-    def get_pos(self):
-        return Position.pos[random.randint(1, 3)]
-
-    def get_firstpos(self):
-        return Position.firstpos[random.randint(1, 4)]
-
-    def get_secondpos(self):
-        return Position.secondpos[random.randint(1,4)]
 
 def mysleep(slpa, slpb = 0): 
     '''
