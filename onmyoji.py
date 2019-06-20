@@ -27,7 +27,7 @@ def init():
     
     try:
         # 模式选择
-        mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n1-本地双开\n2-组队司机\n3-组队打手\n'))
+        mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n2-组队司机\n3-组队打手\n'))
         if(mode==1):
             log.writewarning('未开发，告辞！')
             os._exit(0)
@@ -35,17 +35,17 @@ def init():
             mode=0
         
         # 点怪设置
-        emyc=int(input('\n是否点怪？\n0-不点怪\n1-点中间怪\n2-点右边怪\n'))
-        if((emyc!=0) and (emyc!=1) and (emyc!=2)):
-            emyc=0
+        # emyc=int(input('\n是否点怪？\n0-不点怪\n1-点中间怪\n2-点右边怪\n'))
+        # if((emyc!=0) and (emyc!=1) and (emyc!=2)):
+        #     emyc=0
         
         # 结束设置
-        done=int(input('\n结束后如何处理？\n0-退出\n1-关机\n'))
-        if not ((done == 0) or (done == 1)):
-            done = 0
+        # done=int(input('\n结束后如何处理？\n0-退出\n1-关机\n'))
+        # if not ((done == 0) or (done == 1)):
+        #     done = 0
         log.writeinfo('Mode = %d',mode)
-        log.writeinfo('Emyc = %d',emyc)
-        log.writeinfo('Postoperation = %d',done)
+        # log.writeinfo('Emyc = %d',emyc)
+        # log.writeinfo('Postoperation = %d',done)
     except:
         mode=0
         emyc=0
@@ -63,17 +63,17 @@ def yuhun():
     '''御魂战斗'''
     if mode == 0:
         # 单刷
-        fight = single_fight.SingleFight(done, emyc)
+        fight = single_fight.SingleFight()
         fight.start()
     
     if mode == 2:
         # 司机
-        fight = fighter_driver.DriverFighter(mode, done, emyc)
+        fight = fighter_driver.DriverFighter()
         fight.start()
     
     if mode == 3:
         # 乘客
-        fight = fighter_passenger.FighterPassenger(mode, done, emyc)        
+        fight = fighter_passenger.FighterPassenger()        
         fight.start()    
 
 if __name__ == "__main__":    

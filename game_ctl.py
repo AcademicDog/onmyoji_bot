@@ -223,7 +223,7 @@ class GameControl():
             time.sleep(0.01)
         win32gui.SendMessage(self.hwnd,win32con.WM_LBUTTONUP,0,win32api.MAKELONG(pos2[0],pos2[1]))
 
-    def wait_game_img(self, img_path, max_time = 30, quit=True):
+    def wait_game_img(self, img_path, max_time = 100, quit=True):
         """
         等待游戏图像
             :param img_path: 图片路径
@@ -231,6 +231,7 @@ class GameControl():
             :param quit=True: 超时后是否退出
             :return: 成功返回True，失败返回False
         """
+        self.rejectbounty()
         start_time=time.time()
         while time.time()-start_time<=max_time:
             maxVal,maxLoc=self.find_img(img_path)
@@ -290,7 +291,6 @@ class GameControl():
             :return: 拒绝成功返回True，其他情况返回False
         '''
         maxVal, maxLoc = self.find_img('img\\XUAN-SHANG.png')
-        print(maxVal, maxLoc)
         if maxVal>0.97:
             self.mouse_click_bg((757,460))
             return True

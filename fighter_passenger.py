@@ -6,9 +6,9 @@ import utilities
 class FighterPassenger(fighter.Fighter):
     '''御魂战斗乘客程序，参数mode, emyc'''
 
-    def __init__(self, mode, done, emyc=0):
+    def __init__(self, done = 1, emyc = 0):
         # 初始化
-        fighter.Fighter.__init__(self, emyc)
+        fighter.Fighter.__init__(self, 'Passenger:', emyc)
 
     def start(self):
         '''单人御魂乘客'''
@@ -30,10 +30,10 @@ class FighterPassenger(fighter.Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(utilities.firstposition())
+            mood3.moodsleep()
             start_time = time.time()
             while time.time() - start_time <= 10:
                 # 点击结算
-                mood3.moodsleep()
                 self.yys.mouse_click_bg(utilities.secondposition())
                 if(self.yys.wait_game_img('img\\LI-KAI-DUI-WU.png', mood3.get1mood()/1000, False)):
                     self.log.writeinfo('Passenger: in team')
@@ -45,6 +45,6 @@ class FighterPassenger(fighter.Fighter):
                     self.log.writeinfo('Passenger: auto accepted')
 
                 # 点击普通接受邀请
-                if(self.yys.wait_game_img('img\\JIE-SHOU.png', 0.1, False)):
+                elif(self.yys.wait_game_img('img\\JIE-SHOU.png', 0.1, False)):
                     self.yys.mouse_click_bg((125, 230))
                     self.log.writeinfo('Passenger: accepted')

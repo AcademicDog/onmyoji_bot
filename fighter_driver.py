@@ -6,9 +6,9 @@ import utilities
 class DriverFighter(fighter.Fighter):
     '''御魂战斗司机程序，参数mode, emyc'''
 
-    def __init__(self, mode, done, emyc=0):
+    def __init__(self, done = 1, emyc = 0):
         # 初始化
-        fighter.Fighter.__init__(self, emyc)
+        fighter.Fighter.__init__(self, 'Driver:', emyc)
 
     def start(self):
         '''单人御魂司机'''
@@ -22,7 +22,7 @@ class DriverFighter(fighter.Fighter):
             # 司机点击开始战斗，需要锁定御魂阵容
             self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png')
             mood1.moodsleep()
-            self.yys.mouse_click_bg((850, 509), (1002, 558))
+            self.yys.mouse_click_bg((857, 515), (998, 556))
             self.log.writeinfo('Driver: clicked KAI-SHI-ZHAN-DOU!')
 
             # 检测是否进入战斗
@@ -37,10 +37,10 @@ class DriverFighter(fighter.Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(utilities.firstposition())
+            mood3.moodsleep()
             start_time = time.time()
             while time.time() - start_time <= 10:
                 # 点击结算
-                mood3.moodsleep()
                 self.yys.mouse_click_bg(utilities.secondposition())
                 if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', mood3.get1mood()/1000, False)):
                     self.log.writeinfo('Driver: in team')
