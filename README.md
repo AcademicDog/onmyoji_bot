@@ -5,7 +5,7 @@
 
 # 使用说明
 
-环境：python 3.7, 32 bit；yys PC端；win 10系统。
+环境：python 3.7, 32 bit；yys PC端 默认分辨率 (1136x640)；win 10系统，屏幕(1920x1080)，显示设置100%。
 
 1、该脚本可以用于阴阳师御魂、业原火、御灵等单刷或双人组队，适用于PC端；
 
@@ -45,7 +45,7 @@
 
 1、双击运行run.bat，会弹出设置界面，点击确认后再根据个人情况选择参数；
 
-2、如果不想安装环境，可以访问下载最新已[编译](https://github.com/AcademicDog/onmyoji_bot/releases)版本。
+2、如果不想安装环境，可以访问下载最新已[编译](https://github.com/AcademicDog/onmyoji_bot/releases)版本，同时注意.exe文件和/img文件夹应该放在同一目录后再运行。
 
 # 下一步计划
 1、更新双开部分；
@@ -54,7 +54,10 @@
 
 # 更新说明
 v1.0.0.0619--抛弃dll插件，用win32api，同时用图像识别替代简单找色。
+
 v1.0.0.0621--修改了完成战斗后，等待时间重复计算的bug，同时移除了不必要的参数设置。
+
+v1.0.0.06211--根据[#2](https://github.com/AcademicDog/onmyoji_bot/issues/2)，增加了对已编译文件使用的说明，同时将/img文件夹一起打包发布。
 
 # 协议 (License)
 
