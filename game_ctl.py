@@ -49,7 +49,7 @@ class GameControl():
                 win32gui.DeleteObject(bmp.GetHandle())
                 #cv2.imshow("image", cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY))
                 #cv2.waitKey(0)
-                return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+                return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
         except:
             pass
 
@@ -85,7 +85,7 @@ class GameControl():
             memdc.DeleteDC()
             win32gui.ReleaseDC(self.hwnd, hwindc)
             win32gui.DeleteObject(bmp.GetHandle())            
-            return cv2.cvtColor(img, cv2.COLOR_BGRA2RGB)
+            return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
 
     def find_color(self,region,color,tolerance=0):
         """
@@ -132,7 +132,7 @@ class GameControl():
             :return: (maxVal,maxLoc) maxVal为相关性，越接近1越好，maxLoc为得到的坐标
         """
         img_src = self.window_full_shot()
-        img_template=cv2.imread(img_template_path,0)
+        img_template=cv2.imread(img_template_path, cv2.IMREAD_COLOR)
         res = cv2.matchTemplate(img_src, img_template, cv2.TM_CCOEFF_NORMED)
         minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
         #print(maxLoc)
@@ -236,7 +236,7 @@ class GameControl():
         while time.time()-start_time<=max_time:
             maxVal,maxLoc=self.find_img(img_path)
             if maxVal>0.97:
-                return True
+                return maxLoc
             if max_time > 5:
                 time.sleep(1)
             else:

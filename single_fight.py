@@ -35,10 +35,16 @@ class SingleFight(fighter.Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(utilities.firstposition())
-            mood3.moodsleep()
             start_time = time.time()
-            while time.time() - start_time <= 10:
-                self.yys.mouse_click_bg(utilities.secondposition())
+            while time.time() - start_time <= 10:                
                 if(self.yys.wait_game_img('img\\TIAO-ZHAN.png', mood3.get1mood()/1000, False)):
                     break
+
+                # 点击结算
+                self.yys.mouse_click_bg(utilities.secondposition())
+
+                # 如果没有成功上车，切到主界面提醒玩家
+                if time.time() - start_time > 10:
+                    self.yys.activate_window()
+
             self.log.writeinfo("Back to YUHUN level selection")

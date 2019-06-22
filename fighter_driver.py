@@ -37,14 +37,14 @@ class DriverFighter(fighter.Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(utilities.firstposition())
-            mood3.moodsleep()
             start_time = time.time()
-            while time.time() - start_time <= 10:
-                # 点击结算
-                self.yys.mouse_click_bg(utilities.secondposition())
+            while time.time() - start_time <= 10:                
                 if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', mood3.get1mood()/1000, False)):
                     self.log.writeinfo('Driver: in team')
                     break
+
+                # 点击结算
+                self.yys.mouse_click_bg(utilities.secondposition())
 
                 # 点击默认邀请
                 if(self.yys.wait_game_img('img\\ZI-DONG-YAO-QING.png', 0.2, False)):
@@ -52,3 +52,7 @@ class DriverFighter(fighter.Fighter):
                     time.sleep(0.2)
                     self.yys.mouse_click_bg((674, 384))
                     self.log.writeinfo('Driver: auto invited')
+
+                # 如果没有成功开车，切到主界面提醒玩家
+                if time.time() - start_time > 10:
+                    self.yys.activate_window()

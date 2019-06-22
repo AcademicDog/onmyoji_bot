@@ -30,21 +30,29 @@ class FighterPassenger(fighter.Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(utilities.firstposition())
-            mood3.moodsleep()
             start_time = time.time()
             while time.time() - start_time <= 10:
-                # 点击结算
-                self.yys.mouse_click_bg(utilities.secondposition())
+                # 检测是否回到队伍中
                 if(self.yys.wait_game_img('img\\LI-KAI-DUI-WU.png', mood3.get1mood()/1000, False)):
                     self.log.writeinfo('Passenger: in team')
                     break
 
-                # 点击自动接受邀请
-                if(self.yys.wait_game_img('img\\ZI-DONG-JIE-SHOU.png', 0.1, False)):
-                    self.yys.mouse_click_bg((210, 227))
-                    self.log.writeinfo('Passenger: auto accepted')
+                # 点击结算
+                self.yys.mouse_click_bg(utilities.secondposition())
 
-                # 点击普通接受邀请
-                elif(self.yys.wait_game_img('img\\JIE-SHOU.png', 0.1, False)):
-                    self.yys.mouse_click_bg((125, 230))
-                    self.log.writeinfo('Passenger: accepted')
+                # 检测是否有御魂邀请
+                yuhun_loc = self.yys.wait_game_img('img\\YU-HUN.png', 0.1, False)
+                if yuhun_loc:
+                    # 点击自动接受邀请
+                    if(self.yys.wait_game_img('img\\ZI-DONG-JIE-SHOU.png', 0.1, False)):
+                        self.yys.mouse_click_bg((210, yuhun_loc[1]))
+                        self.log.writeinfo('Passenger: auto accepted')
+
+                    # 点击普通接受邀请
+                    elif(self.yys.wait_game_img('img\\JIE-SHOU.png', 0.1, False)):
+                        self.yys.mouse_click_bg((125, yuhun_loc[1]))
+                        self.log.writeinfo('Passenger: accepted')
+
+                # 如果没有成功上车，切到主界面提醒玩家
+                if time.time() - start_time > 10:
+                    self.yys.activate_window()

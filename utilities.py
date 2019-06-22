@@ -63,7 +63,7 @@ def secondposition():
     w = 1136
     h = 640
     while True:
-        position = (random.randint(0, w), random.randint(50, h-40))
+        position = (random.randint(0, w), random.randint(50, h - 90))
         if position[0] < 210 or position[0] > 952:
             return position
         elif position[1] < 112 or position[1] > 490:
