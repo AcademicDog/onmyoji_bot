@@ -25,6 +25,7 @@ class Mood:
             4 : (2500, 1500),
             5 : (3000, 2000)}
         a = random.randint(1, self.state)
+        log.writeinfo("Now you mood is level %d", a)
         self.lastmood = Mood.mymood[a]
 
     def getmood(self):

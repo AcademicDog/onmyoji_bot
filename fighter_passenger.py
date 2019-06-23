@@ -8,7 +8,7 @@ class FighterPassenger(fighter.Fighter):
 
     def __init__(self, done = 1, emyc = 0):
         # 初始化
-        fighter.Fighter.__init__(self, 'Passenger:', emyc)
+        fighter.Fighter.__init__(self, 'Passenger: ', emyc)
 
     def start(self):
         '''单人御魂乘客'''
@@ -37,22 +37,19 @@ class FighterPassenger(fighter.Fighter):
                     self.log.writeinfo('Passenger: in team')
                     break
 
-                # 点击结算
-                self.yys.mouse_click_bg(utilities.secondposition())
+                # 点击结算，直到回到主界面
+                if (not self.yys.find_game_img('img\\MAIL.png')):
+                    self.yys.mouse_click_bg(utilities.secondposition())
 
                 # 检测是否有御魂邀请
                 yuhun_loc = self.yys.wait_game_img('img\\YU-HUN.png', 0.1, False)
                 if yuhun_loc:
                     # 点击自动接受邀请
-                    if(self.yys.wait_game_img('img\\ZI-DONG-JIE-SHOU.png', 0.1, False)):
+                    if self.yys.find_game_img('img\\ZI-DONG-JIE-SHOU.png'):
                         self.yys.mouse_click_bg((210, yuhun_loc[1]))
                         self.log.writeinfo('Passenger: auto accepted')
 
                     # 点击普通接受邀请
-                    elif(self.yys.wait_game_img('img\\JIE-SHOU.png', 0.1, False)):
+                    elif self.yys.find_game_img('img\\JIE-SHOU.png'):
                         self.yys.mouse_click_bg((125, yuhun_loc[1]))
                         self.log.writeinfo('Passenger: accepted')
-
-                # 如果没有成功上车，切到主界面提醒玩家
-                if time.time() - start_time > 10:
-                    self.yys.activate_window()
