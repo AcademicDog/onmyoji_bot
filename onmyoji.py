@@ -12,10 +12,7 @@ import single_fight
 # 设置
 global mode
 global emyc
-global hwnd
 global done
-hwnd = 0
-HWND=[0,0]
 
 #初始化对象
 log = logsystem.WriteLog()

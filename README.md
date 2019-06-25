@@ -1,3 +1,5 @@
+![avatar](https://raw.githubusercontent.com/AcademicDog/myresource/master/usage.png)
+
 # 特别感谢
 特别感谢society765在本项目中给与的启发，本项目在其[工作基础](https://github.com/society765/yys-auto-yuhun)上修改完成。
 
@@ -66,6 +68,8 @@ v1.0.0.06211--根据[#2](https://github.com/AcademicDog/onmyoji_bot/issues/2)，
 v1.0.0.0622--根据[#3](https://github.com/AcademicDog/onmyoji_bot/issues/3)，优化了乘客结算代码；将原先的灰度图像识别更改为彩色图像识别；在结算失败时，通过激活窗口来提醒玩家。
 
 v1.0.0.0623--调整了结算时开蛋的点击，现在不会在主界面仍然无脑点击了，同时优化了司机结算代码，移除了激活窗口代码。
+
+v1.0.0.0625--增加了UI，目前在ui分支中。
 
 # 协议 (License)
 
