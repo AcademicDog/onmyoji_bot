@@ -1,6 +1,3 @@
-import threading
-import win32com.client
-
 import game_ctl
 import utilities
 import logsystem
@@ -8,7 +5,7 @@ import logsystem
 
 class Fighter:
 
-    def __init__(self, name = '', emyc = 0):
+    def __init__(self, name='', emyc=0):
         # 初始参数
         self.emyc = emyc
         self.name = name

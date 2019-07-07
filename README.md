@@ -52,7 +52,7 @@
 2、如果不想安装环境，可以访问下载最新已[编译](https://github.com/AcademicDog/onmyoji_bot/releases)版本，同时注意.exe文件和/img文件夹应该放在同一目录后再运行。
 
 # 下一步计划
-1、更新双开部分；
+1、更新探索部分；
 
 2、完善点怪操作;
 
@@ -70,6 +70,8 @@ v1.0.0.0622--根据[#3](https://github.com/AcademicDog/onmyoji_bot/issues/3)，�
 v1.0.0.0623--调整了结算时开蛋的点击，现在不会在主界面仍然无脑点击了，同时优化了司机结算代码，移除了激活窗口代码。
 
 v1.0.0.0625--增加了UI，目前在ui分支中。
+
+v1.0.0.0707--根据[#4](https://github.com/AcademicDog/onmyoji_bot/issues/4)，调整了UI设计。
 
 # 协议 (License)
 

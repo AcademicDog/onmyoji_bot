@@ -161,7 +161,7 @@ class GameControl():
         鼠标单击
         """
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0,0,0)
-        time.sleep(0.05)
+        time.sleep(random.randint(20,80)/1000)
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0,0,0)
 
     def mouse_drag(self,pos1,pos2):
@@ -223,7 +223,7 @@ class GameControl():
             time.sleep(0.01)
         win32gui.SendMessage(self.hwnd,win32con.WM_LBUTTONUP,0,win32api.MAKELONG(pos2[0],pos2[1]))
 
-    def wait_game_img(self, img_path, max_time = 60, quit=True):
+    def wait_game_img(self, img_path, max_time = 100, quit=True):
         """
         等待游戏图像
             :param img_path: 图片路径
