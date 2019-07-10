@@ -144,9 +144,10 @@ class Ui_MainWindow(object):
         self.radioButton_2.setText(_translate("MainWindow", "单人司机"))
         self.radioButton_3.setText(_translate("MainWindow", "单人乘客"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "御魂/御灵"))
-        self.plainTextEdit_2.setPlainText(_translate("MainWindow", "把狗粮队长放在最左边，然后开始。\n"
+        self.plainTextEdit_2.setPlainText(_translate("MainWindow", "把狗粮队长放在最左边，点开需要打的章节，然后开始。\n"
 "支持自动换狗粮，只打经验怪。\n"
-"目前尚未完成调试！！！！！"))
+"\n"
+"目前尚未彻底完成调试！！！！！"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "探索"))
         self.plainTextEdit.setPlainText(_translate("MainWindow", "网址：https://github.com/AcademicDog/onmyoji_bot\n"
 "作者：两情相悦--山城"))

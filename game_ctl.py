@@ -85,7 +85,9 @@ class GameControl():
             memdc.DeleteDC()
             win32gui.ReleaseDC(self.hwnd, hwindc)
             win32gui.DeleteObject(bmp.GetHandle())            
-            return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
+            #cv2.imshow("image", cv2.cvtColor(img, cv2.COLOR_BGRA2BGR))
+            #cv2.waitKey(0)
+            return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
     def find_color(self,region,color,tolerance=0):
         """
@@ -125,13 +127,19 @@ class GameControl():
         else:
             return False
 
-    def find_img(self,img_template_path):
+    def find_img(self, img_template_path, part=0, pos1=None, pos2=None):
         """
         查找图片
             :param img_template_path: 欲查找的图片路径
+            :param part=0: 是否全屏查找，0为否，其他为是
+            :param pos1=None: 欲查找范围的左上角坐标
+            :param pos2=None: 欲查找范围的右下角坐标
             :return: (maxVal,maxLoc) maxVal为相关性，越接近1越好，maxLoc为得到的坐标
         """
-        img_src = self.window_full_shot()
+        if part == 1:
+            img_src = self.window_part_shot(pos1, pos2)
+        else:
+            img_src = self.window_full_shot()
         img_template=cv2.imread(img_template_path, cv2.IMREAD_COLOR)
         res = cv2.matchTemplate(img_src, img_template, cv2.TM_CCOEFF_NORMED)
         minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
@@ -296,16 +304,19 @@ class GameControl():
             return True
         return False
 
-    def find_game_img(self, img_path):
+    def find_game_img(self, img_path, part=0, pos1=None, pos2=None):
         '''
         查找图片
             :param img_path: 查找路径
+            :param part=0: 是否全屏查找，0为否，其他为是
+            :param pos1=None: 欲查找范围的左上角坐标
+            :param pos2=None: 欲查找范围的右下角坐标
             :param return: 查找成功返回True，否则返回False
         '''
         self.rejectbounty()
-        maxVal, maxLoc = self.find_img(img_path)
+        maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2)
         if maxVal>0.97:
-            return True
+            return maxLoc
         else:
             return False
 

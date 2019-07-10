@@ -25,17 +25,24 @@ class MyMainWindow(QMainWindow):
         logger.addHandler(h)
 
     def start_onmyoji(self):
-        if mode == 0:
-            # 单刷
-            fight = single_fight.SingleFight()
+        section = self.ui.tabWidget.currentIndex()
+        if section == 0:
+            # 御魂
+            if mode == 0:
+                # 单刷
+                fight = single_fight.SingleFight()
     
-        if mode == 2:
-            # 司机
-            fight = fighter_driver.DriverFighter()
+            if mode == 2:
+                # 司机
+                fight = fighter_driver.DriverFighter()
     
-        if mode == 3:
-            # 乘客
-            fight = fighter_passenger.FighterPassenger()
+            if mode == 3:
+                # 乘客
+                fight = fighter_passenger.FighterPassenger()
+        
+        elif section == 1:
+            # 探索
+            fight = explore.ExploreFight()
 
         self.task = threading.Thread(target = fight.start)
         self.task.start()
@@ -56,6 +63,8 @@ class MyMainWindow(QMainWindow):
         logging.info('Quitting!')
         os._exit(0)
 
+        print(self.ui.tabWidget.currentIndex())
+
 if __name__=="__main__":  
     
     try:
@@ -63,6 +72,8 @@ if __name__=="__main__":
         if is_admin():
             global mode
             mode = 0
+            global section
+            section = 0
 
             # 设置战斗参数
             app = QApplication(sys.argv)

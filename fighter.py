@@ -1,7 +1,7 @@
 import game_ctl
 import utilities
 import logsystem
-
+import time
 
 class Fighter:
 

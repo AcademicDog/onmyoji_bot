@@ -4,6 +4,7 @@ import os
 import ctypes
 import threading
 
+import explore
 import fighter_driver
 import fighter_passenger
 import logsystem
@@ -18,18 +19,23 @@ global done
 log = logsystem.WriteLog()
 
 def init():
+    global section
     global mode
     global emyc
     global done
     
     try:
-        # 模式选择
-        mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n2-组队司机\n3-组队打手\n'))
-        if(mode==1):
-            log.writewarning('未开发，告辞！')
-            os._exit(0)
-        elif(mode != 2 and mode != 0 and mode != 3):
-            mode=0
+        # 选择打什么
+        section = int(input('\n选择刷什么(Ctrl-C跳过并单刷御魂：\n0-御魂\n1-探索\n'))
+        log.writeinfo('Section = %d', section)
+        if section == 0:
+            # 御魂模式选择
+            mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n2-组队司机\n3-组队打手\n'))
+            if(mode==1):
+                log.writewarning('未开发，告辞！')
+                os._exit(0)
+            elif(mode != 2 and mode != 0 and mode != 3):
+                mode=0
         
         # 点怪设置
         # emyc=int(input('\n是否点怪？\n0-不点怪\n1-点中间怪\n2-点右边怪\n'))
@@ -40,10 +46,11 @@ def init():
         # done=int(input('\n结束后如何处理？\n0-退出\n1-关机\n'))
         # if not ((done == 0) or (done == 1)):
         #     done = 0
-        log.writeinfo('Mode = %d',mode)
+            log.writeinfo('Mode = %d',mode)
         # log.writeinfo('Emyc = %d',emyc)
         # log.writeinfo('Postoperation = %d',done)
     except:
+        section = 0
         mode=0
         emyc=0
         done=1
@@ -72,6 +79,12 @@ def yuhun():
         # 乘客
         fight = fighter_passenger.FighterPassenger()        
         fight.start()    
+    
+def tansuo():
+    '''探索战斗'''
+    fight = explore.ExploreFight()
+    print(1)
+    fight.start()
 
 if __name__ == "__main__":    
     log.writeinfo('python version: %s', sys.version)
@@ -85,8 +98,13 @@ if __name__ == "__main__":
             # 设置战斗参数
             init()
 
-            # 开始战斗              
-            yuhun()
+            # 开始战斗
+            print('da')
+            print(section)
+            if section == 0:
+                yuhun()
+            elif section == 1:
+                tansuo()
 
         else:
             ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)       
