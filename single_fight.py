@@ -15,7 +15,7 @@ class SingleFight(fighter.Fighter):
         '''单人战斗主循环'''
         mood1 = utilities.Mood()
         mood2 = utilities.Mood()
-        mood3 = utilities.Mood(3)
+        mood3 = utilities.Mood()
         while True:
             # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
             self.yys.wait_game_img('img\\TIAO-ZHAN.png')
@@ -36,8 +36,8 @@ class SingleFight(fighter.Fighter):
             # 在战斗结算页面
             self.yys.mouse_click_bg(utilities.firstposition())
             start_time = time.time()
-            while time.time() - start_time <= 10:                
-                if(self.yys.wait_game_img('img\\TIAO-ZHAN.png', mood3.get1mood()/1000, False)):
+            while time.time() - start_time <= 12:                
+                if(self.yys.wait_game_img('img\\TIAO-ZHAN.png', mood3.get1mood()/2000, False)):
                     break
 
                 # 点击结算

@@ -14,7 +14,7 @@ class FighterPassenger(fighter.Fighter):
         '''单人御魂乘客'''
         # 设定点击疲劳度
         mood2 = utilities.Mood()
-        mood3 = utilities.Mood(3)
+        mood3 = utilities.Mood()
 
         # 战斗主循环
         while True:
@@ -31,9 +31,9 @@ class FighterPassenger(fighter.Fighter):
             # 在战斗结算页面
             self.yys.mouse_click_bg(utilities.firstposition())
             start_time = time.time()
-            while time.time() - start_time <= 10:
+            while time.time() - start_time <= 12:
                 # 检测是否回到队伍中
-                if(self.yys.wait_game_img('img\\LI-KAI-DUI-WU.png', mood3.get1mood()/1000, False)):
+                if(self.yys.wait_game_img('img\\LI-KAI-DUI-WU.png', mood3.get1mood()/2000, False)):
                     self.log.writeinfo('Passenger: in team')
                     break
 

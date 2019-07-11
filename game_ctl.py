@@ -311,7 +311,7 @@ class GameControl():
             :param part=0: 是否全屏查找，0为否，其他为是
             :param pos1=None: 欲查找范围的左上角坐标
             :param pos2=None: 欲查找范围的右下角坐标
-            :param return: 查找成功返回True，否则返回False
+            :param return: 查找成功返回找到的坐标，否则返回False
         '''
         self.rejectbounty()
         maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2)

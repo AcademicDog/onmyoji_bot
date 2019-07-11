@@ -111,8 +111,8 @@ class ExploreFight(Fighter):
             # 在战斗结算页面
             self.yys.mouse_click_bg(utilities.firstposition())
             start_time = time.time()
-            while time.time() - start_time <= 10:
-                if(self.yys.wait_game_img('img\\YING-BING.png', mood2.get1mood()/1000, False)):
+            while time.time() - start_time <= 12:
+                if(self.yys.wait_game_img('img\\YING-BING.png', mood2.get1mood()/2000, False)):
                     break
 
                 # 点击结算

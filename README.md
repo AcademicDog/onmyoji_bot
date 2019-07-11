@@ -73,7 +73,9 @@ v1.0.0.0625--增加了UI，目前在ui分支中。
 
 v1.0.0.0707--根据[#4](https://github.com/AcademicDog/onmyoji_bot/issues/4)，调整了UI设计。
 
-v1.0.0.0710--增加了单人探索的代码
+v1.0.0.0710--增加了单人探索的代码。
+
+v1.0.0.0711--根据[#5](https://github.com/AcademicDog/onmyoji_bot/issues/5)，调整了结算的点击周期和结算时间。
 
 # 协议 (License)
 

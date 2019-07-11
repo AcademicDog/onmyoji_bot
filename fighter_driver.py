@@ -15,7 +15,7 @@ class DriverFighter(fighter.Fighter):
         # 设定点击疲劳度
         mood1 = utilities.Mood()
         mood2 = utilities.Mood()
-        mood3 = utilities.Mood(3)
+        mood3 = utilities.Mood()
 
         # 战斗主循环
         self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png')
@@ -45,8 +45,8 @@ class DriverFighter(fighter.Fighter):
             # 在战斗结算页面
             self.yys.mouse_click_bg(utilities.firstposition())
             start_time = time.time()
-            while time.time() - start_time <= 10:                
-                if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', mood3.get1mood()/1000, False)):
+            while time.time() - start_time <= 12:                
+                if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', mood3.get1mood()/2000, False)):
                     self.log.writeinfo('Driver: in team')
                     break
 
