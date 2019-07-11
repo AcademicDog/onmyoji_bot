@@ -61,14 +61,15 @@ def secondposition():
     获得点击位置，扣除御魂部分
         :return: 返回随机位置坐标
     '''
-    w = 1136
-    h = 640
+    return (random.randint(887, 1111), random.randint(56, 452))
+    '''
     while True:
         position = (random.randint(0, w), random.randint(50, h - 90))
-        if position[0] < 210 or position[0] > 952:
+        if position[0] < 180 or position[0] > 956:
             return position
-        elif position[1] < 112 or position[1] > 490:
+        elif position[1] < 112:
             return position
+    '''
 
 
 def mysleep(slpa, slpb = 0): 
