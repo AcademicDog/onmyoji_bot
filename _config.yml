@@ -4,6 +4,8 @@ title: 辅助助手
 
 show_downloads: true
 
+google_analytics: UA-144356821-1
+
 github:
   zip_url: https://github.com/AcademicDog/onmyoji_bot/releases
   tar_url: https://github.com/AcademicDog/onmyoji_bot
