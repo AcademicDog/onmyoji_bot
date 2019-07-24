@@ -2,7 +2,9 @@
 
 如果您对本[项目](https://github.com/AcademicDog/onmyoji_bot)感兴趣，欢迎加入[我们](https://github.com/AcademicDog/onmyoji_bot/graphs/contributors)！
 
-## 主要功能
+* * *
+
+# 主要功能
 本工具用于阴阳师代肝，为各位阴阳师大佬养老护肝所用。
 
 ![Branching](https://raw.githubusercontent.com/AcademicDog/myresource/master/usage.png)
@@ -63,6 +65,18 @@
 
 * * *
 
+# 注意事项
+
+1.  探索换狗粮的时候，默认是换上第一个N卡，因此注意不要对N卡点击“喜欢”，导致反复换上一个满级的狗粮；
+
+1.  点怪目前不可用，因为有的模型太大，挡住了点怪图标；
+
+1.  当使用 Windows 7 系统时，需要调整系统的画面设置：把主题调为最丑最挫的那个。在 Windows 10 系统中，不需要调整系统画面设置；
+
+1.  当使用高分辨率屏幕时，在阴阳师客户端程序兼容性选项里，不要勾选"替代高DPI缩放行为"，这个选项应该是默认不勾选的。
+
+* * *
+
 # 更新日志
 
 *   v1.0.0.0619--抛弃dll插件，用win32api，同时用图像识别替代简单找色。
@@ -74,6 +88,7 @@
 *   v1.0.0.0707--根据[#4](https://github.com/AcademicDog/onmyoji_bot/issues/4)，调整了UI设计。
 *   v1.0.0.0710--增加了单人探索的代码。
 *   v1.0.0.0711--根据[#5](https://github.com/AcademicDog/onmyoji_bot/issues/5)，调整了结算点击位置。
+*   v1.0.0.0724--优化了探索代码。
 
 ### 下一步工作计划
 
