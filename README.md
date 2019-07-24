@@ -1,3 +1,5 @@
+目前已开通项目网站，请访问[此地址](https://academicdog.github.io/onmyoji_bot/)获取最新信息。
+
 ![avatar](https://raw.githubusercontent.com/AcademicDog/myresource/master/usage.png)
 
 # 特别感谢
@@ -76,6 +78,8 @@ v1.0.0.0707--根据[#4](https://github.com/AcademicDog/onmyoji_bot/issues/4)，�
 v1.0.0.0710--增加了单人探索的代码。
 
 v1.0.0.0711--根据[#5](https://github.com/AcademicDog/onmyoji_bot/issues/5)，调整了结算点击位置。
+
+v1.0.0.0724--优化了探索代码。
 
 # 协议 (License)
 

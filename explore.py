@@ -1,6 +1,8 @@
 from fighter import *
 from game_pos import *
 
+import random
+
 
 class ExploreFight(Fighter):
     def __init__(self):
@@ -8,7 +10,14 @@ class ExploreFight(Fighter):
         Fighter.__init__(self)
 
     def next_scene(self):
-        self.yys.mouse_drag_bg((1130, 118), (20, 118))
+        '''
+        移动至下一个场景，每次移动400像素
+        '''
+        x0 = random.randint(510, 1126)
+        x1 = x0 - 500
+        y0 = random.randint(110, 210)
+        y1 = random.randint(110, 210)
+        self.yys.mouse_drag_bg((x0, y0), (x1, y1))
         # self.yys.mouse_drag_bg((1130,118),(20,118))
 
     def check_exp_full(self):
@@ -21,8 +30,8 @@ class ExploreFight(Fighter):
         gouliang2 = self.yys.find_game_img(
             'img\\MAN2.png', 1, (628, 333), (693, 394))
         
-        print(gouliang1)
-        print(gouliang2)
+        #print(gouliang1)
+        #print(gouliang2)
 
         # 如果都没满则退出
         if not gouliang1 and not gouliang2:
@@ -76,18 +85,21 @@ class ExploreFight(Fighter):
         return fight_pos
 
     def fight_moster(self, mood1, mood2):
-        '''打经验怪'''
+        '''
+        打经验怪
+            :return: 打完返回True；未找到经验怪返回False
+        '''
         while True:
             mood1.moodsleep()
             # 查看是否进入探索界面
             self.yys.wait_game_img('img\\YING-BING.png')
-            self.log.writeinfo('In field')
+            self.log.writeinfo('In tan-suo field')
 
             # 寻找经验怪，未找到则退出
             fight_pos = self.find_exp_moster()
             if fight_pos == -1:
-                self.log.writeinfo('Back')
-                break
+                self.log.writeinfo('Exp moster not found')
+                return False
 
             # 攻击经验怪
             self.yys.mouse_click_bg(fight_pos)            
@@ -113,7 +125,7 @@ class ExploreFight(Fighter):
             start_time = time.time()
             while time.time() - start_time <= 10:
                 if(self.yys.wait_game_img('img\\YING-BING.png', mood2.get1mood()/1000, False)):
-                    break
+                    return True
 
                 # 点击结算
                 self.yys.mouse_click_bg(utilities.secondposition())
@@ -130,9 +142,19 @@ class ExploreFight(Fighter):
             # 点击挑战按钮
             self.yys.wait_game_img('img\\TAN-SUO.png')
             self.yys.mouse_click_bg((785, 456), (894, 502))
-            self.fight_moster(mood1, mood2)
-            self.next_scene()
-            self.fight_moster(mood1, mood2)
+
+            # 开始打怪
+            i = 0
+            while i < 4:
+                result = self.fight_moster(mood1, mood2)
+                if result:
+                    continue
+                else:
+                    self.log.writeinfo('Going to next scene')
+                    self.next_scene()
+                    i += 1
+
+            # 退出探索
             while True:
                 self.yys.mouse_click_bg(
                     TansuoPos.quit_btn.pos, TansuoPos.quit_btn.pos_end)
@@ -140,3 +162,4 @@ class ExploreFight(Fighter):
                     break
             self.yys.mouse_click_bg(
                 TansuoPos.confirm_btn.pos, TansuoPos.confirm_btn.pos_end)
+            self.log.writeinfo('Quit this cycle')
