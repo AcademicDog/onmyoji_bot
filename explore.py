@@ -24,11 +24,11 @@ class ExploreFight(Fighter):
         '''
         检查狗粮经验，并自动换狗粮
         '''
-        # 狗粮经验判断
+        # 狗粮经验判断, gouliang1是中间狗粮，gouliang2是右边狗粮
         gouliang1 = self.yys.find_game_img(
-            'img\\MAN1.png', 1, (397, 287), (461, 349))
+            'img\\MAN1.png', 1, (397, 258), (461, 349), 1)
         gouliang2 = self.yys.find_game_img(
-            'img\\MAN2.png', 1, (628, 333), (693, 394))
+            'img\\MAN2.png', 1, (628, 333), (693, 430), 1)
         
         #print(gouliang1)
         #print(gouliang2)

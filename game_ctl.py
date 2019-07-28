@@ -14,10 +14,11 @@ class GameControl():
     def __init__(self,window_name):
         self.hwnd = win32gui.FindWindow(0,window_name)
 
-    def window_full_shot(self,file_name=None):
+    def window_full_shot(self, file_name=None, gray=0):
         """
         窗口截图
             :param file_name=None: 截图文件的保存名称
+            :param gray=0: 是否返回灰度图像，0：返回BGR彩色图像，其他：返回灰度黑白图像
             :return: file_name为空则返回RGB数据
         """
         try:
@@ -49,16 +50,20 @@ class GameControl():
                 win32gui.DeleteObject(bmp.GetHandle())
                 #cv2.imshow("image", cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY))
                 #cv2.waitKey(0)
-                return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+                if gray == 0:
+                    return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+                else:
+                    return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
         except:
             pass
 
-    def window_part_shot(self,pos1,pos2,file_name=None):
+    def window_part_shot(self, pos1, pos2, file_name=None, gray=0):
         """
         窗口区域截图
             :param pos1: (x,y) 截图区域的左上角坐标
             :param pos2: (x,y) 截图区域的右下角坐标
             :param file_name=None: 截图文件的保存路径
+            :param gray=0: 是否返回灰度图像，0：返回BGR彩色图像，其他：返回灰度黑白图像
             :return: file_name为空则返回RGB数据
         """
         w=pos2[0]-pos1[0]
@@ -87,7 +92,10 @@ class GameControl():
             win32gui.DeleteObject(bmp.GetHandle())            
             #cv2.imshow("image", cv2.cvtColor(img, cv2.COLOR_BGRA2BGR))
             #cv2.waitKey(0)
-            return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+            if gray == 0:
+                return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
+            else:
+                return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
 
     def find_color(self,region,color,tolerance=0):
         """
@@ -127,20 +135,28 @@ class GameControl():
         else:
             return False
 
-    def find_img(self, img_template_path, part=0, pos1=None, pos2=None):
+    def find_img(self, img_template_path, part=0, pos1=None, pos2=None, gray=0):
         """
         查找图片
             :param img_template_path: 欲查找的图片路径
-            :param part=0: 是否全屏查找，0为否，其他为是
+            :param part=0: 是否全屏查找，1为否，其他为是
             :param pos1=None: 欲查找范围的左上角坐标
             :param pos2=None: 欲查找范围的右下角坐标
+            :param gray=0: 是否彩色查找，0：查找彩色图片，1：查找黑白图片
             :return: (maxVal,maxLoc) maxVal为相关性，越接近1越好，maxLoc为得到的坐标
         """
+        # 获取截图
         if part == 1:
-            img_src = self.window_part_shot(pos1, pos2)
+            img_src = self.window_part_shot(pos1, pos2, None, gray)
         else:
-            img_src = self.window_full_shot()
-        img_template=cv2.imread(img_template_path, cv2.IMREAD_COLOR)
+            img_src = self.window_full_shot(None, gray)
+
+        # 读入文件
+        if gray == 0:
+            img_template = cv2.imread(img_template_path, cv2.IMREAD_COLOR)
+        else:
+            img_template = cv2.imread(img_template_path, cv2.IMREAD_GRAYSCALE)
+
         res = cv2.matchTemplate(img_src, img_template, cv2.TM_CCOEFF_NORMED)
         minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
         #print(maxLoc)
@@ -304,17 +320,19 @@ class GameControl():
             return True
         return False
 
-    def find_game_img(self, img_path, part=0, pos1=None, pos2=None):
+    def find_game_img(self, img_path, part=0, pos1=None, pos2=None, gray=0):
         '''
         查找图片
             :param img_path: 查找路径
             :param part=0: 是否全屏查找，0为否，其他为是
             :param pos1=None: 欲查找范围的左上角坐标
             :param pos2=None: 欲查找范围的右下角坐标
-            :param return: 查找成功返回True，否则返回False
+            :param gray=0: 是否查找黑白图片，0：查找彩色图片，1：查找黑白图片
+            :return: 查找成功返回True，否则返回False
         '''
         self.rejectbounty()
-        maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2)
+        maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2, gray)
+        #print(maxVal)
         if maxVal>0.97:
             return maxLoc
         else:
