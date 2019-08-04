@@ -84,6 +84,21 @@ class ExploreFight(Fighter):
         fight_pos = ((find_pos[0]+exp_pos[0]-150),(find_pos[1]+exp_pos[1]-250))
         return fight_pos
 
+    def find_boss(self):
+        '''
+        寻找BOSS
+            :return: 成功返回BOSS的攻打图标位置；失败返回-1
+        '''
+        # 查找BOSS攻打图标位置
+        find_pos = self.yys.find_game_img(
+            'img\\BOSS.png', 1, (2, 205), (1127, 545))
+        if not find_pos:
+            return -1
+
+        # 返回BOSS攻打图标位置
+        fight_pos = ((find_pos[0]+2), (find_pos[1]+205))
+        return fight_pos
+
     def fight_moster(self, mood1, mood2):
         '''
         打经验怪
@@ -95,13 +110,15 @@ class ExploreFight(Fighter):
             self.yys.wait_game_img('img\\YING-BING.png')
             self.log.writeinfo('In tan-suo field')
 
-            # 寻找经验怪，未找到则退出
+            # 寻找经验怪，未找到则寻找boss，再未找到则退出
             fight_pos = self.find_exp_moster()
             if fight_pos == -1:
-                self.log.writeinfo('Exp moster not found')
-                return False
+                fight_pos = self.find_boss()
+                if fight_pos == -1:
+                    self.log.writeinfo('Monster not found')
+                    return False
 
-            # 攻击经验怪
+            # 攻击怪
             self.yys.mouse_click_bg(fight_pos)            
             if not self.yys.wait_game_img('img\\ZHUN-BEI.png', 3, False):                
                 break

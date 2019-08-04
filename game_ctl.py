@@ -328,7 +328,7 @@ class GameControl():
             :param pos1=None: 欲查找范围的左上角坐标
             :param pos2=None: 欲查找范围的右下角坐标
             :param gray=0: 是否查找黑白图片，0：查找彩色图片，1：查找黑白图片
-            :return: 查找成功返回True，否则返回False
+            :return: 查找成功返回位置坐标，否则返回False
         '''
         self.rejectbounty()
         maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2, gray)
