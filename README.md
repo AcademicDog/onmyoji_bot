@@ -1,44 +1,34 @@
-**目前已开通项目网站，请访问[此地址](https://academicdog.github.io/onmyoji_bot/)获取最新信息。**
+# 欢迎
 
-![avatar](https://raw.githubusercontent.com/AcademicDog/myresource/master/usage.png)
+[![GitHub release](https://img.shields.io/github/release/academicdog/onmyoji_bot)](https://github.com/AcademicDog/onmyoji_bot/releases) ![GitHub top language](https://img.shields.io/github/languages/top/academicdog/onmyoji_bot) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/academicdog/onmyoji_bot)  ![GitHub repo size](https://img.shields.io/github/repo-size/academicdog/onmyoji_bot)    ![GitHub](https://img.shields.io/github/license/academicdog/onmyoji_bot)   ![platforms](https://img.shields.io/badge/platform-win32|win64-brightgreen.svg) [![GitHub issues](https://img.shields.io/github/issues/academicdog/onmyoji_bot.svg)](https://github.com/academicdog/onmyoji_bot/issues) [![GitHub closed issues](https://img.shields.io/github/issues-closed/academicdog/onmyoji_bot.svg)](https://github.com/academicdog/onmyoji_bot/issues?q=is:issue+is:closed)  ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/academicdog/onmyoji_bot)  ![GitHub contributors](https://img.shields.io/github/contributors/academicdog/onmyoji_bot.svg)
+
+<img align="right" width="300" src="https://raw.githubusercontent.com/AcademicDog/myresource/master/usage.png" alt="copy URL to clipboard" />
+
+本工具用于阴阳师代肝，为各位阴阳师大佬养老护肝所用。
+
+目前已开通项目网站，请访问🌍[此地址](https://academicdog.github.io/onmyoji_bot/)获取最新信息。
 
 # 特别感谢
+
 特别感谢society765在本项目中给与的启发，本项目在其[工作基础](https://github.com/society765/yys-auto-yuhun)上修改完成。
 
 同时感谢sup817ch的图像识别思路，本项目game_ctl模块基于其[工作基础](https://github.com/sup817ch/AutoOnmyoji)。
 
-# 使用说明
+# 注意事项
 
 环境：python 3.7, 32 bit；yys PC端 默认分辨率 (1136x640)；win 10系统，屏幕(1920x1080)，显示设置100%。
 
-1、该脚本可以用于阴阳师御魂、业原火、御灵、探索等单刷或双人组队，适用于PC端；
+1.  窗口现在可以完全后台，可以被遮挡，但是**不能最小化**。
 
-2、窗口现在可以完全后台，可以被遮挡，但是不能最小化，不能最小化，不能最小化；
+1.  不要开启游戏中的“模型描边”。
 
-3、玩家需要提前准备好战斗阵容，阵容需要锁定；
+1.  当使用 Windows 7 系统时，需要调整系统的画面设置：把主题调为最丑最挫的那个。在 Windows 10 系统中，不需要调整系统画面设置。
 
-4、在战斗过程中，该脚本会自动拒绝所有悬赏封印的邀请；
+1.  当使用高分辨率屏幕时，在阴阳师客户端程序兼容性选项里，不要勾选“替代高DPI缩放行为”，这个选项应该是默认不勾选的。
 
-5、本人只测试过魂十、探索，其他请自测；
+1.  如果不想安装运行环境，可以访问下载最新已[编译](https://github.com/AcademicDog/onmyoji_bot/releases)版本，该版本有图形界面，同时注意.exe文件和/img文件夹应该放在同一目录后再运行。
 
-6、如果60s程序没有任何操作，视为体力用光，为了保护加成，自动关闭YYS；
-
-7、该脚本仅使用了画面找色，鼠标后台点击的函数，完全模拟人类玩家行为，没有使用任何内存读写函数。在敏感位置添加了均匀分布的随机时间漂移，和随机坐标漂移；
-
-
-# 注意事项
-1、点怪目前不可用，因为有的模型太大，挡住了点怪图标；
-
-2、当使用 Windows 7 系统时，需要调整系统的画面设置：把主题调为最丑最挫的那个。在 Windows 10 系统中，不需要调整系统画面设置；
-
-3、当使用高分辨率屏幕时，在阴阳师客户端程序兼容性选项里，不要勾选"替代高DPI缩放行为"，这个选项应该是默认不勾选的；
-
-4、建议使用脚本时，去到人比较稀少的频道，以免点开路人对话框；
-
-5、请关闭模型描边。
-
-6、如果不想安装运行环境，可以访问下载最新已[编译](https://github.com/AcademicDog/onmyoji_bot/releases)版本，该版本有图形界面，同时注意.exe文件和/img文件夹应该放在同一目录后再运行。
-
+1.  探索换狗粮的时候，默认是换上第一个N卡，因此注意**不要**对N卡点击“喜欢”，导致反复换上一个满级的狗粮。 
 
 # 更新说明
 v1.0.0.0619--抛弃dll插件，用win32api，同时用图像识别替代简单找色。
