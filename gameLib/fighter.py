@@ -1,7 +1,7 @@
-import game_ctl
-import utilities
-import logsystem
-import time
+from gameLib.game_ctl import GameControl
+import tools.utilities as ut
+from tools.logsystem import WriteLog
+
 
 class Fighter:
 
@@ -11,16 +11,16 @@ class Fighter:
         self.name = name
 
         # 启动日志
-        self.log = logsystem.WriteLog()
+        self.log = WriteLog()
 
         # 绑定窗口
-        self.yys = game_ctl.GameControl(u'阴阳师-网易游戏')
+        self.yys = GameControl(u'阴阳师-网易游戏')
         self.log.writeinfo(self.name + 'Registration successful')
 
         # 激活窗口
         self.yys.activate_window()
         self.log.writeinfo(self.name + 'Activation successful')
-        utilities.mysleep(500)
+        ut.mysleep(500)
 
     def check_battle(self):
         # 检测是否进入战斗

@@ -1,14 +1,12 @@
-import win32com.client 
-import sys 
+import sys
 import os
 import ctypes
-import threading
 
-import explore
-import fighter_driver
-import fighter_passenger
-import logsystem
-import single_fight
+from explore.explore import ExploreFight
+from mitama.fighter_driver import DriverFighter
+from mitama.fighter_passenger import FighterPassenger
+from mitama.single_fight import SingleFight
+from tools.logsystem import WriteLog
 
 # 设置
 global mode
@@ -16,7 +14,7 @@ global emyc
 global done
 
 #初始化对象
-log = logsystem.WriteLog()
+log = WriteLog()
 
 def init():
     global section
@@ -67,23 +65,22 @@ def yuhun():
     '''御魂战斗'''
     if mode == 0:
         # 单刷
-        fight = single_fight.SingleFight()
+        fight = SingleFight()
         fight.start()
     
     if mode == 2:
         # 司机
-        fight = fighter_driver.DriverFighter()
+        fight = DriverFighter()
         fight.start()
     
     if mode == 3:
         # 乘客
-        fight = fighter_passenger.FighterPassenger()        
+        fight = FighterPassenger()        
         fight.start()    
     
 def tansuo():
     '''探索战斗'''
-    fight = explore.ExploreFight()
-    print(1)
+    fight = ExploreFight()
     fight.start()
 
 if __name__ == "__main__":    
@@ -99,8 +96,6 @@ if __name__ == "__main__":
             init()
 
             # 开始战斗
-            print('da')
-            print(section)
             if section == 0:
                 yuhun()
             elif section == 1:

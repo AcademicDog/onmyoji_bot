@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import QObject, pyqtSignal
 from Ui_onmyoji import *
 import logging
+import threading
 
 class GuiLogger(logging.Handler):
     def emit(self, record):
@@ -30,19 +31,19 @@ class MyMainWindow(QMainWindow):
             # 御魂
             if mode == 0:
                 # 单刷
-                fight = single_fight.SingleFight()
+                fight = SingleFight()
     
             if mode == 2:
                 # 司机
-                fight = fighter_driver.DriverFighter()
+                fight = DriverFighter()
     
             if mode == 3:
                 # 乘客
-                fight = fighter_passenger.FighterPassenger()
+                fight = FighterPassenger()
         
         elif section == 1:
             # 探索
-            fight = explore.ExploreFight()
+            fight = ExploreFight()
 
         self.task = threading.Thread(target = fight.start)
         self.task.start()

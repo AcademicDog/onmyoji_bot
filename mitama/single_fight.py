@@ -1,21 +1,18 @@
-import time
-import fighter
-import game_ctl
-import utilities
+from gameLib.fighter import Fighter, ut
 
 
-class SingleFight(fighter.Fighter):
+class SingleFight(Fighter):
     '''单人御魂战斗，参数done, emyc'''
 
-    def __init__(self, done = 1, emyc = 0):
+    def __init__(self, done=1, emyc=0):
         # 初始化
-        fighter.Fighter.__init__(self, '', emyc)
+        Fighter.__init__(self, '', emyc)
 
     def start(self):
         '''单人战斗主循环'''
-        mood1 = utilities.Mood()
-        mood2 = utilities.Mood()
-        mood3 = utilities.Mood(3)
+        mood1 = ut.Mood()
+        mood2 = ut.Mood()
+        mood3 = ut.Mood(3)
         while True:
             # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
             self.yys.wait_game_img('img\\TIAO-ZHAN.png')
@@ -34,17 +31,17 @@ class SingleFight(fighter.Fighter):
             mood2.moodsleep()
 
             # 在战斗结算页面
-            self.yys.mouse_click_bg(utilities.firstposition())
-            start_time = time.time()
-            while time.time() - start_time <= 10:                
+            self.yys.mouse_click_bg(ut.firstposition())
+            start_time = ut.time.time()
+            while ut.time.time() - start_time <= 10:
                 if(self.yys.wait_game_img('img\\TIAO-ZHAN.png', mood3.get1mood()/1000, False)):
                     break
 
                 # 点击结算
-                self.yys.mouse_click_bg(utilities.secondposition())
+                self.yys.mouse_click_bg(ut.secondposition())
 
                 # 如果没有成功上车，切到主界面提醒玩家
-                if time.time() - start_time > 10:
+                if ut.time.time() - start_time > 10:
                     self.yys.activate_window()
 
             self.log.writeinfo("Back to YUHUN level selection")

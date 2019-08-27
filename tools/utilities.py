@@ -1,10 +1,10 @@
 import time
 import random
-import os
 
-import logsystem
+from tools.logsystem import WriteLog
 
-log = logsystem.WriteLog()
+log = WriteLog()
+
 
 class Mood:
     '''
@@ -14,16 +14,17 @@ class Mood:
     normal: 状态一般，点击延迟在1.8-3s\n
     tired: 状态疲劳，点击延迟在2.5-4\n
     exhausted: CHSM，点击延迟在3-5s\n
-    '''    
-    def __init__(self, state = 5):
+    '''
+
+    def __init__(self, state=5):
         self.lastime = time.time()
         self.state = state
         Mood.mymood = {
-            1 : (1000, 500),
-            2 : (1300, 800),
-            3 : (1800, 1200),
-            4 : (2500, 1500),
-            5 : (3000, 2000)}
+            1: (1000, 500),
+            2: (1300, 800),
+            3: (1800, 1200),
+            4: (2500, 1500),
+            5: (3000, 2000)}
         a = random.randint(1, self.state)
         log.writeinfo("Now you mood is level %d", a)
         self.lastmood = Mood.mymood[a]
@@ -42,6 +43,7 @@ class Mood:
     def get1mood(self):
         return random.randint(self.getmood()[0], self.getmood()[0] + self.getmood()[1])
 
+
 def firstposition():
     '''
     获得点击位置，扣除御魂部分
@@ -55,6 +57,7 @@ def firstposition():
             return position
         elif position[1] < 350 or position[1] > 462:
             return position
+
 
 def secondposition():
     '''
@@ -72,15 +75,16 @@ def secondposition():
     '''
 
 
-def mysleep(slpa, slpb = 0): 
+def mysleep(slpa, slpb=0):
     '''
     randomly sleep for a short time between `slpa` and `slpa + slpb` \n
     because of the legacy reason, slpa and slpb are in millisecond
     '''
-    slp = random.randint(slpa, slpa+slpb) 
+    slp = random.randint(slpa, slpa+slpb)
     time.sleep(slp/1000)
 
-def crnd(ts, x1, x2, y1, y2): 
+
+def crnd(ts, x1, x2, y1, y2):
     '''
     randomly click a point in a rectangle region (x1, y1), (x2, y2)
     '''
@@ -88,13 +92,14 @@ def crnd(ts, x1, x2, y1, y2):
     yr = random.randint(y1, y2)
     ts.MoveTo(xr, yr)
     mysleep(100, 100)
-    ts.LeftClick() 
+    ts.LeftClick()
     mysleep(100, 100)
+
 
 def rejxs(ts):
     '''拒绝悬赏'''
     colxs = ts.GetColor(750, 458)
-    #print(colxs)
+    # print(colxs)
     if colxs == "df715e":
         crnd(ts, 750-5, 750+5, 458-5, 458+5)
         log.writeinfo("Successfully rejected bounty")
@@ -117,9 +122,9 @@ def wtfc1(ts, colx, coly, coll, x1, x2, y1, y2, zzz, adv, mood):
     直到鼓锤上该点的颜色改变，说明进入了战斗
     '''
     j = 0
-    flgj =0
+    flgj = 0
     while j == 0:
-        rejxs(ts)        
+        rejxs(ts)
         coltest = ts.GetColor(colx, coly)
         #print(colx, coly, coltest)
         if (coltest == coll and zzz == 0) or (coltest != coll and zzz == 1):

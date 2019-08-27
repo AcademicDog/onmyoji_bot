@@ -55,6 +55,8 @@ v1.0.0.0728--根据[#6](https://github.com/AcademicDog/onmyoji_bot/issues/6)，�
 
 v1.0.0.0804--增加了探索完成后打BOSS的代码。
 
+v1.0.0.0827--重新调整了代码文件组织架构，明确了功能模块，方便后续开发。
+
 # 协议 (License)
 
 该源代码使用了 [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) 开源协议。
