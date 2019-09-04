@@ -114,7 +114,7 @@ class ExploreFight(Fighter):
             # 寻找经验怪，未找到则寻找boss，再未找到则退出
             fight_pos = self.find_exp_moster()
             if fight_pos == -1:
-                fight_pos = self.find_boss()
+                # fight_pos = self.find_boss()  临时移除
                 if fight_pos == -1:
                     self.log.writeinfo('Monster not found')
                     return False
