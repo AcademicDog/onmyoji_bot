@@ -98,6 +98,8 @@
 *   v1.0.0.0711--根据[#5](https://github.com/AcademicDog/onmyoji_bot/issues/5)，调整了结算点击位置。
 *   v1.0.0.0724--优化了探索代码。
 *   v1.0.0.0804--增加了探索完成后打BOSS的代码。
+*   v1.0.0.0904--由于打完BOSS后不能正常开始下一轮，临时移除打BOSS。
+*   v1.0.0.0907--根据[#8](https://github.com/AcademicDog/onmyoji_bot/issues/8)、[#10](https://github.com/AcademicDog/onmyoji_bot/issues/10)，修复了部分情况下会导致程序卡死的bug，同时修复了打BOSS后异常的bug。
 
 ### 下一步工作计划
 
