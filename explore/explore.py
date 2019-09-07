@@ -1,7 +1,9 @@
-from gameLib.fighter import Fighter, ut
-from tools.game_pos import TansuoPos
+from gameLib.fighter import Fighter
+from tools.game_pos import CommonPos, TansuoPos
+import tools.utilities as ut
 
 import random
+import time
 
 
 class ExploreFight(Fighter):
@@ -18,7 +20,6 @@ class ExploreFight(Fighter):
         y0 = random.randint(110, 210)
         y1 = random.randint(110, 210)
         self.yys.mouse_drag_bg((x0, y0), (x1, y1))
-        # self.yys.mouse_drag_bg((1130,118),(20,118))
 
     def check_exp_full(self):
         '''
@@ -26,9 +27,9 @@ class ExploreFight(Fighter):
         '''
         # 狗粮经验判断, gouliang1是中间狗粮，gouliang2是右边狗粮
         gouliang1 = self.yys.find_game_img(
-            'img\\MAN1.png', 1, (397, 258), (461, 349), 1)
+            'img\\MAN1.png', 1, (397, 218), (461, 349), 1)
         gouliang2 = self.yys.find_game_img(
-            'img\\MAN2.png', 1, (628, 333), (693, 430), 1)
+            'img\\MAN2.png', 1, (628, 293), (693, 430), 1)
 
         # print(gouliang1)
         # print(gouliang2)
@@ -40,27 +41,24 @@ class ExploreFight(Fighter):
         # 开始换狗粮
         while True:
             # 点击狗粮位置
-            self.yys.mouse_click_bg(
-                TansuoPos.change_monster.pos, TansuoPos.change_monster.pos_end)
+            self.yys.mouse_click_bg(*TansuoPos.change_monster)
             if self.yys.wait_game_img('img\\QUAN-BU.png', 3, False):
                 break
-        ut.time.sleep(1)
+        time.sleep(1)
 
         # 点击“全部”选项
-        self.yys.mouse_click_bg(TansuoPos.quanbu_btn.pos,
-                                TansuoPos.quanbu_btn.pos_end)
-        ut.time.sleep(1)
+        self.yys.mouse_click_bg(*TansuoPos.quanbu_btn)
+        time.sleep(1)
 
         # 点击“N”卡
-        self.yys.mouse_click_bg(TansuoPos.n_tab_btn.pos,
-                                TansuoPos.n_tab_btn.pos_end)
-        ut.time.sleep(1)
+        self.yys.mouse_click_bg(*TansuoPos.n_tab_btn)
+        time.sleep(1)
 
         # 更换狗粮
         if gouliang1:
             self.yys.mouse_drag_bg((309, 520), (554, 315))
         if gouliang2:
-            ut.time.sleep(1)
+            time.sleep(1)
             self.yys.mouse_drag_bg((191, 520), (187, 315))
 
     def find_exp_moster(self):
@@ -112,9 +110,10 @@ class ExploreFight(Fighter):
             self.log.writeinfo('In tan-suo field')
 
             # 寻找经验怪，未找到则寻找boss，再未找到则退出
+            boss = 0
             fight_pos = self.find_exp_moster()
             if fight_pos == -1:
-                # fight_pos = self.find_boss()  临时移除
+                fight_pos = self.find_boss()
                 if fight_pos == -1:
                     self.log.writeinfo('Monster not found')
                     return False
@@ -124,15 +123,14 @@ class ExploreFight(Fighter):
             if not self.yys.wait_game_img('img\\ZHUN-BEI.png', 3, False):
                 break
             self.log.writeinfo('Already in battle')
-            ut.time.sleep(1)
+            time.sleep(1)
 
             # 检查狗粮经验
             self.check_exp_full()
 
-            # 点击准备
-            self.yys.mouse_click_bg(
-                TansuoPos.ready_btn.pos, TansuoPos.ready_btn.pos_end)
-            self.log.writeinfo('Clicked ready')
+            # 点击准备，直到进入战斗
+            self.click_until('Ready_btn', 'img\\ZI-DONG.png', *
+                             TansuoPos.ready_btn, mood1.get1mood()/1000)
 
             # 检查是否打完
             self.check_end()
@@ -140,17 +138,8 @@ class ExploreFight(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
-            start_time = ut.time.time()
-            while ut.time.time() - start_time <= 10:
-                if(self.yys.wait_game_img('img\\YING-BING.png', mood2.get1mood()/1000, False)):
-                    return True
-
-                # 点击结算
-                self.yys.mouse_click_bg(ut.secondposition())
-
-                # 如果没有成功结算，切到主界面提醒玩家
-                if ut.time.time() - start_time > 10:
-                    self.yys.activate_window()
+            self.click_until('JieSuan', 'img\\YING-BING.png',
+                             *CommonPos.second_position, mood2.get1mood()/1000)
 
     def start(self):
         '''单人探索主循环'''
@@ -158,8 +147,14 @@ class ExploreFight(Fighter):
         mood2 = ut.Mood()
         while True:
             # 点击挑战按钮
-            self.yys.wait_game_img('img\\TAN-SUO.png')
-            self.yys.mouse_click_bg((785, 456), (894, 502))
+            if self.yys.find_game_img('img\\TAN-SUO.png'):
+                self.click_until('TiaoZhan_btn', 'img\\YING-BING.png',
+                             *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
+            else:
+                self.click_until('ZhangJie', 'img\\TAN-SUO.png',
+                                 *TansuoPos.last_chapter, mood1.get1mood()/1000)
+                self.click_until('TiaoZhan_btn', 'img\\YING-BING.png',
+                             *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
 
             # 开始打怪
             i = 0
@@ -173,11 +168,10 @@ class ExploreFight(Fighter):
                     i += 1
 
             # 退出探索
-            while True:
-                self.yys.mouse_click_bg(
-                    TansuoPos.quit_btn.pos, TansuoPos.quit_btn.pos_end)
-                if self.yys.wait_game_img('img\\QUE-REN.png', 3, False):
-                    break
-            self.yys.mouse_click_bg(
-                TansuoPos.confirm_btn.pos, TansuoPos.confirm_btn.pos_end)
+            if self.yys.find_game_img('img\\YING-BING.png'):
+                while True:
+                    self.yys.mouse_click_bg(*TansuoPos.quit_btn)
+                    if self.yys.wait_game_img('img\\QUE-REN.png', 3, False):
+                        break
+                self.yys.mouse_click_bg(*TansuoPos.confirm_btn)
             self.log.writeinfo('Quit this cycle')

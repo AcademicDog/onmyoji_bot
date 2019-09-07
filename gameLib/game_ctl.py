@@ -14,6 +14,8 @@ from PIL import Image
 class GameControl():
     def __init__(self, window_name):
         self.hwnd = win32gui.FindWindow(0, window_name)
+        #user32 = ctypes.windll.user32
+        #user32.SetProcessDPIAware()
 
     def window_full_shot(self, file_name=None, gray=0):
         """
@@ -154,6 +156,8 @@ class GameControl():
         else:
             img_src = self.window_full_shot(None, gray)
 
+        # show_img(img_src)
+        
         # 读入文件
         if gray == 0:
             img_template = cv2.imread(img_template_path, cv2.IMREAD_COLOR)
@@ -355,6 +359,9 @@ class GameControl():
 
 # 测试用
 
+def show_img(img):
+    cv2.imshow("image", img)
+    cv2.waitKey(0)
 
 def main():
     yys = GameControl(u'阴阳师-网易游戏')

@@ -57,7 +57,9 @@ v1.0.0.0804--增加了探索完成后打BOSS的代码。
 
 v1.0.0.0827--重新调整了代码文件组织架构，明确了功能模块，方便后续开发。
 
-v1.0.0.0904--由于打完BOSS后不能正常开始下一轮，临时移除打BOSS
+v1.0.0.0904--由于打完BOSS后不能正常开始下一轮，临时移除打BOSS。
+
+v1.0.0.0907--根据[#8](https://github.com/AcademicDog/onmyoji_bot/issues/8)、[#10](https://github.com/AcademicDog/onmyoji_bot/issues/10)，修复了部分情况下会导致程序卡死的bug，同时修复了打BOSS后异常的bug。
 
 # 协议 (License)
 

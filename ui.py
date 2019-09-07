@@ -2,7 +2,7 @@ from onmyoji import *
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import QObject, pyqtSignal
-from Ui_onmyoji import *
+from Ui_onmyoji import Ui_MainWindow
 import logging
 import threading
 

@@ -1,4 +1,5 @@
-from gameLib.fighter import Fighter, ut
+from gameLib.fighter import Fighter
+import tools.utilities as ut
 
 
 class SingleFight(Fighter):

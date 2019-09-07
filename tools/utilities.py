@@ -1,4 +1,4 @@
-import time
+from gameLib.game_ctl import time
 import random
 
 from tools.logsystem import WriteLog
