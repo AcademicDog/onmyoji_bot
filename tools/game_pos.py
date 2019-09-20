@@ -17,3 +17,8 @@ class TansuoPos():
     quanbu_btn = (37, 574), (80, 604)  # “全部”按钮
     n_tab_btn = (142, 288), (164, 312)  # n卡标签
     quit_change_monster=GamePos((19,17),(43,38)) #退出换狗粮界面
+
+
+class YuhunPos():
+    tiaozhan_btn = (790, 418), (903, 469)    # 御魂挑战按钮
+    kaishizhandou_btn = (857, 515), (998, 556)   # 御魂开始战斗按钮

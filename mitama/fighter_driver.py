@@ -1,5 +1,8 @@
 from gameLib.fighter import Fighter
+from tools.game_pos import CommonPos, YuhunPos
 import tools.utilities as ut
+
+import time
 
 
 class DriverFighter(Fighter):
@@ -17,22 +20,15 @@ class DriverFighter(Fighter):
         mood3 = ut.Mood(3)
 
         # 战斗主循环
-        self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png')
+        self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png',
+                               self.max_win_time)
         while True:
             # 司机点击开始战斗，需要锁定御魂阵容
             mood1.moodsleep()
-            self.yys.mouse_click_bg((857, 515), (998, 556))
-            self.log.writeinfo('Driver: clicked KAI-SHI-ZHAN-DOU!')
-
-            # 检测是否进入战斗
-            start_time = ut.time.time()
-            while ut.time.time() - start_time <= 10:
-                if self.yys.find_game_img('img\\ZI-DONG.png'):
-                    self.log.writeinfo(self.name + 'Already in battle')
-                    break
-                else:
-                    self.yys.mouse_click_bg((857, 515), (998, 556))
-                mood2.moodsleep()
+            self.log.writeinfo('Driver: 点击开始战斗按钮')
+            self.click_until('开始战斗按钮', 'img\\ZI-DONG.png', *
+                             YuhunPos.kaishizhandou_btn, mood2.get1mood()/1000)
+            self.log.writeinfo('Driver: 已进入战斗')
 
             # 已经进入战斗，司机自动点怪
             self.click_monster()
@@ -43,19 +39,19 @@ class DriverFighter(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
-            start_time = ut.time.time()
-            while ut.time.time() - start_time <= 10:
+            start_time = time.time()
+            while time.time() - start_time <= 10:
                 if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', mood3.get1mood()/1000, False)):
-                    self.log.writeinfo('Driver: in team')
+                    self.log.writeinfo('Driver: 进入队伍')
                     break
 
                 # 点击结算
                 if (not self.yys.find_game_img('img\\MAIL.png')):
-                    self.yys.mouse_click_bg(ut.secondposition())
+                    self.yys.mouse_click_bg(*CommonPos.second_position)
 
                 # 点击默认邀请
                 if self.yys.find_game_img('img\\ZI-DONG-YAO-QING.png'):
                     self.yys.mouse_click_bg((497, 319))
-                    ut.time.sleep(0.2)
+                    time.sleep(0.2)
                     self.yys.mouse_click_bg((674, 384))
-                    self.log.writeinfo('Driver: auto invited')
+                    self.log.writeinfo('Driver: 自动邀请')

@@ -1,4 +1,5 @@
 from gameLib.fighter import Fighter
+from tools.game_pos import CommonPos, YuhunPos
 import tools.utilities as ut
 
 
@@ -16,9 +17,10 @@ class SingleFight(Fighter):
         mood3 = ut.Mood(3)
         while True:
             # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
-            self.yys.wait_game_img('img\\TIAO-ZHAN.png')
+            self.yys.wait_game_img('img\\TIAO-ZHAN.png',
+                                   self.max_win_time)
             mood1.moodsleep()
-            self.yys.mouse_click_bg((790, 418), (790 + 113, 418 + 51))
+            self.yys.mouse_click_bg(*YuhunPos.tiaozhan_btn)
             self.log.writeinfo('Already clicked TIAO-ZHAN')
 
             # 检测是否进入战斗
@@ -33,16 +35,6 @@ class SingleFight(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
-            start_time = ut.time.time()
-            while ut.time.time() - start_time <= 10:
-                if(self.yys.wait_game_img('img\\TIAO-ZHAN.png', mood3.get1mood()/1000, False)):
-                    break
-
-                # 点击结算
-                self.yys.mouse_click_bg(ut.secondposition())
-
-                # 如果没有成功上车，切到主界面提醒玩家
-                if ut.time.time() - start_time > 10:
-                    self.yys.activate_window()
-
+            self.click_until('JieSuan', 'img\\TIAO-ZHAN.png',
+                             *CommonPos.second_position, mood3.get1mood()/1000)
             self.log.writeinfo("Back to YUHUN level selection")

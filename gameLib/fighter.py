@@ -1,6 +1,7 @@
 from gameLib.game_ctl import GameControl
 from tools.logsystem import WriteLog
 
+import configparser
 import time
 
 
@@ -10,14 +11,19 @@ class Fighter:
         # 初始参数
         self.emyc = emyc
         self.name = name
-        self.max_op_time = 20
-        self.max_win_time = 100
+
+        # 读取配置文件
+        conf = configparser.ConfigParser()
+        conf.read('conf.ini')
+        quit_game_enable = conf.getboolean('watchdog', 'watchdog_enable')
+        self.max_op_time = conf.getint('watchdog', 'max_op_time')
+        self.max_win_time = conf.getint('watchdog', 'max_win_time')
 
         # 启动日志
         self.log = WriteLog()
 
         # 绑定窗口
-        self.yys = GameControl(u'阴阳师-网易游戏')
+        self.yys = GameControl(u'阴阳师-网易游戏', quit_game_enable)
         self.log.writeinfo(self.name + 'Registration successful')
 
         # 激活窗口
@@ -27,13 +33,15 @@ class Fighter:
 
     def check_battle(self):
         # 检测是否进入战斗
-        self.yys.wait_game_img('img\\ZI-DONG.png')
-        self.log.writeinfo(self.name + 'Already in battle')
+        self.log.writeinfo(self.name + '检测是否进入战斗')
+        self.yys.wait_game_img('img\\ZI-DONG.png', self.max_win_time)
+        self.log.writeinfo(self.name + '已进入战斗')
 
     def check_end(self):
         # 检测是否打完
-        self.yys.wait_game_img('img\\JIE-SU.png')
-        self.log.writeinfo(self.name + "Battle finished")
+        self.log.writeinfo(self.name + '检测是战斗是否结束')
+        self.yys.wait_game_img('img\\JIE-SU.png', self.max_win_time)
+        self.log.writeinfo(self.name + "战斗结束")
 
     def click_monster(self):
         # 点击怪物
@@ -54,16 +62,16 @@ class Fighter:
         while time.time()-start_time <= self.max_op_time:
             result = self.yys.find_game_img(img_path)
             if result:
-                self.log.writeinfo('Clicked ' + tag + ' passed')
+                self.log.writeinfo('点击 ' + tag + ' 成功')
                 return True
             else:
                 # 点击指定位置并等待下一轮
                 self.yys.mouse_click_bg(pos, pos_end)
-                self.log.writeinfo('Clicked ' + tag)
+                self.log.writeinfo('点击 ' + tag)
             time.sleep(step_time)
-        self.log.writewarning('Clicked ' + tag + ' failed!')
+        self.log.writewarning('点击 ' + tag + ' 失败!')
 
-        # 提醒玩家点击失败，并在5s后退出阴阳师
+        # 提醒玩家点击失败，并在5s后退出
         self.yys.activate_window()
         time.sleep(5)
         self.yys.quit_game()

@@ -61,6 +61,8 @@ v1.0.0.0904--由于打完BOSS后不能正常开始下一轮，临时移除打BOS
 
 v1.0.0.0907--根据[#8](https://github.com/AcademicDog/onmyoji_bot/issues/8)、[#10](https://github.com/AcademicDog/onmyoji_bot/issues/10)，修复了部分情况下会导致程序卡死的bug，同时修复了打BOSS后异常的bug。
 
+v1.0.0.0918--由于在某些情况下还是存在着异常退出的问题，增加“是否打BOSS”的选项按钮，让玩家自行决定。同时“超时时间”、“是否自动退出阴阳师游戏等”选项目前已可以使用。
+
 # 协议 (License)
 
 该源代码使用了 [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) 开源协议。

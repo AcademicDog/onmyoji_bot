@@ -1,5 +1,8 @@
 from gameLib.fighter import Fighter
+from tools.game_pos import CommonPos, TansuoPos
 import tools.utilities as ut
+
+import time
 
 
 class FighterPassenger(Fighter):
@@ -29,16 +32,16 @@ class FighterPassenger(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
-            start_time = ut.time.time()
-            while ut.time.time() - start_time <= 10:
+            start_time = time.time()
+            while time.time() - start_time <= 10:
                 # 检测是否回到队伍中
                 if(self.yys.wait_game_img('img\\LI-KAI-DUI-WU.png', mood3.get1mood()/1000, False)):
-                    self.log.writeinfo('Passenger: in team')
+                    self.log.writeinfo('Passenger: 进入队伍')
                     break
 
                 # 点击结算，直到回到主界面
                 if (not self.yys.find_game_img('img\\MAIL.png')):
-                    self.yys.mouse_click_bg(ut.secondposition())
+                    self.yys.mouse_click_bg(*CommonPos.second_position)
 
                 # 检测是否有御魂邀请
                 yuhun_loc = self.yys.wait_game_img(
@@ -47,9 +50,9 @@ class FighterPassenger(Fighter):
                     # 点击自动接受邀请
                     if self.yys.find_game_img('img\\ZI-DONG-JIE-SHOU.png'):
                         self.yys.mouse_click_bg((210, yuhun_loc[1]))
-                        self.log.writeinfo('Passenger: auto accepted')
+                        self.log.writeinfo('Passenger: 自动接受邀请')
 
                     # 点击普通接受邀请
                     elif self.yys.find_game_img('img\\JIE-SHOU.png'):
                         self.yys.mouse_click_bg((125, yuhun_loc[1]))
-                        self.log.writeinfo('Passenger: accepted')
+                        self.log.writeinfo('Passenger: 接受邀请')

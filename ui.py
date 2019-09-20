@@ -1,10 +1,26 @@
-from onmyoji import *
+from explore.explore import ExploreFight
+from mitama.fighter_driver import DriverFighter
+from mitama.fighter_passenger import FighterPassenger
+from mitama.single_fight import SingleFight
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtCore import QObject, pyqtSignal
 from Ui_onmyoji import Ui_MainWindow
+
+import configparser
+import ctypes
 import logging
+import os
+import sys
 import threading
+
+
+def is_admin():
+    # UAC申请，获得管理员权限
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
 
 class GuiLogger(logging.Handler):
     def emit(self, record):
@@ -25,7 +41,38 @@ class MyMainWindow(QMainWindow):
         logger.setLevel(logging.INFO)
         logger.addHandler(h)
 
+    def set_conf(self, conf):
+        '''
+        设置参数至配置文件
+        '''
+        conf.set('watchdog', 'watchdog_enable',
+                 str(self.ui.checkBox.isChecked()))
+        conf.set('watchdog', 'max_win_time', str(self.ui.lineEdit.text()))
+        conf.set('watchdog', 'max_op_time', str(self.ui.lineEdit_2.text()))
+        conf.set('explore', 'fight_boss_enable',
+                 str(self.ui.checkBox_2.isChecked()))
+    
+    def get_conf(self):
+        conf = configparser.ConfigParser()
+        # 读取配置文件
+        conf.read('conf.ini')
+
+        # 修改配置
+        try:
+            self.set_conf(conf)
+        except:
+            conf.add_section('watchdog')
+            conf.add_section('explore')
+            self.set_conf(conf)
+
+        # 保存配置文件
+        with open('conf.ini', 'w') as configfile:
+                conf.write(configfile)
+
     def start_onmyoji(self):
+        # 读取配置
+        self.get_conf()
+
         section = self.ui.tabWidget.currentIndex()
         if section == 0:
             # 御魂
@@ -63,8 +110,6 @@ class MyMainWindow(QMainWindow):
     def stop_onmyoji(self):
         logging.info('Quitting!')
         os._exit(0)
-
-        print(self.ui.tabWidget.currentIndex())
 
 if __name__=="__main__":  
     

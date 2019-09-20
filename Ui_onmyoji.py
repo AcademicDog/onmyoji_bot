@@ -78,6 +78,9 @@ class Ui_MainWindow(object):
         self.plainTextEdit_2.setReadOnly(True)
         self.plainTextEdit_2.setObjectName("plainTextEdit_2")
         self.gridLayout_5.addWidget(self.plainTextEdit_2, 0, 0, 1, 1)
+        self.checkBox_2 = QtWidgets.QCheckBox(self.tab_2)
+        self.checkBox_2.setObjectName("checkBox_2")
+        self.gridLayout_5.addWidget(self.checkBox_2, 1, 0, 1, 1)
         self.tabWidget.addTab(self.tab_2, "")
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
@@ -193,15 +196,14 @@ class Ui_MainWindow(object):
         self.radioButton_3.setText(_translate("MainWindow", "单人乘客"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "御魂/御灵"))
         self.plainTextEdit_2.setPlainText(_translate("MainWindow", "把狗粮队长放在最左边，点开需要打的章节，然后开始。\n"
-"支持自动换狗粮，只打经验怪。\n"
-"\n"
-"目前尚未彻底完成调试！！！！！"))
+"支持自动换狗粮，只打经验怪。"))
+        self.checkBox_2.setText(_translate("MainWindow", "结束后打BOSS"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "探索"))
         self.plainTextEdit.setPlainText(_translate("MainWindow", "网址：https://github.com/AcademicDog/onmyoji_bot\n"
 "\n"
 "交流Q群：592055060"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("MainWindow", "关于"))
-        self.groupBox_2.setTitle(_translate("MainWindow", "高级选项（调试中）"))
+        self.groupBox_2.setTitle(_translate("MainWindow", "高级选项"))
         self.checkBox.setText(_translate("MainWindow", "超时自动关闭阴阳师"))
         self.label_2.setText(_translate("MainWindow", "  画面超时时间(秒)："))
         self.lineEdit.setText(_translate("MainWindow", "100"))

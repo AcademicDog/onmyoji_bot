@@ -3,4 +3,3 @@ pywin32==224
 opencv_python==4.1.0.25
 Pillow==6.1.0
 PyQt5==5.12.2
-win32gui==221.6

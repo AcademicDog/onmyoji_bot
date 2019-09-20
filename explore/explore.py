@@ -2,6 +2,7 @@ from gameLib.fighter import Fighter
 from tools.game_pos import CommonPos, TansuoPos
 import tools.utilities as ut
 
+import configparser
 import random
 import time
 
@@ -10,6 +11,11 @@ class ExploreFight(Fighter):
     def __init__(self):
         # 初始化
         Fighter.__init__(self)
+
+        # 读取配置文件
+        conf = configparser.ConfigParser()
+        conf.read('conf.ini')
+        self.fight_boss_enable = conf.getboolean('explore', 'fight_boss_enable')
 
     def next_scene(self):
         '''
@@ -107,29 +113,32 @@ class ExploreFight(Fighter):
             mood1.moodsleep()
             # 查看是否进入探索界面
             self.yys.wait_game_img('img\\YING-BING.png')
-            self.log.writeinfo('In tan-suo field')
+            self.log.writeinfo('进入探索页面')
 
             # 寻找经验怪，未找到则寻找boss，再未找到则退出
-            boss = 0
             fight_pos = self.find_exp_moster()
             if fight_pos == -1:
-                fight_pos = self.find_boss()
-                if fight_pos == -1:
-                    self.log.writeinfo('Monster not found')
+                if self.fight_boss_enable:
+                    fight_pos = self.find_boss()
+                    if fight_pos == -1:
+                        self.log.writeinfo('未找到经验怪和boss')
+                        return False
+                else:
+                    self.log.writeinfo('未找到经验怪')
                     return False
 
             # 攻击怪
             self.yys.mouse_click_bg(fight_pos)
             if not self.yys.wait_game_img('img\\ZHUN-BEI.png', 3, False):
                 break
-            self.log.writeinfo('Already in battle')
+            self.log.writeinfo('已进入战斗')
             time.sleep(1)
 
             # 检查狗粮经验
             self.check_exp_full()
 
             # 点击准备，直到进入战斗
-            self.click_until('Ready_btn', 'img\\ZI-DONG.png', *
+            self.click_until('准备按钮', 'img\\ZI-DONG.png', *
                              TansuoPos.ready_btn, mood1.get1mood()/1000)
 
             # 检查是否打完
@@ -138,7 +147,7 @@ class ExploreFight(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
-            self.click_until('JieSuan', 'img\\YING-BING.png',
+            self.click_until('结算', 'img\\YING-BING.png',
                              *CommonPos.second_position, mood2.get1mood()/1000)
 
     def start(self):
@@ -148,13 +157,13 @@ class ExploreFight(Fighter):
         while True:
             # 点击挑战按钮
             if self.yys.find_game_img('img\\TAN-SUO.png'):
-                self.click_until('TiaoZhan_btn', 'img\\YING-BING.png',
-                             *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
+                self.click_until('探索按钮', 'img\\YING-BING.png',
+                                 *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
             else:
-                self.click_until('ZhangJie', 'img\\TAN-SUO.png',
+                self.click_until('最后章节', 'img\\TAN-SUO.png',
                                  *TansuoPos.last_chapter, mood1.get1mood()/1000)
-                self.click_until('TiaoZhan_btn', 'img\\YING-BING.png',
-                             *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
+                self.click_until('探索按钮', 'img\\YING-BING.png',
+                                 *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
 
             # 开始打怪
             i = 0
@@ -163,7 +172,7 @@ class ExploreFight(Fighter):
                 if result:
                     continue
                 else:
-                    self.log.writeinfo('Going to next scene')
+                    self.log.writeinfo('移动至下一个场景')
                     self.next_scene()
                     i += 1
 
@@ -174,4 +183,4 @@ class ExploreFight(Fighter):
                     if self.yys.wait_game_img('img\\QUE-REN.png', 3, False):
                         break
                 self.yys.mouse_click_bg(*TansuoPos.confirm_btn)
-            self.log.writeinfo('Quit this cycle')
+            self.log.writeinfo('结束本轮探索')
