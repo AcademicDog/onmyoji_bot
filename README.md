@@ -63,6 +63,8 @@ v1.0.0.0907--根据[#8](https://github.com/AcademicDog/onmyoji_bot/issues/8)、[
 
 v1.0.0.0918--由于在某些情况下还是存在着异常退出的问题，增加“是否打BOSS”的选项按钮，让玩家自行决定。同时“超时时间”、“是否自动退出阴阳师游戏等”选项目前已可以使用。
 
+v1.0.0.0920--根据[#12](https://github.com/AcademicDog/onmyoji_bot/issues/12)适配了新版本UI。
+
 # 协议 (License)
 
 该源代码使用了 [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) 开源协议。

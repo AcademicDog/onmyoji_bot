@@ -35,7 +35,7 @@ class FighterPassenger(Fighter):
             start_time = time.time()
             while time.time() - start_time <= 10:
                 # 检测是否回到队伍中
-                if(self.yys.wait_game_img('img\\LI-KAI-DUI-WU.png', mood3.get1mood()/1000, False)):
+                if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', mood3.get1mood()/1000, False)):
                     self.log.writeinfo('Passenger: 进入队伍')
                     break
 

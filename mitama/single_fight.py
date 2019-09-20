@@ -35,6 +35,6 @@ class SingleFight(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
-            self.click_until('JieSuan', 'img\\TIAO-ZHAN.png',
+            self.click_until('结算', 'img\\TIAO-ZHAN.png',
                              *CommonPos.second_position, mood3.get1mood()/1000)
             self.log.writeinfo("Back to YUHUN level selection")
