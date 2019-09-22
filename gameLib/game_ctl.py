@@ -12,7 +12,7 @@ from PIL import Image
 
 
 class GameControl():
-    def __init__(self, window_name, quit_game_enable):
+    def __init__(self, window_name, quit_game_enable=1):
         '''
         初始化
             :param window_name: 需要绑定的窗口名称

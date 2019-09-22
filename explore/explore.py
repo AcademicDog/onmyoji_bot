@@ -60,6 +60,9 @@ class ExploreFight(Fighter):
         self.yys.mouse_click_bg(*TansuoPos.n_tab_btn)
         time.sleep(1)
 
+        # 拖放进度条
+        self.yys.mouse_drag_bg(*TansuoPos.n_slide)
+
         # 更换狗粮
         if gouliang1:
             self.yys.mouse_drag_bg((309, 520), (554, 315))
@@ -152,8 +155,8 @@ class ExploreFight(Fighter):
 
     def start(self):
         '''单人探索主循环'''
-        mood1 = ut.Mood(1)
-        mood2 = ut.Mood()
+        mood1 = ut.Mood(2)
+        mood2 = ut.Mood(3)
         while True:
             # 点击挑战按钮
             if self.yys.find_game_img('img\\TAN-SUO.png'):
