@@ -78,22 +78,22 @@ class MyMainWindow(QMainWindow):
             # 御魂
             if mode == 0:
                 # 单刷
-                fight = SingleFight()
+                self.fight = SingleFight()
     
             if mode == 2:
                 # 司机
-                fight = DriverFighter()
+                self.fight = DriverFighter()
     
             if mode == 3:
                 # 乘客
-                fight = FighterPassenger()
+                self.fight = FighterPassenger()
         
         elif section == 1:
             # 探索
-            fight = ExploreFight()
+            self.fight = ExploreFight()
 
-        self.task = threading.Thread(target = fight.start)
-        self.task.start()
+        task = threading.Thread(target = self.fight.start)
+        task.start()
 
     def set_mood1(self):
         global mode
@@ -108,8 +108,10 @@ class MyMainWindow(QMainWindow):
         mode = 3
 
     def stop_onmyoji(self):
-        logging.info('Quitting!')
-        os._exit(0)
+        try:
+            self.fight.deactivate()
+        except:
+            pass
 
 if __name__=="__main__":  
     

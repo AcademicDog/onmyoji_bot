@@ -15,13 +15,13 @@ class SingleFight(Fighter):
         mood1 = ut.Mood()
         mood2 = ut.Mood()
         mood3 = ut.Mood(3)
-        while True:
+        while self.run:
             # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
             self.yys.wait_game_img('img\\TIAO-ZHAN.png',
                                    self.max_win_time)
             mood1.moodsleep()
             self.yys.mouse_click_bg(*YuhunPos.tiaozhan_btn)
-            self.log.writeinfo('Already clicked TIAO-ZHAN')
+            self.log.writeinfo('点击 挑战按钮')
 
             # 检测是否进入战斗
             self.check_battle()
@@ -37,4 +37,4 @@ class SingleFight(Fighter):
             self.yys.mouse_click_bg(ut.firstposition())
             self.click_until('结算', 'img\\TIAO-ZHAN.png',
                              *CommonPos.second_position, mood3.get1mood()/1000)
-            self.log.writeinfo("Back to YUHUN level selection")
+            self.log.writeinfo("回到御魂选择界面")

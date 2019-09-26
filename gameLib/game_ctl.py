@@ -18,6 +18,7 @@ class GameControl():
             :param window_name: 需要绑定的窗口名称
             :param quit_game_enable: 程序死掉时是否退出游戏。True为是，False为否
         '''
+        self.run = True
         self.hwnd = win32gui.FindWindow(0, window_name)
         self.quit_game_enable = quit_game_enable
         #user32 = ctypes.windll.user32
@@ -282,7 +283,7 @@ class GameControl():
         """
         self.rejectbounty()
         start_time = time.time()
-        while time.time()-start_time <= max_time:
+        while time.time()-start_time <= max_time and self.run:
             maxVal, maxLoc = self.find_img(img_path)
             if maxVal > 0.97:
                 return maxLoc
@@ -308,7 +309,7 @@ class GameControl():
         """
         self.rejectbounty()
         start_time = time.time()
-        while time.time()-start_time <= max_time:
+        while time.time()-start_time <= max_time and self.run:
             pos = self.find_color(region, color)
             if pos != -1:
                 return True
@@ -324,6 +325,8 @@ class GameControl():
         退出游戏
         """
         self.takescreenshot()  # 保存一下现场
+        if not self.run:
+            return False
         if self.quit_game_enable:
             win32gui.SendMessage(self.hwnd, win32con.WM_DESTROY, 0, 0)  # 退出游戏
         sys.exit(0)

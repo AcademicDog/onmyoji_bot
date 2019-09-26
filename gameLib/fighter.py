@@ -11,6 +11,7 @@ class Fighter:
         # 初始参数
         self.emyc = emyc
         self.name = name
+        self.run = True
 
         # 读取配置文件
         conf = configparser.ConfigParser()
@@ -24,11 +25,11 @@ class Fighter:
 
         # 绑定窗口
         self.yys = GameControl(u'阴阳师-网易游戏', quit_game_enable)
-        self.log.writeinfo(self.name + 'Registration successful')
+        self.log.writeinfo(self.name + '绑定窗口成功')
 
         # 激活窗口
         self.yys.activate_window()
-        self.log.writeinfo(self.name + 'Activation successful')
+        self.log.writeinfo(self.name + '激活窗口成功')
         time.sleep(0.5)
 
     def check_battle(self):
@@ -59,7 +60,7 @@ class Fighter:
         '''
         # 在指定时间内反复监测画面并点击
         start_time = time.time()
-        while time.time()-start_time <= self.max_op_time:
+        while time.time()-start_time <= self.max_op_time and self.run:
             result = self.yys.find_game_img(img_path)
             if result:
                 self.log.writeinfo('点击 ' + tag + ' 成功')
@@ -75,3 +76,13 @@ class Fighter:
         self.yys.activate_window()
         time.sleep(5)
         self.yys.quit_game()
+
+    def activate(self):
+        self.log.writewarning(self.name + '启动脚本')
+        self.run = True
+        self.yys.run = True
+
+    def deactivate(self):
+        self.log.writewarning(self.name + '手动停止脚本')
+        self.run = False
+        self.yys.run = False

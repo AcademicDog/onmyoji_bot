@@ -45,7 +45,7 @@ class ExploreFight(Fighter):
             return
 
         # 开始换狗粮
-        while True:
+        while self.run:
             # 点击狗粮位置
             self.yys.mouse_click_bg(*TansuoPos.change_monster)
             if self.yys.wait_game_img('img\\QUAN-BU.png', 3, False):
@@ -112,7 +112,7 @@ class ExploreFight(Fighter):
         打经验怪
             :return: 打完返回True；未找到经验怪返回False
         '''
-        while True:
+        while self.run:
             mood1.moodsleep()
             # 查看是否进入探索界面
             self.yys.wait_game_img('img\\YING-BING.png')
@@ -157,7 +157,7 @@ class ExploreFight(Fighter):
         '''单人探索主循环'''
         mood1 = ut.Mood(2)
         mood2 = ut.Mood(3)
-        while True:
+        while self.run:
             # 点击挑战按钮
             if self.yys.find_game_img('img\\TAN-SUO.png'):
                 self.click_until('探索按钮', 'img\\YING-BING.png',
@@ -170,7 +170,7 @@ class ExploreFight(Fighter):
 
             # 开始打怪
             i = 0
-            while i < 4:
+            while i < 4 and self.run:
                 result = self.fight_moster(mood1, mood2)
                 if result:
                     continue
@@ -181,7 +181,7 @@ class ExploreFight(Fighter):
 
             # 退出探索
             if self.yys.find_game_img('img\\YING-BING.png'):
-                while True:
+                while self.run:
                     self.yys.mouse_click_bg(*TansuoPos.quit_btn)
                     if self.yys.wait_game_img('img\\QUE-REN.png', 3, False):
                         break

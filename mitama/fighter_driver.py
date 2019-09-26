@@ -22,7 +22,7 @@ class DriverFighter(Fighter):
         # 战斗主循环
         self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png',
                                self.max_win_time)
-        while True:
+        while self.run:
             # 司机点击开始战斗，需要锁定御魂阵容
             mood1.moodsleep()
             self.log.writeinfo('Driver: 点击开始战斗按钮')
@@ -40,7 +40,7 @@ class DriverFighter(Fighter):
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
             start_time = time.time()
-            while time.time() - start_time <= 10:
+            while time.time() - start_time <= 10 and self.run:
                 if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', mood3.get1mood()/1000, False)):
                     self.log.writeinfo('Driver: 进入队伍')
                     break

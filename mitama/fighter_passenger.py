@@ -19,7 +19,7 @@ class FighterPassenger(Fighter):
         mood3 = ut.Mood(3)
 
         # 战斗主循环
-        while True:
+        while self.run:
             # 检测是否进入战斗
             self.check_battle()
 
@@ -33,7 +33,7 @@ class FighterPassenger(Fighter):
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
             start_time = time.time()
-            while time.time() - start_time <= 10:
+            while time.time() - start_time <= 10 and self.run:
                 # 检测是否回到队伍中
                 if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', mood3.get1mood()/1000, False)):
                     self.log.writeinfo('Passenger: 进入队伍')
