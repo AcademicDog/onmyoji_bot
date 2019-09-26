@@ -18,6 +18,8 @@ class TansuoPos():
     n_tab_btn = (142, 288), (164, 312)  # n卡标签
     n_slide = (168, 615), (370, 615)  # n卡进度条
     quit_change_monster=GamePos((19,17),(43,38)) #退出换狗粮界面
+    gouliang_middle = (397, 218), (500, 349)  # 中间狗粮位置
+    gouliang_right = (628, 293), (730, 430)  # 右边狗粮位置
 
 
 class YuhunPos():
