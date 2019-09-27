@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.0.0.0927
+#### New features:
+*  更新了UI系统，现在预留了更多的设置空间。
+*  增加了狗粮更换滑块，现在可以自由设置狗粮更换的式神进度。
+#### Fixes (bugs & defects):
+*  修复了某些情况下，打完boss脚本会死掉的情况。
+*  根据[#14](https://github.com/AcademicDog/onmyoji_bot/issues/14)，修复了乘客在庭院上车，可能会出现进入其他界面问题。
+
 ## v1.0.0.0926
 #### Fixes (bugs & defects):
 *  修复了部分模型过大（如茨林、拍屁股），导致无法有效更换满级狗粮的问题。

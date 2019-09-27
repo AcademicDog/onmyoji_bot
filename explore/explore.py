@@ -16,6 +16,8 @@ class ExploreFight(Fighter):
         conf = configparser.ConfigParser()
         conf.read('conf.ini')
         self.fight_boss_enable = conf.getboolean('explore', 'fight_boss_enable')
+        self.slide_shikigami = conf.getboolean('explore', 'slide_shikigami')
+        self.slide_shikigami_progress = conf.getint('explore', 'slide_shikigami_progress')
 
     def next_scene(self):
         '''
@@ -61,7 +63,18 @@ class ExploreFight(Fighter):
         time.sleep(1)
 
         # 拖放进度条
-        self.yys.mouse_drag_bg(*TansuoPos.n_slide)
+        if self.slide_shikigami:
+            # 读取坐标范围
+            star_x = TansuoPos.n_slide[0][0]
+            end_x = TansuoPos.n_slide[1][0]
+            length = end_x - star_x
+
+            # 计算拖放范围
+            pos_end_x = int(star_x + length/100*self.slide_shikigami_progress)
+            pos_end_y = TansuoPos.n_slide[0][1]
+
+            self.yys.mouse_drag_bg(
+                TansuoPos.n_slide[0], (pos_end_x, pos_end_y))
 
         # 更换狗粮
         if gouliang1:
@@ -150,7 +163,7 @@ class ExploreFight(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
-            self.click_until('结算', 'img\\YING-BING.png',
+            self.click_until('结算', 'img\\MESSAGE.png',
                              *CommonPos.second_position, mood2.get1mood()/1000)
 
     def start(self):
@@ -187,3 +200,4 @@ class ExploreFight(Fighter):
                         break
                 self.yys.mouse_click_bg(*TansuoPos.confirm_btn)
             self.log.writeinfo('结束本轮探索')
+            time.sleep(0.5)

@@ -41,39 +41,53 @@ class MyMainWindow(QMainWindow):
         logger.setLevel(logging.INFO)
         logger.addHandler(h)
 
-    def set_conf(self, conf):
+    def set_conf(self, conf, section):
         '''
         设置参数至配置文件
         '''
+        # 一般参数
         conf.set('watchdog', 'watchdog_enable',
                  str(self.ui.checkBox.isChecked()))
         conf.set('watchdog', 'max_win_time', str(self.ui.lineEdit.text()))
         conf.set('watchdog', 'max_op_time', str(self.ui.lineEdit_2.text()))
-        conf.set('explore', 'fight_boss_enable',
-                 str(self.ui.checkBox_2.isChecked()))
+
+        # 御魂参数
+        if section == 0:
+            pass
+
+        # 探索参数
+        if section == 1:
+            # 探索
+            conf.set('explore', 'fight_boss_enable',
+                     str(self.ui.checkBox_2.isChecked()))
+            conf.set('explore', 'slide_shikigami',
+                     str(self.ui.checkBox_3.isChecked()))
+            conf.set('explore', 'slide_shikigami_progress',
+                     str(self.ui.horizontalSlider.value()))
     
-    def get_conf(self):
+    def get_conf(self, section):
         conf = configparser.ConfigParser()
         # 读取配置文件
-        conf.read('conf.ini')
+        conf.read('conf.ini', encoding="utf-8")
 
         # 修改配置
         try:
-            self.set_conf(conf)
+            self.set_conf(conf, section)
         except:
             conf.add_section('watchdog')
             conf.add_section('explore')
-            self.set_conf(conf)
+            self.set_conf(conf, section)
 
         # 保存配置文件
         with open('conf.ini', 'w') as configfile:
                 conf.write(configfile)
 
     def start_onmyoji(self):
-        # 读取配置
-        self.get_conf()
-
         section = self.ui.tabWidget.currentIndex()
+
+        # 读取配置
+        self.get_conf(section)
+
         if section == 0:
             # 御魂
             if mode == 0:

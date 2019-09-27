@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>288</width>
+    <width>545</width>
     <height>590</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>288</width>
+    <width>545</width>
     <height>590</height>
    </size>
   </property>
@@ -27,8 +27,14 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_6">
-    <item row="0" column="0">
+    <item row="1" column="0">
      <widget class="QFrame" name="frame">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
@@ -42,41 +48,93 @@
        <enum>QFrame::Sunken</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="1" column="0">
-        <widget class="Line" name="line_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <layout class="QVBoxLayout" name="verticalLayout">
+       <item row="1" column="2">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <widget class="QLabel" name="label">
-           <property name="font">
-            <font>
-             <family>Times New Roman</family>
-             <pointsize>24</pointsize>
-            </font>
-           </property>
+          <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>辅助助手</string>
+            <string>日志</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="Line" name="line_2">
+          <widget class="QTextEdit" name="textEdit">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>216</width>
+             <height>124</height>
+            </size>
+           </property>
+           <property name="statusTip">
+            <string/>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line_3">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QTabWidget" name="tabWidget">
+          <widget class="QPushButton" name="start_btn">
            <property name="minimumSize">
             <size>
              <width>246</width>
-             <height>115</height>
+             <height>23</height>
+            </size>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::RightToLeft</enum>
+           </property>
+           <property name="text">
+            <string>开始</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="minimumSize">
+            <size>
+             <width>246</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>结束</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="font">
+          <font>
+           <family>Times New Roman</family>
+           <pointsize>24</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>辅助助手</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QTabWidget" name="tabWidget">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
@@ -136,6 +194,23 @@
              <string>探索</string>
             </attribute>
             <layout class="QGridLayout" name="gridLayout_5">
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="checkBox_3">
+               <property name="text">
+                <string>换狗粮拖放式神进度条，进度：</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QCheckBox" name="checkBox_2">
+               <property name="text">
+                <string>结束后打BOSS</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="0">
               <widget class="QPlainTextEdit" name="plainTextEdit_2">
                <property name="maximumSize">
@@ -149,14 +224,20 @@
                </property>
                <property name="plainText">
                 <string>把狗粮队长放在最左边，点开需要打的章节，然后开始。
-支持自动换狗粮，只打经验怪。</string>
+
+支持自动换狗粮，只打经验怪。
+
+最好把“合并相同式神”选项关闭。</string>
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QCheckBox" name="checkBox_2">
-               <property name="text">
-                <string>结束后打BOSS</string>
+             <item row="2" column="0">
+              <widget class="QSlider" name="horizontalSlider">
+               <property name="sliderPosition">
+                <number>10</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
@@ -190,7 +271,7 @@
           </widget>
          </item>
          <item>
-          <widget class="Line" name="line_5">
+          <widget class="Line" name="line">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -206,8 +287,8 @@
            </property>
            <property name="minimumSize">
             <size>
-             <width>246</width>
-             <height>100</height>
+             <width>0</width>
+             <height>0</height>
             </size>
            </property>
            <property name="layoutDirection">
@@ -234,6 +315,13 @@
               </property>
              </widget>
             </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>  操作超时时间(秒)：</string>
+              </property>
+             </widget>
+            </item>
             <item row="2" column="1">
              <widget class="QLineEdit" name="lineEdit">
               <property name="sizePolicy">
@@ -241,6 +329,12 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
               </property>
               <property name="text">
                <string>100</string>
@@ -250,15 +344,14 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>  操作超时时间(秒)：</string>
-              </property>
-             </widget>
-            </item>
             <item row="3" column="1">
              <widget class="QLineEdit" name="lineEdit_2">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
               <property name="text">
                <string>20</string>
               </property>
@@ -270,60 +363,14 @@
            </layout>
           </widget>
          </item>
-         <item>
-          <widget class="Line" name="line_4">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QTextEdit" name="textEdit">
-           <property name="minimumSize">
-            <size>
-             <width>246</width>
-             <height>124</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="line">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="start_btn">
-           <property name="minimumSize">
-            <size>
-             <width>246</width>
-             <height>23</height>
-            </size>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::RightToLeft</enum>
-           </property>
-           <property name="text">
-            <string>开始</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton">
-           <property name="minimumSize">
-            <size>
-             <width>246</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>结束</string>
-           </property>
-          </widget>
-         </item>
         </layout>
+       </item>
+       <item row="1" column="1">
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -335,7 +382,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>288</width>
+     <width>545</width>
      <height>23</height>
     </rect>
    </property>
@@ -361,6 +408,9 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+   <property name="statusTip">
+    <string/>
    </property>
   </action>
  </widget>
