@@ -63,14 +63,14 @@ class Fighter:
         while time.time()-start_time <= self.max_op_time and self.run:
             result = self.yys.find_game_img(img_path)
             if result:
-                self.log.writeinfo('点击 ' + tag + ' 成功')
+                self.log.writeinfo(self.name + '点击 ' + tag + ' 成功')
                 return True
             else:
                 # 点击指定位置并等待下一轮
                 self.yys.mouse_click_bg(pos, pos_end)
-                self.log.writeinfo('点击 ' + tag)
+                self.log.writeinfo(self.name + '点击 ' + tag)
             time.sleep(step_time)
-        self.log.writewarning('点击 ' + tag + ' 失败!')
+        self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
 
         # 提醒玩家点击失败，并在5s后退出
         self.yys.activate_window()

@@ -1,4 +1,5 @@
 from explore.explore import ExploreFight
+from mitama.dual import dual_star
 from mitama.fighter_driver import DriverFighter
 from mitama.fighter_passenger import FighterPassenger
 from mitama.single_fight import SingleFight
@@ -90,17 +91,21 @@ class MyMainWindow(QMainWindow):
 
         if section == 0:
             # 御魂
-            if mode == 0:
+            if self.ui.mitama_single.isChecked():
                 # 单刷
                 self.fight = SingleFight()
     
-            if mode == 2:
+            elif self.ui.mitama_driver.isChecked():
                 # 司机
                 self.fight = DriverFighter()
     
-            if mode == 3:
+            if self.ui.mitama_passenger.isChecked():
                 # 乘客
                 self.fight = FighterPassenger()
+
+            if self.ui.mitama_dual.isChecked():
+                # 双开
+                dual_star()
         
         elif section == 1:
             # 探索
@@ -108,18 +113,6 @@ class MyMainWindow(QMainWindow):
 
         task = threading.Thread(target = self.fight.start)
         task.start()
-
-    def set_mood1(self):
-        global mode
-        mode = 0
-
-    def set_mood2(self):
-        global mode
-        mode = 2
-
-    def set_mood3(self):
-        global mode
-        mode = 3
 
     def stop_onmyoji(self):
         try:

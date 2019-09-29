@@ -157,15 +157,22 @@
                 <string>模式</string>
                </property>
                <layout class="QGridLayout" name="gridLayout">
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="mitama_passenger">
+                  <property name="text">
+                   <string>单人乘客</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="0" column="1">
-                 <widget class="QRadioButton" name="radioButton_2">
+                 <widget class="QRadioButton" name="mitama_driver">
                   <property name="text">
                    <string>单人司机</string>
                   </property>
                  </widget>
                 </item>
                 <item row="0" column="0">
-                 <widget class="QRadioButton" name="radioButton">
+                 <widget class="QRadioButton" name="mitama_single">
                   <property name="autoFillBackground">
                    <bool>false</bool>
                   </property>
@@ -177,10 +184,13 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radioButton_3">
+                <item row="1" column="0">
+                 <widget class="QRadioButton" name="mitama_dual">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
-                   <string>单人乘客</string>
+                   <string>双开</string>
                   </property>
                  </widget>
                 </item>
@@ -429,54 +439,6 @@
     <hint type="destinationlabel">
      <x>197</x>
      <y>327</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioButton</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>set_mood1()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>89</x>
-     <y>174</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>85</x>
-     <y>323</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioButton_2</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>set_mood2()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>166</x>
-     <y>174</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>135</x>
-     <y>363</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>radioButton_3</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>set_mood3()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>243</x>
-     <y>174</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>287</x>
-     <y>375</y>
     </hint>
    </hints>
   </connection>

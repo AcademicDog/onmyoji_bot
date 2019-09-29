@@ -40,8 +40,9 @@ class FighterPassenger(Fighter):
                     break
 
                 # 点击结算，直到回到主界面
-                if not (self.yys.find_game_img('img\\MAIL.png') or self.yys.find_game_img('img\\JIA-CHENG.png')):
+                if not (self.yys.find_game_img('img\\MESSAGE.png') or self.yys.find_game_img('img\\JIA-CHENG.png')):
                     self.yys.mouse_click_bg(*CommonPos.second_position)
+                    self.log.writeinfo('Passenger: 点击结算')
 
                 # 检测是否有御魂邀请
                 yuhun_loc = self.yys.wait_game_img(

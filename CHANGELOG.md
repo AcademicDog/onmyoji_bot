@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.0.0.0929
+#### New features:
+*  新增御魂双开选项，代码目前还在调试
+#### Fixes (bugs & defects):
+*  修复了御魂战斗有时候会把御魂识别为“MAIL.png”，从而导致逻辑混乱的问题。
+*  修复了打完boss仍然会继续探索的bug。
+
 ## v1.0.0.0927
 #### New features:
 *  更新了UI系统，现在预留了更多的设置空间。

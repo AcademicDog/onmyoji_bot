@@ -46,8 +46,9 @@ class DriverFighter(Fighter):
                     break
 
                 # 点击结算
-                if (not self.yys.find_game_img('img\\MAIL.png')):
+                if not (self.yys.find_game_img('img\\MESSAGE.png') or self.yys.find_game_img('img\\JIA-CHENG.png')):
                     self.yys.mouse_click_bg(*CommonPos.second_position)
+                    self.log.writeinfo('Driver: 点击结算')
 
                 # 点击默认邀请
                 if self.yys.find_game_img('img\\ZI-DONG-YAO-QING.png'):

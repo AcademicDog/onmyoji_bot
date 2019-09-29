@@ -123,7 +123,7 @@ class ExploreFight(Fighter):
     def fight_moster(self, mood1, mood2):
         '''
         打经验怪
-            :return: 打完返回True；未找到经验怪返回False
+            :return: 打完普通怪返回1；打完boss返回2；未找到经验怪返回-1；未找到经验怪和boss返回-2
         '''
         while self.run:
             mood1.moodsleep()
@@ -133,15 +133,17 @@ class ExploreFight(Fighter):
 
             # 寻找经验怪，未找到则寻找boss，再未找到则退出
             fight_pos = self.find_exp_moster()
+            boss = False
             if fight_pos == -1:
                 if self.fight_boss_enable:
                     fight_pos = self.find_boss()
+                    boss = True
                     if fight_pos == -1:
                         self.log.writeinfo('未找到经验怪和boss')
-                        return False
+                        return -2
                 else:
                     self.log.writeinfo('未找到经验怪')
-                    return False
+                    return -1
 
             # 攻击怪
             self.yys.mouse_click_bg(fight_pos)
@@ -166,18 +168,25 @@ class ExploreFight(Fighter):
             self.click_until('结算', 'img\\MESSAGE.png',
                              *CommonPos.second_position, mood2.get1mood()/1000)
 
+            # 返回结果
+            if boss:
+                return 2
+            else:
+                return 1
+
     def start(self):
         '''单人探索主循环'''
         mood1 = ut.Mood(2)
         mood2 = ut.Mood(3)
         while self.run:
             # 点击挑战按钮
-            if self.yys.find_game_img('img\\TAN-SUO.png'):
+            if self.yys.wait_game_img('img\\TAN-SUO.png', 3, False):
                 self.click_until('探索按钮', 'img\\YING-BING.png',
                                  *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
             else:
                 self.click_until('最后章节', 'img\\TAN-SUO.png',
                                  *TansuoPos.last_chapter, mood1.get1mood()/1000)
+                time.sleep(0.5)
                 self.click_until('探索按钮', 'img\\YING-BING.png',
                                  *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
 
@@ -185,8 +194,10 @@ class ExploreFight(Fighter):
             i = 0
             while i < 4 and self.run:
                 result = self.fight_moster(mood1, mood2)
-                if result:
+                if result == 1:
                     continue
+                elif result == 2:
+                    break
                 else:
                     self.log.writeinfo('移动至下一个场景')
                     self.next_scene()
