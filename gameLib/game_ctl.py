@@ -12,14 +12,14 @@ from PIL import Image
 
 
 class GameControl():
-    def __init__(self, window_name, quit_game_enable=1):
+    def __init__(self, hwnd, quit_game_enable=1):
         '''
         初始化
-            :param window_name: 需要绑定的窗口名称
+            :param hwnd: 需要绑定的窗口句柄
             :param quit_game_enable: 程序死掉时是否退出游戏。True为是，False为否
         '''
         self.run = True
-        self.hwnd = win32gui.FindWindow(0, window_name)
+        self.hwnd = hwnd
         self.quit_game_enable = quit_game_enable
         #user32 = ctypes.windll.user32
         #user32.SetProcessDPIAware()
@@ -171,10 +171,13 @@ class GameControl():
         else:
             img_template = cv2.imread(img_template_path, cv2.IMREAD_GRAYSCALE)
 
-        res = cv2.matchTemplate(img_src, img_template, cv2.TM_CCOEFF_NORMED)
-        minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
-        # print(maxLoc)
-        return maxVal, maxLoc
+        try:
+            res = cv2.matchTemplate(img_src, img_template, cv2.TM_CCOEFF_NORMED)
+            minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
+            # print(maxLoc)
+            return maxVal, maxLoc
+        except:
+            return 0, 0
 
     def activate_window(self):
         user32 = ctypes.WinDLL('user32.dll')

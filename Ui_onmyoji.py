@@ -86,7 +86,6 @@ class Ui_MainWindow(object):
         self.mitama_single.setObjectName("mitama_single")
         self.gridLayout.addWidget(self.mitama_single, 0, 0, 1, 1)
         self.mitama_dual = QtWidgets.QRadioButton(self.groupBox)
-        self.mitama_dual.setEnabled(False)
         self.mitama_dual.setObjectName("mitama_dual")
         self.gridLayout.addWidget(self.mitama_dual, 1, 0, 1, 1)
         self.gridLayout_2.addWidget(self.groupBox, 0, 0, 1, 1)

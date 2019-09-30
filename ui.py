@@ -1,5 +1,5 @@
 from explore.explore import ExploreFight
-from mitama.dual import dual_star
+from mitama.dual import DualFighter
 from mitama.fighter_driver import DriverFighter
 from mitama.fighter_passenger import FighterPassenger
 from mitama.single_fight import SingleFight
@@ -105,7 +105,7 @@ class MyMainWindow(QMainWindow):
 
             if self.ui.mitama_dual.isChecked():
                 # 双开
-                dual_star()
+                self.fight = DualFighter()
         
         elif section == 1:
             # 探索

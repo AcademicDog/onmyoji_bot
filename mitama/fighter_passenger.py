@@ -8,9 +8,9 @@ import time
 class FighterPassenger(Fighter):
     '''御魂战斗乘客程序，参数mode, emyc'''
 
-    def __init__(self, done=1, emyc=0):
+    def __init__(self, emyc=0, hwnd=0):
         # 初始化
-        Fighter.__init__(self, 'Passenger: ', emyc)
+        Fighter.__init__(self, 'Passenger: ', emyc, hwnd)
 
     def start(self):
         '''单人御魂乘客'''
@@ -33,7 +33,7 @@ class FighterPassenger(Fighter):
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
             start_time = time.time()
-            while time.time() - start_time <= 10 and self.run:
+            while time.time() - start_time <= 20 and self.run:
                 # 检测是否回到队伍中
                 if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', mood3.get1mood()/1000, False)):
                     self.log.writeinfo('Passenger: 进入队伍')

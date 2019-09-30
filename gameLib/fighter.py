@@ -3,11 +3,18 @@ from tools.logsystem import WriteLog
 
 import configparser
 import time
+import win32gui
 
 
 class Fighter:
 
-    def __init__(self, name='', emyc=0):
+    def __init__(self, name='', emyc=0, hwnd=0):
+        '''
+        初始化
+            ：param name='': 打手名称
+            : param emyc=0: 点怪设置：0-不点怪
+            : param hwnd=0: 指定窗口句柄：0-否；其他-窗口句柄
+        '''
         # 初始参数
         self.emyc = emyc
         self.name = name
@@ -24,8 +31,11 @@ class Fighter:
         self.log = WriteLog()
 
         # 绑定窗口
-        self.yys = GameControl(u'阴阳师-网易游戏', quit_game_enable)
+        if hwnd == 0:
+            hwnd = win32gui.FindWindow(0, u'阴阳师-网易游戏')
+        self.yys = GameControl(hwnd, quit_game_enable)
         self.log.writeinfo(self.name + '绑定窗口成功')
+        self.log.writeinfo(self.name + str(hwnd))
 
         # 激活窗口
         self.yys.activate_window()
