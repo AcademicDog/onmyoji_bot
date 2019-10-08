@@ -9,6 +9,7 @@ class CommonPos():
 class TansuoPos():
     last_chapter = (934, 493), (1108, 572)  # 列表最后一章
     tansuo_btn=(787,458),(890,500) #探索按钮
+    tansuo_denglong = (424, 118), (462, 158)  # 探索灯笼
     ready_btn = (1000, 460), (1069, 513)  # 准备按钮
     fight_quit=GamePos((1055,462),(1121,518)) #退出战斗
     quit_btn = (32, 45), (58, 64)  # 退出副本

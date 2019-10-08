@@ -179,6 +179,45 @@ class GameControl():
         except:
             return 0, 0
 
+    def find_multi_img(self, *img_template_path, part=0, pos1=None, pos2=None, gray=0):
+        """
+        查找多张图片
+            :param img_template_path: 欲查找的图片路径列表
+            :param part=0: 是否全屏查找，1为否，其他为是
+            :param pos1=None: 欲查找范围的左上角坐标
+            :param pos2=None: 欲查找范围的右下角坐标
+            :param gray=0: 是否彩色查找，0：查找彩色图片，1：查找黑白图片
+            :return: (maxVal,maxLoc) maxVal为相关性列表，越接近1越好，maxLoc为得到的坐标列表
+        """
+        # 窗口截图
+        if part == 1:
+            img_src = self.window_part_shot(pos1, pos2, None, gray)
+        else:
+            img_src = self.window_full_shot(None, gray)
+
+        # 返回值列表
+        maxVal_list = []
+        maxLoc_list = []
+        for item in img_template_path:
+            # 读入文件
+            if gray == 0:
+                img_template = cv2.imread(item, cv2.IMREAD_COLOR)
+            else:
+                img_template = cv2.imread(item, cv2.IMREAD_GRAYSCALE)
+
+            # 开始识别
+            try:
+                res = cv2.matchTemplate(
+                    img_src, img_template, cv2.TM_CCOEFF_NORMED)
+                minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
+                maxVal_list.append(maxVal)
+                maxLoc_list.append(maxLoc)
+            except:
+                maxVal_list.append(0)
+                maxLoc_list.append(0)
+        # 返回列表
+        return maxVal_list, maxLoc_list
+
     def activate_window(self):
         user32 = ctypes.WinDLL('user32.dll')
         user32.SwitchToThisWindow(self.hwnd, True)

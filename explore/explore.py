@@ -3,6 +3,7 @@ from tools.game_pos import CommonPos, TansuoPos
 import tools.utilities as ut
 
 import configparser
+import logging
 import random
 import time
 
@@ -152,6 +153,10 @@ class ExploreFight(Fighter):
             self.log.writeinfo('已进入战斗')
             time.sleep(1)
 
+            # 等待式神准备
+            self.yys.wait_game_color(((1024,524),(1044, 544)), (138,198,233), 30)
+            logging.info('式神准备完成')
+
             # 检查狗粮经验
             self.check_exp_full()
 
@@ -179,16 +184,8 @@ class ExploreFight(Fighter):
         mood1 = ut.Mood(2)
         mood2 = ut.Mood(3)
         while self.run:
-            # 点击挑战按钮
-            if self.yys.wait_game_img('img\\TAN-SUO.png', 3, False):
-                self.click_until('探索按钮', 'img\\YING-BING.png',
-                                 *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
-            else:
-                self.click_until('最后章节', 'img\\TAN-SUO.png',
-                                 *TansuoPos.last_chapter, mood1.get1mood()/1000)
-                time.sleep(0.5)
-                self.click_until('探索按钮', 'img\\YING-BING.png',
-                                 *TansuoPos.tansuo_btn, mood1.get1mood()/1000)
+            # 进入探索内
+            self.switch_to_scene(4)
 
             # 开始打怪
             i = 0
@@ -204,11 +201,6 @@ class ExploreFight(Fighter):
                     i += 1
 
             # 退出探索
-            if self.yys.find_game_img('img\\YING-BING.png'):
-                while self.run:
-                    self.yys.mouse_click_bg(*TansuoPos.quit_btn)
-                    if self.yys.wait_game_img('img\\QUE-REN.png', 3, False):
-                        break
-                self.yys.mouse_click_bg(*TansuoPos.confirm_btn)
+            self.switch_to_scene(3)
             self.log.writeinfo('结束本轮探索')
             time.sleep(0.5)
