@@ -2,6 +2,7 @@ from gameLib.fighter import Fighter
 from tools.game_pos import CommonPos, YuhunPos
 import tools.utilities as ut
 
+import logging
 import time
 
 
@@ -39,16 +40,18 @@ class DriverFighter(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
+            self.click_until('结算', 'img/JIN-BI.png',
+                             *CommonPos.second_position, mood3.get1mood()/1000)
+            self.click_until('结算', 'img/JIN-BI.png',
+                             *CommonPos.second_position, mood3.get1mood()/1000, False)
+
+            # 等待下一轮
+            logging.info('Driver: 等待下一轮')
             start_time = time.time()
             while time.time() - start_time <= 20 and self.run:
-                if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', mood3.get1mood()/1000, False)):
+                if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', 1, False)):
                     self.log.writeinfo('Driver: 进入队伍')
                     break
-
-                # 点击结算
-                if not (self.yys.find_game_img('img\\MESSAGE.png') or self.yys.find_game_img('img\\JIA-CHENG.png')):
-                    self.yys.mouse_click_bg(*CommonPos.second_position)
-                    self.log.writeinfo('Driver: 点击结算')
 
                 # 点击默认邀请
                 if self.yys.find_game_img('img\\ZI-DONG-YAO-QING.png'):

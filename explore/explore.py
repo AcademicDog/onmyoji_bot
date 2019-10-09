@@ -19,6 +19,7 @@ class ExploreFight(Fighter):
         self.fight_boss_enable = conf.getboolean('explore', 'fight_boss_enable')
         self.slide_shikigami = conf.getboolean('explore', 'slide_shikigami')
         self.slide_shikigami_progress = conf.getint('explore', 'slide_shikigami_progress')
+        self.zhunbei_delay = conf.getint('explore', 'zhunbei_delay')
 
     def next_scene(self):
         '''
@@ -148,7 +149,7 @@ class ExploreFight(Fighter):
 
             # 攻击怪
             self.yys.mouse_click_bg(fight_pos)
-            if not self.yys.wait_game_img('img\\ZHUN-BEI.png', 3, False):
+            if not self.yys.wait_game_img('img\\ZHUN-BEI.png', self.zhunbei_delay, False):
                 break
             self.log.writeinfo('已进入战斗')
             time.sleep(1)

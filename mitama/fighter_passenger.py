@@ -2,6 +2,7 @@ from gameLib.fighter import Fighter
 from tools.game_pos import CommonPos, TansuoPos
 import tools.utilities as ut
 
+import logging
 import time
 
 
@@ -32,17 +33,19 @@ class FighterPassenger(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
+            self.click_until('结算', 'img/JIN-BI.png',
+                             *CommonPos.second_position, mood3.get1mood()/1000)
+            self.click_until('结算', 'img/JIN-BI.png',
+                             *CommonPos.second_position, mood3.get1mood()/1000, False)
+
+            # 等待下一轮
+            logging.info('Passenger: 等待下一轮')
             start_time = time.time()
             while time.time() - start_time <= 20 and self.run:
                 # 检测是否回到队伍中
-                if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', mood3.get1mood()/1000, False)):
+                if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', 1, False)):
                     self.log.writeinfo('Passenger: 进入队伍')
                     break
-
-                # 点击结算，直到回到主界面
-                if not (self.yys.find_game_img('img\\MESSAGE.png') or self.yys.find_game_img('img\\JIA-CHENG.png')):
-                    self.yys.mouse_click_bg(*CommonPos.second_position)
-                    self.log.writeinfo('Passenger: 点击结算')
 
                 # 检测是否有御魂邀请
                 yuhun_loc = self.yys.wait_game_img(

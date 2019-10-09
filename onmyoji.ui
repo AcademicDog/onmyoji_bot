@@ -202,6 +202,38 @@
             </attribute>
             <layout class="QGridLayout" name="gridLayout_5">
              <item row="1" column="0">
+              <widget class="QGroupBox" name="groupBox_3">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="title">
+                <string>延迟设置</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_8">
+                <item row="0" column="1">
+                 <widget class="QLineEdit" name="lineEdit_3">
+                  <property name="text">
+                   <string>3</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>满级狗粮识别延迟(秒)：</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="3" column="0">
               <widget class="QCheckBox" name="checkBox_3">
                <property name="text">
                 <string>换狗粮拖放式神进度条，进度：</string>
@@ -212,6 +244,16 @@
               </widget>
              </item>
              <item row="4" column="0">
+              <widget class="QSlider" name="horizontalSlider">
+               <property name="sliderPosition">
+                <number>10</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
               <widget class="QCheckBox" name="checkBox_2">
                <property name="text">
                 <string>结束后打BOSS</string>
@@ -239,10 +281,7 @@
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QSlider" name="horizontalSlider">
-               <property name="sliderPosition">
-                <number>10</number>
-               </property>
+              <widget class="Line" name="line_4">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>

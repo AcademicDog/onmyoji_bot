@@ -65,6 +65,8 @@ class MyMainWindow(QMainWindow):
                      str(self.ui.checkBox_3.isChecked()))
             conf.set('explore', 'slide_shikigami_progress',
                      str(self.ui.horizontalSlider.value()))
+            conf.set('explore', 'zhunbei_delay',
+                     str(self.ui.lineEdit_3.text()))
     
     def get_conf(self, section):
         conf = configparser.ConfigParser()
