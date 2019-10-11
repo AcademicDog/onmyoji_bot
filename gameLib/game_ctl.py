@@ -23,6 +23,12 @@ class GameControl():
         self.quit_game_enable = quit_game_enable
         #user32 = ctypes.windll.user32
         #user32.SetProcessDPIAware()
+        l1,t1,r1,b1 = win32gui.GetWindowRect(self.hwnd)
+        l2,t2,r2,b2 = win32gui.GetClientRect(self.hwnd)
+        self._client_h = b2 - t2
+        self._client_w = r2 - l2
+        self._border_l = ((r1 - l1) - (r2 - l2)) // 2
+        self._border_t = ((b1 - t1) - (b2 - t2)) - self._border_l
 
     def window_full_shot(self, file_name=None, gray=0):
         """
@@ -32,17 +38,13 @@ class GameControl():
             :return: file_name为空则返回RGB数据
         """
         try:
-            l, t, r, b = win32gui.GetWindowRect(self.hwnd)
-            # 39和16为Window与Client高和宽的差值
-            h = b - t - 39
-            w = r - l - 16
             hwindc = win32gui.GetWindowDC(self.hwnd)
             srcdc = win32ui.CreateDCFromHandle(hwindc)
             memdc = srcdc.CreateCompatibleDC()
             bmp = win32ui.CreateBitmap()
-            bmp.CreateCompatibleBitmap(srcdc, w, h)
+            bmp.CreateCompatibleBitmap(srcdc, self._client_w, self._client_h)
             memdc.SelectObject(bmp)
-            memdc.BitBlt((0, 0), (w, h), srcdc, (8, 31), win32con.SRCCOPY)
+            memdc.BitBlt((0, 0), (self._client_w, self._client_h), srcdc, (self._border_l, self._border_t), win32con.SRCCOPY)
             if file_name != None:
                 bmp.SaveBitmapFile(memdc, file_name)
                 srcdc.DeleteDC()
@@ -53,7 +55,7 @@ class GameControl():
             else:
                 signedIntsArray = bmp.GetBitmapBits(True)
                 img = np.fromstring(signedIntsArray, dtype='uint8')
-                img.shape = (h, w, 4)
+                img.shape = (self._client_h, self._client_w, 4)
                 srcdc.DeleteDC()
                 memdc.DeleteDC()
                 win32gui.ReleaseDC(self.hwnd, hwindc)
@@ -85,7 +87,7 @@ class GameControl():
         bmp.CreateCompatibleBitmap(srcdc, w, h)
         memdc.SelectObject(bmp)
         memdc.BitBlt((0, 0), (w, h), srcdc,
-                     (pos1[0]+8, pos1[1]+31), win32con.SRCCOPY)
+                     (pos1[0]+self._border_l, pos1[1]+self._border_t), win32con.SRCCOPY)
         if file_name != None:
             bmp.SaveBitmapFile(memdc, file_name)
             srcdc.DeleteDC()
