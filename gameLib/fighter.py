@@ -1,6 +1,6 @@
 from gameLib.game_ctl import GameControl
 from tools.logsystem import WriteLog
-from tools.game_pos import TansuoPos
+from tools.game_pos import TansuoPos, CommonPos
 
 import configparser
 import logging
@@ -61,7 +61,14 @@ class Fighter:
         # 点击怪物
         pass
 
-    def click_until(self, tag, img_path, pos, pos_end=None, step_time=0.5, appear=True):
+    def click_shikigami(self):
+        # 点击第二位式神
+        self.log.writeinfo("开始标记式神")
+        self.click_until('标记式神', 'img/GREEN-SIGN.png', *
+                         CommonPos.shikigami_position_2, 0.7, True, False)
+        self.log.writeinfo("标记式神成功")
+
+    def click_until(self, tag, img_path, pos, pos_end=None, step_time=0.5, appear=True, quit=True):
         '''
         在某一时间段内，后台点击鼠标，直到出现某一图片出现或消失
             :param tag: 按键名
@@ -70,6 +77,7 @@ class Fighter:
             :param pos_end=None: (x,y) 若pos_end不为空，则鼠标单击以pos为左上角坐标pos_end为右下角坐标的区域内的随机位置
             :step_time=0.5: 查询间隔
             :appear: 图片出现或消失：Ture-出现；False-消失
+            :quit=True: 超时后是否退出
             :return: 成功返回True, 失败退出游戏
         '''
         # 在指定时间内反复监测画面并点击
@@ -89,9 +97,11 @@ class Fighter:
         self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
 
         # 提醒玩家点击失败，并在5s后退出
-        self.yys.activate_window()
-        time.sleep(5)
-        self.yys.quit_game()
+        if quit:
+            # 超时则退出游戏
+            self.yys.activate_window()
+            time.sleep(5)
+            self.yys.quit_game()
 
     def activate(self):
         self.log.writewarning(self.name + '启动脚本')
