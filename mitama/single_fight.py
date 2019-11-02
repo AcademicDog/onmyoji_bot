@@ -26,6 +26,9 @@ class SingleFight(Fighter):
             # 检测是否进入战斗
             self.check_battle()
 
+            # 已经进入战斗，乘客自动标记第二位式神
+            self.click_shikigami()
+
             # 在战斗中，自动点怪
             self.click_monster()
 

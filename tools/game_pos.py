@@ -5,6 +5,7 @@ class GamePos():
 
 class CommonPos():
     second_position = (877, 56), (1111, 452)  # 第二次结算所点击的位置
+    shikigami_position_2 = (308, 433), (375, 523)  # 标记第二只式神的位置
 
 class TansuoPos():
     last_chapter = (934, 493), (1108, 572)  # 列表最后一章
