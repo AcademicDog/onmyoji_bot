@@ -53,6 +53,8 @@ def firstposition():
     h = 640
     while True:
         position = (random.randint(0, w), random.randint(50, h))
+        if position[0] < 123 and position[0] <108:
+            continue
         if position[0] < 332 or position[0] > 931:
             return position
         elif position[1] < 350 or position[1] > 462:
@@ -68,6 +70,8 @@ def secondposition():
     '''
     while True:
         position = (random.randint(0, w), random.randint(50, h - 90))
+        if position[0] < 123 and position[0] <108:
+            continue
         if position[0] < 180 or position[0] > 956:
             return position
         elif position[1] < 112:

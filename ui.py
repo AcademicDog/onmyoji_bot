@@ -15,6 +15,7 @@ import os
 import sys
 import threading
 
+confPath = os.path.join(os.getcwd(), "conf.ini") #拼接上配置文件名称目录
 
 def is_admin():
     # UAC申请，获得管理员权限
@@ -71,7 +72,7 @@ class MyMainWindow(QMainWindow):
     def get_conf(self, section):
         conf = configparser.ConfigParser()
         # 读取配置文件
-        conf.read('conf.ini', encoding="utf-8")
+        conf.read(confPath, encoding="utf-8")
 
         # 修改配置
         try:
@@ -82,7 +83,7 @@ class MyMainWindow(QMainWindow):
             self.set_conf(conf, section)
 
         # 保存配置文件
-        with open('conf.ini', 'w') as configfile:
+        with open(confPath, 'w') as configfile:
                 conf.write(configfile)
 
     def start_onmyoji(self):

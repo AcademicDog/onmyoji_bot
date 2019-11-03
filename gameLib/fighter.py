@@ -2,12 +2,15 @@ from gameLib.game_ctl import GameControl
 from tools.logsystem import WriteLog
 from tools.game_pos import TansuoPos, CommonPos
 
+import os
 import configparser
 import logging
 import random
 import time
 import win32gui
+import tools.utilities as ut
 
+confPath = os.path.join(os.getcwd(), "conf.ini") #拼接上配置文件名称目录
 
 class Fighter:
 
@@ -25,10 +28,11 @@ class Fighter:
 
         # 读取配置文件
         conf = configparser.ConfigParser()
-        conf.read('conf.ini')
+        conf.read(confPath)
         quit_game_enable = conf.getboolean('watchdog', 'watchdog_enable')
         self.max_op_time = conf.getint('watchdog', 'max_op_time')
         self.max_win_time = conf.getint('watchdog', 'max_win_time')
+        self.sign_shikigami = conf.getboolean('common', 'sign_shikigami')
 
         # 启动日志
         self.log = WriteLog()
@@ -63,10 +67,12 @@ class Fighter:
 
     def click_shikigami(self):
         # 点击第二位式神
-        self.log.writeinfo("开始标记式神")
-        self.click_until('标记式神', 'img/GREEN-SIGN.png', *
-                         CommonPos.shikigami_position_2, 0.7, True, False)
-        self.log.writeinfo("标记式神成功")
+        if self.sign_shikigami:
+            self.log.writeinfo("开始标记式神")
+            ut.mysleep(200, 50)
+            self.click_until('标记式神', 'img/GREEN-SIGN.png', *
+                             CommonPos.shikigami_position_2, 0.4, True, False)
+            self.log.writeinfo("标记式神完成")
 
     def click_until(self, tag, img_path, pos, pos_end=None, step_time=0.5, appear=True, quit=True):
         '''
@@ -93,7 +99,7 @@ class Fighter:
                 # 点击指定位置并等待下一轮
                 self.yys.mouse_click_bg(pos, pos_end)
                 self.log.writeinfo(self.name + '点击 ' + tag)
-            time.sleep(step_time)
+            ut.mysleep(step_time*1000, 100)
         self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
 
         # 提醒玩家点击失败，并在5s后退出

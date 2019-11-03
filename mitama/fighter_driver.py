@@ -31,6 +31,9 @@ class DriverFighter(Fighter):
                              YuhunPos.kaishizhandou_btn, mood2.get1mood()/1000)
             self.log.writeinfo('Driver: 已进入战斗')
 
+            # 已经进入战斗，乘客自动标记第二位式神
+            self.click_shikigami()
+
             # 已经进入战斗，司机自动点怪
             self.click_monster()
 
@@ -39,10 +42,10 @@ class DriverFighter(Fighter):
             mood2.moodsleep()
 
             # 在战斗结算页面
-            self.yys.mouse_click_bg(ut.firstposition())
-            self.click_until('结算', 'img/JIN-BI.png',
-                             *CommonPos.second_position, mood3.get1mood()/1000)
-            self.click_until('结算', 'img/JIN-BI.png',
+            self.click_until('结算', 'img/JIE-SU.png',
+                             *CommonPos.second_position, mood3.get1mood()/1000, False)
+            ut.mysleep(600,100)
+            self.click_until('结算', 'img/JIE-SU-2.png',
                              *CommonPos.second_position, mood3.get1mood()/1000, False)
 
             # 等待下一轮

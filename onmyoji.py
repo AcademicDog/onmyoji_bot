@@ -12,6 +12,7 @@ from tools.logsystem import WriteLog
 global mode
 global emyc
 global done
+global sign_shikigami
 
 #初始化对象
 log = WriteLog()
@@ -21,6 +22,7 @@ def init():
     global mode
     global emyc
     global done
+    global sign_shikigami
     
     try:
         # 选择打什么
@@ -39,6 +41,11 @@ def init():
         # emyc=int(input('\n是否点怪？\n0-不点怪\n1-点中间怪\n2-点右边怪\n'))
         # if((emyc!=0) and (emyc!=1) and (emyc!=2)):
         #     emyc=0
+
+        # 标记式神设置
+        sign_shikigami=int(input('\n是否标记式神？\n3-使用配置文件的设置\n0-不标记\n1-标记\n'))
+        if((sign_shikigami!=3) and (sign_shikigami!=0) and (sign_shikigami!=1)):
+            sign_shikigami=3
         
         # 结束设置
         # done=int(input('\n结束后如何处理？\n0-退出\n1-关机\n'))
@@ -52,6 +59,7 @@ def init():
         mode=0
         emyc=0
         done=1
+        sign_shikigami=3
         log.writeinfo('Use default parameters')
 
 def is_admin():
@@ -63,20 +71,31 @@ def is_admin():
 
 def yuhun():
     '''御魂战斗'''
-    if mode == 0:
-        # 单刷
-        fight = SingleFight()
-        fight.start()
-    
-    if mode == 2:
-        # 司机
-        fight = DriverFighter()
-        fight.start()
-    
-    if mode == 3:
-        # 乘客
-        fight = FighterPassenger()        
-        fight.start()    
+    try:
+        if mode == 0:
+            # 单刷
+            fight = SingleFight()
+            if sign_shikigami != 3:
+                fight.sign_shikigami = sign_shikigami
+            fight.start()
+
+        if mode == 2:
+            # 司机
+            fight = DriverFighter()
+            if sign_shikigami != 3:
+                fight.sign_shikigami = sign_shikigami
+            fight.start()
+
+        if mode == 3:
+            # 乘客
+            fight = FighterPassenger()
+            if sign_shikigami != 3:
+                fight.sign_shikigami = sign_shikigami
+            fight.start()
+
+    except Exception as e:
+        log.writeinfo(e)
+        os.system("pause")
     
 def tansuo():
     '''探索战斗'''
@@ -103,7 +122,7 @@ if __name__ == "__main__":
 
         else:
             ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)       
-    except KeyboardInterrupt:        
+    except KeyboardInterrupt:
         log.writeinfo('terminated')
         os._exit(0)
     else:
