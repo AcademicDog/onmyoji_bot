@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.0.0.1129
+#### Fixes (bugs & defects):
+*  调整了探索战斗的结算逻辑，现在不检查邮箱图标了，同时修复[#21](https://github.com/AcademicDog/onmyoji_bot/issues/21)、[#28](https://github.com/AcademicDog/onmyoji_bot/issues/28)。
+*  删除了冗余代码。
+*  根据[#24](https://github.com/AcademicDog/onmyoji_bot/issues/24)，调整了结算点击范围。
+
 ## v1.0.0.1009
 #### New features:
 *  增加了探索中“满级狗粮识别延迟”的设置选项。

@@ -19,7 +19,7 @@ class ExploreFight(Fighter):
         self.fight_boss_enable = conf.getboolean('explore', 'fight_boss_enable')
         self.slide_shikigami = conf.getboolean('explore', 'slide_shikigami')
         self.slide_shikigami_progress = conf.getint('explore', 'slide_shikigami_progress')
-        self.zhunbei_delay = conf.getint('explore', 'zhunbei_delay')
+        self.zhunbei_delay = conf.getfloat('explore', 'zhunbei_delay')
 
     def next_scene(self):
         '''
@@ -155,7 +155,7 @@ class ExploreFight(Fighter):
             time.sleep(1)
 
             # 等待式神准备
-            self.yys.wait_game_color(((1024,524),(1044, 544)), (138,198,233), 30)
+            #self.yys.wait_game_color(((1024,524),(1044, 544)), (138,198,233), 30)
             logging.info('式神准备完成')
 
             # 检查狗粮经验
@@ -171,8 +171,10 @@ class ExploreFight(Fighter):
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
-            self.click_until('结算', 'img\\MESSAGE.png',
+            self.click_until('结算', 'img/JIN-BI.png',
                              *CommonPos.second_position, mood2.get1mood()/1000)
+            self.click_until('结算', 'img/JIN-BI.png',
+                             *CommonPos.second_position, mood2.get1mood()/1000, False)
 
             # 返回结果
             if boss:
