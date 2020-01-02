@@ -151,26 +151,52 @@
              <string>御魂/御灵</string>
             </attribute>
             <layout class="QGridLayout" name="gridLayout_2">
+             <item row="1" column="0">
+              <widget class="QGroupBox" name="groupBox_4">
+               <property name="title">
+                <string>副本(调试中)</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_9">
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="radioButton_1">
+                  <property name="text">
+                   <string>八岐大蛇</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0" colspan="2">
+                 <widget class="QRadioButton" name="radioButton_3">
+                  <property name="text">
+                   <string>卑弥呼</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QRadioButton" name="radioButton_4">
+                  <property name="text">
+                   <string>御灵</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="radioButton_2">
+                  <property name="text">
+                   <string>业原火</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
              <item row="0" column="0">
               <widget class="QGroupBox" name="groupBox">
                <property name="title">
                 <string>模式</string>
                </property>
                <layout class="QGridLayout" name="gridLayout">
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="mitama_passenger">
-                  <property name="text">
-                   <string>单人乘客</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QRadioButton" name="mitama_driver">
-                  <property name="text">
-                   <string>单人司机</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="0">
                  <widget class="QRadioButton" name="mitama_single">
                   <property name="autoFillBackground">
@@ -184,7 +210,21 @@
                   </property>
                  </widget>
                 </item>
+                <item row="0" column="1">
+                 <widget class="QRadioButton" name="mitama_driver">
+                  <property name="text">
+                   <string>单人司机</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="1" column="0">
+                 <widget class="QRadioButton" name="mitama_passenger">
+                  <property name="text">
+                   <string>单人乘客</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
                  <widget class="QRadioButton" name="mitama_dual">
                   <property name="text">
                    <string>双开</string>
@@ -344,7 +384,21 @@
             <string>高级选项</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_7">
-            <item row="0" column="0">
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>  画面超时时间(秒)：</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>  操作超时时间(秒)：</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
              <widget class="QCheckBox" name="checkBox">
               <property name="text">
                <string>超时自动关闭阴阳师</string>
@@ -354,21 +408,7 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>  画面超时时间(秒)：</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>  操作超时时间(秒)：</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
+            <item row="3" column="1">
              <widget class="QLineEdit" name="lineEdit">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -390,7 +430,7 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="4" column="1">
              <widget class="QLineEdit" name="lineEdit_2">
               <property name="maximumSize">
                <size>
@@ -403,6 +443,13 @@
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="checkBox_4">
+              <property name="text">
+               <string>调试模式</string>
               </property>
              </widget>
             </item>
@@ -469,8 +516,8 @@
    <slot>start_onmyoji()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>217</x>
-     <y>508</y>
+     <x>495</x>
+     <y>517</y>
     </hint>
     <hint type="destinationlabel">
      <x>197</x>
@@ -485,8 +532,8 @@
    <slot>stop_onmyoji()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>253</x>
-     <y>537</y>
+     <x>523</x>
+     <y>546</y>
     </hint>
     <hint type="destinationlabel">
      <x>287</x>
@@ -497,10 +544,7 @@
  </connections>
  <slots>
   <slot>start_onmyoji()</slot>
-  <slot>set_mood1()</slot>
-  <slot>set_mood2()</slot>
-  <slot>set_mood3()</slot>
   <slot>stop_onmyoji()</slot>
-  <slot>set_section()</slot>
+  <slot>debug()</slot>
  </slots>
 </ui>

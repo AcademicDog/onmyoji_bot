@@ -5,6 +5,7 @@ from tools.game_pos import TansuoPos
 import configparser
 import logging
 import random
+import threading
 import time
 import win32gui
 
@@ -44,6 +45,12 @@ class Fighter:
         self.yys.activate_window()
         self.log.writeinfo(self.name + '激活窗口成功')
         time.sleep(0.5)
+
+        # 自检
+        debug_enable = conf.getboolean('others', 'debug_enable')
+        if debug_enable:
+            task = threading.Thread(target=self.yys.debug)
+            task.start()
 
     def check_battle(self):
         # 检测是否进入战斗

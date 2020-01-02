@@ -23,19 +23,22 @@ def is_admin():
     except:
         return False
 
+
 class GuiLogger(logging.Handler):
     def emit(self, record):
-        self.edit.append(self.format(record))  # implementation of append_line omitted
+        # implementation of append_line omitted
+        self.edit.append(self.format(record))
         self.edit.moveCursor(QTextCursor.End)
 
+
 class MyMainWindow(QMainWindow):
-    def __init__(self, parent = None):
+    def __init__(self, parent=None):
         super(MyMainWindow, self).__init__(parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
         self.ui.textEdit.ensureCursorVisible()
-        
+
         h = GuiLogger()
         h.edit = self.ui.textEdit
         logger = logging.getLogger()
@@ -52,6 +55,8 @@ class MyMainWindow(QMainWindow):
         conf.set('watchdog', 'max_win_time', str(self.ui.lineEdit.text()))
         conf.set('watchdog', 'max_op_time', str(self.ui.lineEdit_2.text()))
 
+        conf.set('others', 'debug_enable', str(self.ui.checkBox_4.isChecked()))
+
         # 御魂参数
         if section == 0:
             pass
@@ -67,7 +72,7 @@ class MyMainWindow(QMainWindow):
                      str(self.ui.horizontalSlider.value()))
             conf.set('explore', 'zhunbei_delay',
                      str(self.ui.lineEdit_3.text()))
-    
+
     def get_conf(self, section):
         conf = configparser.ConfigParser()
         # 读取配置文件
@@ -79,16 +84,17 @@ class MyMainWindow(QMainWindow):
         except:
             conf.add_section('watchdog')
             conf.add_section('explore')
+            conf.add_section('others')
             self.set_conf(conf, section)
 
         # 保存配置文件
         with open('conf.ini', 'w') as configfile:
-                conf.write(configfile)
+            conf.write(configfile)
 
     def start_onmyoji(self):
         section = self.ui.tabWidget.currentIndex()
 
-        # 读取配置
+        # 读取主要副本
         self.get_conf(section)
 
         if section == 0:
@@ -96,11 +102,11 @@ class MyMainWindow(QMainWindow):
             if self.ui.mitama_single.isChecked():
                 # 单刷
                 self.fight = SingleFight()
-    
+
             elif self.ui.mitama_driver.isChecked():
                 # 司机
                 self.fight = DriverFighter()
-    
+
             if self.ui.mitama_passenger.isChecked():
                 # 乘客
                 self.fight = FighterPassenger()
@@ -108,12 +114,12 @@ class MyMainWindow(QMainWindow):
             if self.ui.mitama_dual.isChecked():
                 # 双开
                 self.fight = DualFighter()
-        
+
         elif section == 1:
             # 探索
             self.fight = ExploreFight()
 
-        task = threading.Thread(target = self.fight.start)
+        task = threading.Thread(target=self.fight.start)
         task.start()
 
     def stop_onmyoji(self):
@@ -122,8 +128,9 @@ class MyMainWindow(QMainWindow):
         except:
             pass
 
-if __name__=="__main__":  
-    
+
+if __name__ == "__main__":
+
     try:
         # 检测管理员权限
         if is_admin():
@@ -139,6 +146,7 @@ if __name__=="__main__":
             sys.exit(app.exec_())
 
         else:
-            ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
+            ctypes.windll.shell32.ShellExecuteW(
+                None, "runas", sys.executable, __file__, None, 1)
     except:
         pass

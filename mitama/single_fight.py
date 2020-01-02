@@ -37,4 +37,4 @@ class SingleFight(Fighter):
             self.yys.mouse_click_bg(ut.firstposition())
             self.click_until('结算', 'img\\TIAO-ZHAN.png',
                              *CommonPos.second_position, mood3.get1mood()/1000)
-            self.log.writeinfo("回到御魂选择界面")
+            self.log.writeinfo("回到选择界面")
