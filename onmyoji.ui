@@ -148,49 +148,9 @@
            </property>
            <widget class="QWidget" name="tab">
             <attribute name="title">
-             <string>御魂/御灵</string>
+             <string>御魂</string>
             </attribute>
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="1" column="0">
-              <widget class="QGroupBox" name="groupBox_4">
-               <property name="title">
-                <string>副本(调试中)</string>
-               </property>
-               <layout class="QGridLayout" name="gridLayout_9">
-                <item row="0" column="0">
-                 <widget class="QRadioButton" name="radioButton_1">
-                  <property name="text">
-                   <string>八岐大蛇</string>
-                  </property>
-                  <property name="checked">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0" colspan="2">
-                 <widget class="QRadioButton" name="radioButton_3">
-                  <property name="text">
-                   <string>卑弥呼</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="2">
-                 <widget class="QRadioButton" name="radioButton_4">
-                  <property name="text">
-                   <string>御灵</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QRadioButton" name="radioButton_2">
-                  <property name="text">
-                   <string>业原火</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
              <item row="0" column="0">
               <widget class="QGroupBox" name="groupBox">
                <property name="title">
@@ -232,6 +192,56 @@
                  </widget>
                 </item>
                </layout>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QGroupBox" name="groupBox_4">
+               <property name="title">
+                <string>副本(调试中)</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_9">
+                <item row="0" column="0">
+                 <widget class="QRadioButton" name="radioButton_1">
+                  <property name="text">
+                   <string>八岐大蛇</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0" colspan="2">
+                 <widget class="QRadioButton" name="radioButton_3">
+                  <property name="text">
+                   <string>卑弥呼</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QRadioButton" name="radioButton_2">
+                  <property name="text">
+                   <string>业原火</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_4">
+            <attribute name="title">
+             <string>御灵</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QPlainTextEdit" name="plainTextEdit_3">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="plainText">
+                <string>选择好要打的御灵及层数，点击开始按钮即可。</string>
+               </property>
               </widget>
              </item>
             </layout>

@@ -1,4 +1,5 @@
 from explore.explore import ExploreFight
+from goryou.single_fight import GoryouFight
 from mitama.dual import DualFighter
 from mitama.fighter_driver import DriverFighter
 from mitama.fighter_passenger import FighterPassenger
@@ -116,6 +117,10 @@ class MyMainWindow(QMainWindow):
                 self.fight = DualFighter()
 
         elif section == 1:
+            # 御灵
+            self.fight = GoryouFight()
+
+        elif section == 2:
             # 探索
             self.fight = ExploreFight()
 
@@ -129,11 +134,26 @@ class MyMainWindow(QMainWindow):
             pass
 
 
+def my_excepthook(exc_type, exc_value, tb):
+    msg = ' Traceback (most recent call last):\n'
+    while tb:
+        filename = tb.tb_frame.f_code.co_filename
+        name = tb.tb_frame.f_code.co_name
+        lineno = tb.tb_lineno
+        msg += '   File "%.500s", line %d, in %.500s\n' % (filename, lineno, name)
+        tb = tb.tb_next
+
+    msg += ' %s: %s\n' %(exc_type.__name__, exc_value)
+
+    logging.error(msg)
+
+
 if __name__ == "__main__":
 
     try:
         # 检测管理员权限
         if is_admin():
+            sys.excepthook = my_excepthook
             global mode
             mode = 0
             global section

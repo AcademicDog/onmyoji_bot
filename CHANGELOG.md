@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v1.0.1.0106
+#### New features:
+*  完善了刷御灵的流程。
+*  在程序出现异常崩溃时捕获TrackBack至log.log。
+
 ## v1.0.1.0102
 #### New features:
 *  增加了简单的自检逻辑。
