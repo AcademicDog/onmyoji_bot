@@ -17,7 +17,7 @@ class SingleFight(Fighter):
         mood3 = ut.Mood(3)
         while self.run:
             # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
-            self.yys.wait_game_img('img\\TIAO-ZHAN.png',
+            self.yys.wait_game_img('img\\YU-HUN-XUAN-DAN.png',
                                    self.max_win_time)
             mood1.moodsleep()
             self.yys.mouse_click_bg(*YuhunPos.tiaozhan_btn)
@@ -37,9 +37,7 @@ class SingleFight(Fighter):
             mood2.moodsleep()
 
             # 在战斗结算页面
-            self.click_until('结算', 'img/JIE-SU.png',
-                             *CommonPos.second_position, mood3.get1mood()/1000, False)
-            ut.mysleep(600,100)
-            self.click_until('结算', 'img/JIE-SU-2.png',
-                             *CommonPos.second_position, mood3.get1mood()/1000, False)
+            self.yys.mouse_click_bg(ut.firstposition())
+            self.click_until('结算', 'img\\YU-HUN-XUAN-DAN.png',
+                             *CommonPos.second_position, mood3.get1mood()/1000)
             self.log.writeinfo("回到御魂选择界面")

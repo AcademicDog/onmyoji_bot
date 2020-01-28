@@ -53,11 +53,11 @@ def firstposition():
     h = 640
     while True:
         position = (random.randint(0, w), random.randint(50, h))
-        if position[0] < 123 and position[0] <108:
+        if position[0] < 123 and position[1] <108:
             continue
         if position[0] < 332 or position[0] > 931:
             return position
-        elif position[1] < 350 or position[1] > 462:
+        elif position[1] < 260:
             return position
 
 
@@ -70,7 +70,9 @@ def secondposition():
     '''
     while True:
         position = (random.randint(0, w), random.randint(50, h - 90))
-        if position[0] < 123 and position[0] <108:
+        if position[0] < 123 and position[1] <108:
+            continue
+        if position[0] > 1020 and position[1] <80:
             continue
         if position[0] < 180 or position[0] > 956:
             return position
@@ -84,7 +86,7 @@ def mysleep(slpa, slpb=0):
     randomly sleep for a short time between `slpa` and `slpa + slpb` \n
     because of the legacy reason, slpa and slpb are in millisecond
     '''
-    slp = random.randint(slpa, slpa+slpb)
+    slp = random.randint(int(slpa), int(slpa+slpb))
     time.sleep(slp/1000)
 
 

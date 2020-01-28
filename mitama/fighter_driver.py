@@ -26,6 +26,10 @@ class DriverFighter(Fighter):
         while self.run:
             # 司机点击开始战斗，需要锁定御魂阵容
             mood1.moodsleep()
+
+            # 拒绝悬赏
+            self.yys.rejectbounty()
+
             self.log.writeinfo('Driver: 点击开始战斗按钮')
             self.click_until('开始战斗按钮', 'img\\ZI-DONG.png', *
                              YuhunPos.kaishizhandou_btn, mood2.get1mood()/1000)
@@ -42,19 +46,22 @@ class DriverFighter(Fighter):
             mood2.moodsleep()
 
             # 在战斗结算页面
-            self.click_until('结算', 'img/JIE-SU.png',
-                             *CommonPos.second_position, mood3.get1mood()/1000, False)
-            ut.mysleep(600,100)
-            self.click_until('结算', 'img/JIE-SU-2.png',
-                             *CommonPos.second_position, mood3.get1mood()/1000, False)
-
-            # 等待下一轮
-            logging.info('Driver: 等待下一轮')
+            self.yys.mouse_click_bg(ut.firstposition())
             start_time = time.time()
+            jiesuan_status = 0
             while time.time() - start_time <= 20 and self.run:
-                if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', 1, False)):
+                if(self.yys.wait_game_img('img\\KAI-SHI-ZHAN-DOU.png', mood3.get1mood()/1000, False)):
                     self.log.writeinfo('Driver: 进入队伍')
                     break
+
+                # 点击结算
+                if jiesuan_status == 0:
+                    if not (self.yys.find_game_img('img\\MESSAGE.png') or self.yys.find_game_img('img\\JIA-CHENG.png')):
+                        self.yys.mouse_click_bg(*CommonPos.second_position)
+                        self.log.writeinfo('Driver: 点击结算')
+                    else:
+                        jiesuan_status = 1
+                        self.log.writeinfo('Driver: 点击结算成功，待进入队伍')
 
                 # 点击默认邀请
                 if self.yys.find_game_img('img\\ZI-DONG-YAO-QING.png'):

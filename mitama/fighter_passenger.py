@@ -34,21 +34,24 @@ class FighterPassenger(Fighter):
             self.check_end()
             mood2.moodsleep()
 
-            # 在战斗结算页面
-            self.click_until('结算', 'img/JIE-SU.png',
-                             *CommonPos.second_position, mood3.get1mood()/1000, False)
-            ut.mysleep(600,100)
-            self.click_until('结算', 'img/JIE-SU-2.png',
-                             *CommonPos.second_position, mood3.get1mood()/1000, False)
-
             # 等待下一轮
-            logging.info('Passenger: 等待下一轮')
+            self.yys.mouse_click_bg(ut.firstposition())
             start_time = time.time()
+            jiesuan_status = 0
             while time.time() - start_time <= 20 and self.run:
                 # 检测是否回到队伍中
-                if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', 1, False)):
+                if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', mood3.get1mood()/1000, False) or self.yys.find_game_img('img\\XIE-ZHAN-DUI-WU.png', 0, None, None, 1) or self.yys.find_game_img('img\\ZI-DONG.png')):
                     self.log.writeinfo('Passenger: 进入队伍')
                     break
+
+                # 点击结算
+                if jiesuan_status == 0:
+                    if not (self.yys.find_game_img('img\\MESSAGE.png') or self.yys.find_game_img('img\\JIA-CHENG.png')):
+                        self.yys.mouse_click_bg(*CommonPos.second_position)
+                        self.log.writeinfo('Passenger: 点击结算')
+                    else:
+                        jiesuan_status = 1
+                        self.log.writeinfo('Passenger: 点击结算成功，待进入队伍')
 
                 # 检测是否有御魂邀请
                 yuhun_loc = self.yys.wait_game_img(
