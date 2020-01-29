@@ -1,4 +1,5 @@
 import ctypes
+import logging
 import sys
 import time
 import random
@@ -21,6 +22,7 @@ class GameControl():
         self.run = True
         self.hwnd = hwnd
         self.quit_game_enable = quit_game_enable
+        self.debug_enable = False
         #user32 = ctypes.windll.user32
         #user32.SetProcessDPIAware()
         l1,t1,r1,b1 = win32gui.GetWindowRect(self.hwnd)
@@ -44,7 +46,8 @@ class GameControl():
             bmp = win32ui.CreateBitmap()
             bmp.CreateCompatibleBitmap(srcdc, self._client_w, self._client_h)
             memdc.SelectObject(bmp)
-            memdc.BitBlt((0, 0), (self._client_w, self._client_h), srcdc, (self._border_l, self._border_t), win32con.SRCCOPY)
+            memdc.BitBlt((0, 0), (self._client_w, self._client_h), srcdc,
+                         (self._border_l, self._border_t), win32con.SRCCOPY)
             if file_name != None:
                 bmp.SaveBitmapFile(memdc, file_name)
                 srcdc.DeleteDC()
@@ -279,6 +282,9 @@ class GameControl():
             :param pos: (x,y) 鼠标单击的坐标
             :param pos_end=None: (x,y) 若pos_end不为空，则鼠标单击以pos为左上角坐标pos_end为右下角坐标的区域内的随机位置
         """
+        if self.debug_enable:
+                    img = self.window_full_shot()
+                    self.img = cv2.rectangle(img, pos, pos_end, (0, 255, 0), 3)
         if pos_end == None:
             win32gui.SendMessage(
                 self.hwnd, win32con.WM_MOUSEMOVE, 0, win32api.MAKELONG(pos[0], pos[1]))
@@ -411,20 +417,41 @@ class GameControl():
         else:
             return False
 
+    def debug(self):
+        '''
+        自检分辨率和点击范围
+        '''
+        # 开启自检
+        self.debug_enable = True
+
+        # 分辨率
+        self.img = self.window_full_shot()
+        logging.info('游戏分辨率：' + str(self.img.shape))
+
+        while(1):
+            # 点击范围标记
+            cv2.imshow('Click Area (Press \'q\' to exit)', self.img)
+
+            # 候选图片
+
+            k = cv2.waitKey(1) & 0xFF
+            if k == ord('q'):
+                break
+
+        cv2.destroyAllWindows()
+        self.debug_enable = False
+
 # 测试用
+
 
 def show_img(img):
     cv2.imshow("image", img)
     cv2.waitKey(0)
 
 def main():
-    yys = GameControl(u'阴阳师-网易游戏')
-    # yys.mouse_click_bg((427,419),(457,452))
-    # yys.mouse_drag_bg((1130,118),(20,118))
-    # print(yys.window_full_shot('tmp\\full.png'))
-    # print(yys.find_color(((380,200),(480,400)),(251,237,2),3))
-    # print(yys.find_color(((630,250),(730,450)),(251,237,2),3))
-    # print(yys.find_color(((1006,526),(1058,549)),(242,215,165),0))
+    hwnd = win32gui.FindWindow(0, u'阴阳师-网易游戏')
+    yys = GameControl(hwnd, 0)
+    yys.debug()
 
 
 if __name__ == '__main__':

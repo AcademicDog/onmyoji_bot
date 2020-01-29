@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.0.1.0102
+#### New features:
+*  增加了简单的自检逻辑。
+#### Fixes (bugs & defects):
+*  根据[#28](https://github.com/AcademicDog/onmyoji_bot/issues/28)，修复了探索的时候如果拉到场景图的最后，不会判断有没有经验怪的问题。
+*  修复了双开结束后不清除窗口信息的问题。
+
 ## v1.0.0.1129
 #### Fixes (bugs & defects):
 *  调整了探索战斗的结算逻辑，现在不检查邮箱图标了，同时修复[#21](https://github.com/AcademicDog/onmyoji_bot/issues/21)、[#28](https://github.com/AcademicDog/onmyoji_bot/issues/28)。

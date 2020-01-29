@@ -192,7 +192,9 @@ class ExploreFight(Fighter):
 
             # 开始打怪
             i = 0
-            while i < 4 and self.run:
+            while self.run:
+                if i >= 4:
+                    break
                 result = self.fight_moster(mood1, mood2)
                 if result == 1:
                     continue

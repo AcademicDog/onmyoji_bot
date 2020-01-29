@@ -8,6 +8,7 @@ import logging
 import random
 import time
 import win32gui
+import threading
 import tools.utilities as ut
 
 confPath = os.path.join(os.getcwd(), "conf.ini") #拼接上配置文件名称目录
@@ -48,6 +49,12 @@ class Fighter:
         self.yys.activate_window()
         self.log.writeinfo(self.name + '激活窗口成功')
         time.sleep(0.5)
+
+        # 自检
+        debug_enable = conf.getboolean('others', 'debug_enable')
+        if debug_enable:
+            task = threading.Thread(target=self.yys.debug)
+            task.start()
 
     def check_battle(self):
         # 检测是否进入战斗

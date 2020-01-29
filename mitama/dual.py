@@ -56,5 +56,6 @@ class DualFighter():
         task2.join()
 
     def deactivate(self):
+        self.hwndlist = []
         self.driver.deactivate()
         self.passenger.deactivate()

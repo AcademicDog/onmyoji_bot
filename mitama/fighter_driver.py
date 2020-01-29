@@ -56,7 +56,7 @@ class DriverFighter(Fighter):
 
                 # 点击结算
                 if jiesuan_status == 0:
-                    if not (self.yys.find_game_img('img\\MESSAGE.png') or self.yys.find_game_img('img\\JIA-CHENG.png')):
+                    if not (self.yys.find_game_img('img\\MESSAGE.png') or self.yys.find_game_img('img\\JIA-CHENG.png') or self.yys.find_game_img('img\\XIE-ZHAN-DUI-WU.png')):
                         self.yys.mouse_click_bg(*CommonPos.second_position)
                         self.log.writeinfo('Driver: 点击结算')
                     else:
