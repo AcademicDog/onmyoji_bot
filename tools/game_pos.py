@@ -18,10 +18,19 @@ class TansuoPos():
     change_monster = (427, 419), (457, 452)  # 切换狗粮点击区域
     quanbu_btn = (37, 574), (80, 604)  # “全部”按钮
     n_tab_btn = (142, 288), (164, 312)  # n卡标签
+    sucai_tab_btn = (44, 268), (88, 308)  # 素材卡标签
     n_slide = (168, 615), (784, 615)  # n卡进度条，从头至尾
     quit_change_monster=GamePos((19,17),(43,38)) #退出换狗粮界面
-    gouliang_middle = (397, 218), (500, 349)  # 中间狗粮位置
-    gouliang_right = (628, 293), (730, 430)  # 右边狗粮位置
+    gouliang_man_left = (190, 172), (290, 250)  # 左边狗粮满字位置
+    gouliang_man_middle = (397, 218), (500, 349)  # 中间狗粮满字位置
+    gouliang_man_right = (628, 293), (730, 430)  # 右边狗粮满字位置
+    gouliang_left = (309, 520), (990, 315)  # 左边狗粮拖放位置
+    gouliang_middle = (309, 520), (554, 315)  # 中间狗粮拖放位置
+    gouliang_right = (191, 520), (187, 315)  # 右边狗粮拖放位置
+    gouliang_driver_left = (309, 520), (308, 306)  # 左边狗粮拖放位置(司机)
+    gouliang_driver_right = (191, 520), (835, 306)  # 右边狗粮拖放位置(司机)
+    gouliang_passenger_left = (309, 520), (554, 325)  # 左边狗粮拖放位置(乘客)
+    gouliang_passenger_right = (191, 520), (187, 325)  # 右边狗粮拖放位置(乘客)
 
 
 class YuhunPos():

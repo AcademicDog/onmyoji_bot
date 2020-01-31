@@ -19,6 +19,7 @@ class ExploreFight(Fighter):
         self.fight_boss_enable = conf.getboolean('explore', 'fight_boss_enable')
         self.slide_shikigami = conf.getboolean('explore', 'slide_shikigami')
         self.slide_shikigami_progress = conf.getint('explore', 'slide_shikigami_progress')
+        self.slide_shikigami_n = conf.getboolean('explore', 'slide_shikigami_n')
         self.zhunbei_delay = conf.getfloat('explore', 'zhunbei_delay')
 
     def next_scene(self):
@@ -35,11 +36,11 @@ class ExploreFight(Fighter):
         '''
         检查狗粮经验，并自动换狗粮
         '''
-        # 狗粮经验判断, gouliang1是中间狗粮，gouliang2是右边狗粮
+        # 狗粮经验判断, gouliang1是左边狗粮，gouliang2是右边狗粮
         gouliang1 = self.yys.find_game_img(
-            'img\\MAN1.png', 1, *TansuoPos.gouliang_middle, 1)
+            'img\\MAN0.png', 1, *TansuoPos.gouliang_man_left, 1)
         gouliang2 = self.yys.find_game_img(
-            'img\\MAN2.png', 1, *TansuoPos.gouliang_right, 1)
+            'img\\MAN2.png', 1, *TansuoPos.gouliang_man_right, 1)
 
         # print(gouliang1)
         # print(gouliang2)
@@ -60,8 +61,11 @@ class ExploreFight(Fighter):
         self.yys.mouse_click_bg(*TansuoPos.quanbu_btn)
         time.sleep(1)
 
-        # 点击“N”卡
-        self.yys.mouse_click_bg(*TansuoPos.n_tab_btn)
+        # 点击“N”卡或其他
+        if self.slide_shikigami_n:
+            self.yys.mouse_click_bg(*TansuoPos.n_tab_btn)
+        else:
+            self.yys.mouse_click_bg(*TansuoPos.sucai_tab_btn)
         time.sleep(1)
 
         # 拖放进度条
@@ -80,10 +84,22 @@ class ExploreFight(Fighter):
 
         # 更换狗粮
         if gouliang1:
-            self.yys.mouse_drag_bg((309, 520), (554, 315))
+            if self.mode == 0:
+                pos = TansuoPos.gouliang_left
+            if self.mode == 2:
+                pos = TansuoPos.gouliang_driver_left
+            if self.mode == 3:
+                pos = TansuoPos.gouliang_passenger_left
+            self.yys.mouse_drag_bg(*pos)
         if gouliang2:
             time.sleep(1)
-            self.yys.mouse_drag_bg((191, 520), (187, 315))
+            if self.mode == 0:
+                pos = TansuoPos.gouliang_right
+            if self.mode == 2:
+                pos = TansuoPos.gouliang_driver_right
+            if self.mode == 3:
+                pos = TansuoPos.gouliang_passenger_right
+            self.yys.mouse_drag_bg(*pos)
 
     def find_exp_moster(self):
         '''
@@ -92,9 +108,19 @@ class ExploreFight(Fighter):
         '''
         # 查找经验图标
         exp_pos = self.yys.find_color(
-            ((2, 205), (1127, 545)), (140, 122, 44), 2)
+            ((2, 115), (1127, 545)), (140, 122, 44), 4)
+        if exp_pos == -1:
+            exp_pos = self.yys.find_color(
+                        ((2, 115), (1127, 545)), (52, 23, 10), 4)
+        if exp_pos == -1:
+            exp_pos = self.yys.find_color(
+                        ((2, 115), (1127, 545)), (44, 18, 9), 4)
+        if exp_pos == -1:
+            exp_pos = self.yys.find_color(
+                        ((2, 115), (1127, 545)), (140, 76, 40), 4)
         if exp_pos == -1:
             return -1
+
 
         # 查找经验怪攻打图标位置
         find_pos = self.yys.find_game_img(
@@ -114,12 +140,12 @@ class ExploreFight(Fighter):
         '''
         # 查找BOSS攻打图标位置
         find_pos = self.yys.find_game_img(
-            'img\\BOSS.png', 1, (2, 205), (1127, 545))
+            'img\\BOSS.png', 1, (2, 115), (1127, 545))
         if not find_pos:
             return -1
 
         # 返回BOSS攻打图标位置
-        fight_pos = ((find_pos[0]+2), (find_pos[1]+205))
+        fight_pos = ((find_pos[0]+2), (find_pos[1]+115))
         return fight_pos
 
     def fight_moster(self, mood1, mood2):
@@ -182,30 +208,20 @@ class ExploreFight(Fighter):
             else:
                 return 1
 
-    def start(self):
-        '''单人探索主循环'''
-        mood1 = ut.Mood(2)
-        mood2 = ut.Mood(3)
-        while self.run:
-            # 进入探索内
-            self.switch_to_scene(4)
-
-            # 开始打怪
-            i = 0
-            while self.run:
-                if i >= 4:
-                    break
-                result = self.fight_moster(mood1, mood2)
-                if result == 1:
-                    continue
-                elif result == 2:
-                    break
-                else:
-                    self.log.writeinfo('移动至下一个场景')
-                    self.next_scene()
-                    i += 1
-
-            # 退出探索
-            self.switch_to_scene(3)
-            self.log.writeinfo('结束本轮探索')
+    def click_box(self):
+        '''
+        点击宝箱
+        '''
+        time.sleep(1)
+        start_time = time.time()
+        while True:
+            scene_now = self.get_scene()
+            if scene_now != 4 or ( time.time() - start_time > 10000):
+                break
+            pos = self.yys.find_game_img('img\\BAO-WU.png')
+            if pos:
+                self.log.writeinfo('点击打开宝物')
+                self.yys.mouse_click_bg(pos)
+                time.sleep(0.5)
+                self.yys.mouse_click_bg(*CommonPos.second_position)
             time.sleep(0.5)

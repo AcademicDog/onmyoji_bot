@@ -2,7 +2,9 @@ import sys
 import os
 import ctypes
 
-from explore.explore import ExploreFight
+from explore.single_explore import SingleExploreFight
+from explore.driver_explore import DriverExploreFight
+from explore.passenger_explore import PassengerExploreFight
 from mitama.fighter_driver import DriverFighter
 from mitama.fighter_passenger import FighterPassenger
 from mitama.single_fight import SingleFight
@@ -36,16 +38,25 @@ def init():
                 os._exit(0)
             elif(mode != 2 and mode != 0 and mode != 3):
                 mode=0
-        
+
+            # 标记式神设置
+            sign_shikigami=int(input('\n是否标记式神？\n3-使用配置文件的设置\n0-不标记\n1-标记\n'))
+            if((sign_shikigami!=3) and (sign_shikigami!=0) and (sign_shikigami!=1)):
+                sign_shikigami=3
+        else:
+            # 探索模式选择
+            # mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n2-组队司机\n3-组队打手\n'))
+            # if(mode==1):
+            #     log.writewarning('未开发，告辞！')
+            #     os._exit(0)
+            # elif(mode != 2 and mode != 0 and mode != 3):
+            #     mode=0
+            mode=0
+
         # 点怪设置
         # emyc=int(input('\n是否点怪？\n0-不点怪\n1-点中间怪\n2-点右边怪\n'))
         # if((emyc!=0) and (emyc!=1) and (emyc!=2)):
         #     emyc=0
-
-        # 标记式神设置
-        sign_shikigami=int(input('\n是否标记式神？\n3-使用配置文件的设置\n0-不标记\n1-标记\n'))
-        if((sign_shikigami!=3) and (sign_shikigami!=0) and (sign_shikigami!=1)):
-            sign_shikigami=3
         
         # 结束设置
         # done=int(input('\n结束后如何处理？\n0-退出\n1-关机\n'))
@@ -75,23 +86,18 @@ def yuhun():
         if mode == 0:
             # 单刷
             fight = SingleFight()
-            if sign_shikigami != 3:
-                fight.sign_shikigami = sign_shikigami
-            fight.start()
 
         if mode == 2:
             # 司机
             fight = DriverFighter()
-            if sign_shikigami != 3:
-                fight.sign_shikigami = sign_shikigami
-            fight.start()
 
         if mode == 3:
             # 乘客
             fight = FighterPassenger()
-            if sign_shikigami != 3:
-                fight.sign_shikigami = sign_shikigami
-            fight.start()
+
+        if sign_shikigami != 3:
+            fight.sign_shikigami = sign_shikigami
+        fight.start()
 
     except Exception as e:
         log.writeinfo(e)
@@ -99,8 +105,24 @@ def yuhun():
     
 def tansuo():
     '''探索战斗'''
-    fight = ExploreFight()
-    fight.start()
+    try:
+        if mode == 0:
+            # 单刷
+            fight = SingleExploreFight()
+
+        if mode == 2:
+            # 司机
+            fight = DriverExploreFight()
+
+        if mode == 3:
+            # 乘客
+            fight = PassengerExploreFight()
+
+        fight.start()
+
+    except Exception as e:
+        log.writeinfo(e)
+        os.system("pause")
 
 if __name__ == "__main__":    
     log.writeinfo('python version: %s', sys.version)
