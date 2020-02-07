@@ -21,16 +21,31 @@ class TansuoPos():
     sucai_tab_btn = (44, 268), (88, 308)  # 素材卡标签
     n_slide = (168, 615), (784, 615)  # n卡进度条，从头至尾
     quit_change_monster=GamePos((19,17),(43,38)) #退出换狗粮界面
-    gouliang_man_left = (190, 172), (290, 250)  # 左边狗粮满字位置
-    gouliang_man_middle = (397, 218), (500, 349)  # 中间狗粮满字位置
-    gouliang_man_right = (628, 293), (730, 430)  # 右边狗粮满字位置
-    gouliang_left = (309, 520), (990, 315)  # 左边狗粮拖放位置
-    gouliang_middle = (309, 520), (554, 315)  # 中间狗粮拖放位置
-    gouliang_right = (191, 520), (187, 315)  # 右边狗粮拖放位置
-    gouliang_driver_left = (309, 520), (308, 306)  # 左边狗粮拖放位置(司机)
-    gouliang_driver_right = (191, 520), (835, 306)  # 右边狗粮拖放位置(司机)
-    gouliang_passenger_left = (309, 520), (554, 325)  # 左边狗粮拖放位置(乘客)
-    gouliang_passenger_right = (191, 520), (187, 325)  # 右边狗粮拖放位置(乘客)
+
+    gouliang_man_left = (190, 122), (370, 430)  # 左边狗粮满字位置
+    gouliang_man_middle = (397, 122), (500, 430)  # 中间狗粮满字位置
+    gouliang_man_right = (578, 122), (750, 430)  # 右边狗粮满字位置
+
+    # 拖放相关位置
+    gouliang_target_left = (990, 315)  # 左边狗粮拖放位置
+    gouliang_target_middle = (554, 315)  # 中间狗粮拖放位置
+    gouliang_target_right = (187, 315)  # 右边狗粮拖放位置
+
+    # n卡拖放相关位置
+    gouliang_left = (309, 520), gouliang_target_left  # 左边狗粮拖放路线
+    gouliang_middle = (309, 520), gouliang_target_middle  # 中间狗粮拖放路线
+    gouliang_right = (191, 520), gouliang_target_right  # 右边狗粮拖放路线
+
+    gouliang_driver_left = (309, 520), (308, 306)  # 左边狗粮拖放路线(司机)
+    gouliang_driver_right = (191, 520), (835, 306)  # 右边狗粮拖放路线(司机)
+
+    gouliang_passenger_left = (309, 520), (554, 325)  # 左边狗粮拖放路线(乘客)
+    gouliang_passenger_right = (191, 520), (187, 325)  # 右边狗粮拖放路线(乘客)
+
+    # 素材卡拖放相关位置
+    gouliang_sucai_0 = 204, 520  # 1级素材拖放起点
+    gouliang_sucai_1 = 526, 520  # 1+级素材拖放起点1
+    gouliang_sucai_2 = 648, 520  # 1+级素材拖放起点2
 
 
 class YuhunPos():

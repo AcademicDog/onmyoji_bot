@@ -3,8 +3,7 @@ import os
 import ctypes
 
 from explore.single_explore import SingleExploreFight
-from explore.driver_explore import DriverExploreFight
-from explore.passenger_explore import PassengerExploreFight
+from explore.explore import ExploreFight
 from mitama.fighter_driver import DriverFighter
 from mitama.fighter_passenger import FighterPassenger
 from mitama.single_fight import SingleFight
@@ -25,17 +24,26 @@ def init():
     global emyc
     global done
     global sign_shikigami
-    
+    global multiPassenger
+    global shikigami_type
+    global shikigami_brush_max
+    global shikigami_brush_max_quit
+
+    multiPassenger = False
+
     try:
         # 选择打什么
         section = int(input('\n选择刷什么(Ctrl-C跳过并单刷御魂：\n0-御魂\n1-探索\n'))
         log.writeinfo('Section = %d', section)
         if section == 0:
             # 御魂模式选择
-            mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n2-组队司机\n3-组队打手\n'))
+            mode=int(input('\n选择游戏模式(Ctrl-C跳过并单刷)：\n0-单刷\n2-组队司机\n3-组队打手\n22-组队司机（双乘客）\n'))
             if(mode==1):
                 log.writewarning('未开发，告辞！')
                 os._exit(0)
+            elif(mode == 22):
+                mode=2
+                multiPassenger = True
             elif(mode != 2 and mode != 0 and mode != 3):
                 mode=0
 
@@ -53,11 +61,27 @@ def init():
             #     mode=0
             mode=0
 
+            log.writewarning('狗粮队长请放中间')
+            shikigami_type=int(input('\n选择式神类型：\n1-N卡\n2-1级2星白蛋\n3-高级白蛋  （需要折叠相同式神）\n'))
+            if shikigami_type!=1 and shikigami_type!=2 and shikigami_type!=3:
+                shikigami_type = 1
+
+            shikigami_brush_max=int(input('\n填写要刷的最大数量：\n'))
+            if not shikigami_brush_max:
+                shikigami_brush_max = 999
+                shikigami_type = 1
+
+            shikigami_brush_max_quit=int(input('\是否刷完关闭游戏：\n1：是\n2：否\n'))
+            if shikigami_brush_max_quit == 1:
+                shikigami_brush_max_quit = True
+            else:
+                shikigami_brush_max_quit = False
+
         # 点怪设置
         # emyc=int(input('\n是否点怪？\n0-不点怪\n1-点中间怪\n2-点右边怪\n'))
         # if((emyc!=0) and (emyc!=1) and (emyc!=2)):
         #     emyc=0
-        
+
         # 结束设置
         # done=int(input('\n结束后如何处理？\n0-退出\n1-关机\n'))
         # if not ((done == 0) or (done == 1)):
@@ -97,6 +121,7 @@ def yuhun():
 
         if sign_shikigami != 3:
             fight.sign_shikigami = sign_shikigami
+        fight.multiPassenger = multiPassenger
         fight.start()
 
     except Exception as e:
@@ -118,13 +143,17 @@ def tansuo():
             # 乘客
             fight = PassengerExploreFight()
 
+        fight.shikigami_type = shikigami_type
+        if shikigami_brush_max:
+            fight.shikigami_brush_max = shikigami_brush_max
+        fight.shikigami_brush_max_quit = shikigami_brush_max_quit
         fight.start()
 
     except Exception as e:
         log.writeinfo(e)
         os.system("pause")
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
     log.writeinfo('python version: %s', sys.version)
     
     try:

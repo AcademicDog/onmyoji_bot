@@ -19,8 +19,11 @@ class ExploreFight(Fighter):
         self.fight_boss_enable = conf.getboolean('explore', 'fight_boss_enable')
         self.slide_shikigami = conf.getboolean('explore', 'slide_shikigami')
         self.slide_shikigami_progress = conf.getint('explore', 'slide_shikigami_progress')
-        self.slide_shikigami_n = conf.getboolean('explore', 'slide_shikigami_n')
+        self.shikigami_type = conf.getboolean('explore', 'shikigami_type')
         self.zhunbei_delay = conf.getfloat('explore', 'zhunbei_delay')
+
+        self.shikigami_change_time = 0
+        self.willQuit = False
 
     def next_scene(self):
         '''
@@ -49,6 +52,19 @@ class ExploreFight(Fighter):
         if not gouliang1 and not gouliang2:
             return
 
+        rest = self.shikigami_brush_max - self.shikigami_change_time - 2
+        if gouliang1 and gouliang2:
+            # 刷满数量
+            if rest <= 0:
+                self.willQuit = True
+                return
+            elif rest <= 1:
+                gouliang2 = False
+        elif rest <= 0:
+            gouliang1 = False
+            gouliang2 = False
+            return
+
         # 开始换狗粮
         while self.run:
             # 点击狗粮位置
@@ -61,45 +77,110 @@ class ExploreFight(Fighter):
         self.yys.mouse_click_bg(*TansuoPos.quanbu_btn)
         time.sleep(1)
 
-        # 点击“N”卡或其他
-        if self.slide_shikigami_n:
+        # 点击“N”卡或“素材”
+        if self.shikigami_type == 1:
             self.yys.mouse_click_bg(*TansuoPos.n_tab_btn)
         else:
             self.yys.mouse_click_bg(*TansuoPos.sucai_tab_btn)
         time.sleep(1)
 
-        # 拖放进度条
-        if self.slide_shikigami:
-            # 读取坐标范围
-            star_x = TansuoPos.n_slide[0][0]
-            end_x = TansuoPos.n_slide[1][0]
-            length = end_x - star_x
+        self.change_shikigami(gouliang1,gouliang2)
 
-            # 计算拖放范围
-            pos_end_x = int(star_x + length/100*self.slide_shikigami_progress)
-            pos_end_y = TansuoPos.n_slide[0][1]
-
-            self.yys.mouse_drag_bg(
-                TansuoPos.n_slide[0], (pos_end_x, pos_end_y))
-
-        # 更换狗粮
+    def change_shikigami(self,gouliang1,gouliang2):
+        '''
+        变更式神
+        '''
         if gouliang1:
-            if self.mode == 0:
-                pos = TansuoPos.gouliang_left
-            if self.mode == 2:
-                pos = TansuoPos.gouliang_driver_left
-            if self.mode == 3:
-                pos = TansuoPos.gouliang_passenger_left
-            self.yys.mouse_drag_bg(*pos)
+            self.shikigami_change_time = self.shikigami_change_time + 1
         if gouliang2:
-            time.sleep(1)
-            if self.mode == 0:
-                pos = TansuoPos.gouliang_right
-            if self.mode == 2:
-                pos = TansuoPos.gouliang_driver_right
-            if self.mode == 3:
-                pos = TansuoPos.gouliang_passenger_right
-            self.yys.mouse_drag_bg(*pos)
+            self.shikigami_change_time = self.shikigami_change_time + 1
+        # 换n卡
+        if self.shikigami_type == 1:
+            # 拖放进度条
+            if self.slide_shikigami:
+                # 读取坐标范围
+                star_x = TansuoPos.n_slide[0][0]
+                end_x = TansuoPos.n_slide[1][0]
+                length = end_x - star_x
+
+                # 计算拖放范围
+                pos_end_x = int(star_x + length/100*self.slide_shikigami_progress)
+                pos_end_y = TansuoPos.n_slide[0][1]
+
+                self.yys.mouse_drag_bg(
+                    TansuoPos.n_slide[0], (pos_end_x, pos_end_y))
+
+            # 更换狗粮
+            if gouliang1:
+                if self.mode == 0:
+                    pos = TansuoPos.gouliang_left
+                if self.mode == 2:
+                    pos = TansuoPos.gouliang_driver_left
+                if self.mode == 3:
+                    pos = TansuoPos.gouliang_passenger_left
+                self.yys.mouse_drag_bg(*pos)
+            if gouliang2:
+                time.sleep(1)
+                if self.mode == 0:
+                    pos = TansuoPos.gouliang_right
+                if self.mode == 2:
+                    pos = TansuoPos.gouliang_driver_right
+                if self.mode == 3:
+                    pos = TansuoPos.gouliang_passenger_right
+                self.yys.mouse_drag_bg(*pos)
+
+        # 换1星1级白蛋
+        elif self.shikigami_type == 2:
+            if gouliang1:
+                if self.mode == 0:
+                    pos2 = TansuoPos.gouliang_target_left
+                if self.mode == 2:
+                    pos2 = TansuoPos.gouliang_target_left
+                if self.mode == 3:
+                    pos2 = TansuoPos.gouliang_target_left
+                self.yys.mouse_drag_bg(TansuoPos.gouliang_sucai_0,pos2)
+            if gouliang2:
+                time.sleep(1)
+                if gouliang1:
+                    self.yys.mouse_drag_bg(TansuoPos.gouliang_sucai_0,(TansuoPos.gouliang_sucai_0[0]+3,TansuoPos.gouliang_sucai_0[1]+3))
+                    time.sleep(0.7)
+                if self.mode == 0:
+                    pos2 = TansuoPos.gouliang_target_right
+                if self.mode == 2:
+                    pos2 = TansuoPos.gouliang_target_right
+                if self.mode == 3:
+                    pos2 = TansuoPos.gouliang_target_right
+                self.yys.mouse_drag_bg(TansuoPos.gouliang_sucai_0,pos2)
+
+        # 换高级白蛋
+        elif self.shikigami_type == 3:
+            if gouliang1:
+                if gouliang2:
+                    pos1 = TansuoPos.gouliang_sucai_1
+                else:
+                    pos1 = TansuoPos.gouliang_sucai_2
+                if self.mode == 0:
+                    pos2 = TansuoPos.gouliang_target_left
+                if self.mode == 2:
+                    pos2 = TansuoPos.gouliang_target_left
+                if self.mode == 3:
+                    pos2 = TansuoPos.gouliang_target_left
+                self.yys.mouse_drag_bg(pos1,pos2)
+            if gouliang2:
+                time.sleep(1)
+                if gouliang1:
+                    pos1 = TansuoPos.gouliang_sucai_2
+                    self.yys.mouse_drag_bg(TansuoPos.gouliang_sucai_0,(pos1[0]+3,pos1[1]+3))
+                    time.sleep(0.7)
+                else:
+                    pos1 = TansuoPos.gouliang_sucai_1
+                if self.mode == 0:
+                    pos2 = TansuoPos.gouliang_target_right
+                if self.mode == 2:
+                    pos2 = TansuoPos.gouliang_target_right
+                if self.mode == 3:
+                    pos2 = TansuoPos.gouliang_target_right
+                self.yys.mouse_drag_bg(pos1,pos2)
 
     def find_exp_moster(self):
         '''
@@ -201,6 +282,14 @@ class ExploreFight(Fighter):
                              *CommonPos.second_position, mood2.get1mood()/1000)
             self.click_until('结算', 'img/JIN-BI.png',
                              *CommonPos.second_position, mood2.get1mood()/1000, False)
+
+            if self.willQuit:
+                if self.shikigami_brush_max_quit:
+                    self.yys.activate_window()
+                    time.sleep(5)
+                    self.yys.quit_game()
+                else:
+                    self.deactivate()
 
             # 返回结果
             if boss:

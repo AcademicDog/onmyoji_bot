@@ -260,7 +260,7 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "满级狗粮识别延迟(秒)："))
         self.checkBox_3.setText(_translate("MainWindow", "换狗粮拖放式神进度条，进度："))
         self.checkBox_2.setText(_translate("MainWindow", "结束后打BOSS"))
-        self.plainTextEdit_2.setPlainText(_translate("MainWindow", "把狗粮队长放在最左边，点开需要打的章节，然后开始。\n"
+        self.plainTextEdit_2.setPlainText(_translate("MainWindow", "把狗粮队长放在中间，点开需要打的章节，然后开始。\n"
 "\n"
 "支持自动换狗粮，只打经验怪。\n"
 "\n"

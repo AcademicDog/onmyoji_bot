@@ -16,8 +16,8 @@ class SingleExploreFight(ExploreFight):
 
     def start(self):
         '''单人探索主循环'''
-        mood1 = ut.Mood(2)
-        mood2 = ut.Mood(3)
+        mood1 = ut.Mood(1)
+        mood2 = ut.Mood(2)
         while self.run:
             # 进入探索内
             self.switch_to_scene(4)
@@ -38,10 +38,11 @@ class SingleExploreFight(ExploreFight):
                     i += 1
 
             # 退出探索
-            if result == 2:
-                self.click_box()
-            else:
-                self.switch_to_scene(3)
+            if self.run:
+                if result == 2:
+                    self.click_box()
+                else:
+                    self.switch_to_scene(3)
 
             self.log.writeinfo('结束本轮探索')
             time.sleep(0.5)

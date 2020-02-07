@@ -272,7 +272,7 @@
                 <bool>true</bool>
                </property>
                <property name="plainText">
-                <string>把狗粮队长放在最左边，点开需要打的章节，然后开始。
+                <string>把狗粮队长放在中间，点开需要打的章节，然后开始。
 
 支持自动换狗粮，只打经验怪。
 
