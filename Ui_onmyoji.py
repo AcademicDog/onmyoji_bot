@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'd:\软件\github\onmyoji_bot\onmyoji.ui'
+# Form implementation generated from reading ui file 'c:\Users\74205\Documents\github\onmyoji_bot\onmyoji.ui'
 #
-# Created by: PyQt5 UI code generator 5.9.2
+# Created by: PyQt5 UI code generator 5.13.0
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(300, 590)
+        MainWindow.resize(359, 651)
         MainWindow.setMinimumSize(QtCore.QSize(300, 590))
         MainWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -91,6 +93,28 @@ class Ui_MainWindow(object):
         self.tab_2.setObjectName("tab_2")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.tab_2)
         self.gridLayout_5.setObjectName("gridLayout_5")
+        self.line_4 = QtWidgets.QFrame(self.tab_2)
+        self.line_4.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_4.setObjectName("line_4")
+        self.gridLayout_5.addWidget(self.line_4, 2, 0, 1, 1)
+        self.checkBox_2 = QtWidgets.QCheckBox(self.tab_2)
+        self.checkBox_2.setObjectName("checkBox_2")
+        self.gridLayout_5.addWidget(self.checkBox_2, 7, 0, 1, 1)
+        self.plainTextEdit_2 = QtWidgets.QPlainTextEdit(self.tab_2)
+        self.plainTextEdit_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        self.plainTextEdit_2.setReadOnly(True)
+        self.plainTextEdit_2.setObjectName("plainTextEdit_2")
+        self.gridLayout_5.addWidget(self.plainTextEdit_2, 0, 0, 1, 1)
+        self.checkBox_3 = QtWidgets.QCheckBox(self.tab_2)
+        self.checkBox_3.setChecked(True)
+        self.checkBox_3.setObjectName("checkBox_3")
+        self.gridLayout_5.addWidget(self.checkBox_3, 3, 0, 1, 1)
+        self.horizontalSlider = QtWidgets.QSlider(self.tab_2)
+        self.horizontalSlider.setSliderPosition(10)
+        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.horizontalSlider.setObjectName("horizontalSlider")
+        self.gridLayout_5.addWidget(self.horizontalSlider, 4, 0, 1, 1)
         self.groupBox_3 = QtWidgets.QGroupBox(self.tab_2)
         self.groupBox_3.setMinimumSize(QtCore.QSize(0, 0))
         self.groupBox_3.setObjectName("groupBox_3")
@@ -104,28 +128,12 @@ class Ui_MainWindow(object):
         self.label_5.setObjectName("label_5")
         self.gridLayout_8.addWidget(self.label_5, 0, 0, 1, 1)
         self.gridLayout_5.addWidget(self.groupBox_3, 1, 0, 1, 1)
-        self.checkBox_3 = QtWidgets.QCheckBox(self.tab_2)
-        self.checkBox_3.setChecked(True)
-        self.checkBox_3.setObjectName("checkBox_3")
-        self.gridLayout_5.addWidget(self.checkBox_3, 3, 0, 1, 1)
-        self.horizontalSlider = QtWidgets.QSlider(self.tab_2)
-        self.horizontalSlider.setSliderPosition(10)
-        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider.setObjectName("horizontalSlider")
-        self.gridLayout_5.addWidget(self.horizontalSlider, 4, 0, 1, 1)
-        self.checkBox_2 = QtWidgets.QCheckBox(self.tab_2)
-        self.checkBox_2.setObjectName("checkBox_2")
-        self.gridLayout_5.addWidget(self.checkBox_2, 6, 0, 1, 1)
-        self.plainTextEdit_2 = QtWidgets.QPlainTextEdit(self.tab_2)
-        self.plainTextEdit_2.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.plainTextEdit_2.setReadOnly(True)
-        self.plainTextEdit_2.setObjectName("plainTextEdit_2")
-        self.gridLayout_5.addWidget(self.plainTextEdit_2, 0, 0, 1, 1)
-        self.line_4 = QtWidgets.QFrame(self.tab_2)
-        self.line_4.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line_4.setObjectName("line_4")
-        self.gridLayout_5.addWidget(self.line_4, 2, 0, 1, 1)
+        self.comboBox = QtWidgets.QComboBox(self.tab_2)
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
+        self.gridLayout_5.addWidget(self.comboBox, 6, 0, 1, 1)
         self.tabWidget.addTab(self.tab_2, "")
         self.tab_3 = QtWidgets.QWidget()
         self.tab_3.setObjectName("tab_3")
@@ -196,7 +204,7 @@ class Ui_MainWindow(object):
         self.gridLayout_6.addWidget(self.frame, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 300, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 359, 23))
         self.menubar.setObjectName("menubar")
         self.menu = QtWidgets.QMenu(self.menubar)
         self.menu.setObjectName("menu")
@@ -216,6 +224,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.tabWidget.setCurrentIndex(0)
+        self.comboBox.setCurrentIndex(1)
         self.start_btn.clicked.connect(MainWindow.start_onmyoji)
         self.pushButton.clicked.connect(MainWindow.stop_onmyoji)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -236,16 +245,19 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "御魂"))
         self.plainTextEdit_3.setPlainText(_translate("MainWindow", "选择好要打的御灵及层数，点击开始按钮即可。"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), _translate("MainWindow", "御灵"))
-        self.groupBox_3.setTitle(_translate("MainWindow", "延迟设置"))
-        self.lineEdit_3.setText(_translate("MainWindow", "3"))
-        self.label_5.setText(_translate("MainWindow", "满级狗粮识别延迟(秒)："))
-        self.checkBox_3.setText(_translate("MainWindow", "换狗粮拖放式神进度条，进度："))
         self.checkBox_2.setText(_translate("MainWindow", "结束后打BOSS"))
         self.plainTextEdit_2.setPlainText(_translate("MainWindow", "把狗粮队长放在最左边，点开需要打的章节，然后开始。\n"
 "\n"
 "支持自动换狗粮，只打经验怪。\n"
 "\n"
 "最好把“合并相同式神”选项关闭。"))
+        self.checkBox_3.setText(_translate("MainWindow", "换狗粮拖放式神进度条，进度："))
+        self.groupBox_3.setTitle(_translate("MainWindow", "延迟设置"))
+        self.lineEdit_3.setText(_translate("MainWindow", "3"))
+        self.label_5.setText(_translate("MainWindow", "满级狗粮识别延迟(秒)："))
+        self.comboBox.setItemText(0, _translate("MainWindow", "更换素材"))
+        self.comboBox.setItemText(1, _translate("MainWindow", "更换N卡"))
+        self.comboBox.setItemText(2, _translate("MainWindow", "更换R卡"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "探索"))
         self.plainTextEdit.setPlainText(_translate("MainWindow", "网址：https://github.com/AcademicDog/onmyoji_bot\n"
 "\n"
@@ -264,4 +276,3 @@ class Ui_MainWindow(object):
         self.actionFile.setText(_translate("MainWindow", "File"))
         self.actionAbout_2.setText(_translate("MainWindow", "About"))
         self.actionAbout.setText(_translate("MainWindow", "About"))
-

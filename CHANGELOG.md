@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.0.1.0211
+#### New features:
+*  根据[#39](https://github.com/AcademicDog/onmyoji_bot/issues/39)，增加了更换素材和R卡的选项。
+
 ## v1.0.1.0210
 #### New features:
 *  前后台分离，目前编译为2个.exe文件，前后台分离。既可以ui运行，也可以单独控制台运行。

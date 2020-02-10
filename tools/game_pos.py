@@ -17,6 +17,8 @@ class TansuoPos():
     change_monster = (427, 419), (457, 452)  # 切换狗粮点击区域
     quanbu_btn = (37, 574), (80, 604)  # “全部”按钮
     n_tab_btn = (142, 288), (164, 312)  # n卡标签
+    s_tab_btn = (33, 264), (82, 307)  # 素材标签
+    r_tab_btn = (216, 322), (259, 366)  # r卡标签
     n_slide = (168, 615), (784, 615)  # n卡进度条，从头至尾
     quit_change_monster=GamePos((19,17),(43,38)) #退出换狗粮界面
     gouliang_middle = (397, 218), (500, 349)  # 中间狗粮位置

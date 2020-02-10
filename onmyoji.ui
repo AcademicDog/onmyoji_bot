@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>590</height>
+    <width>359</width>
+    <height>651</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -185,6 +185,60 @@
              <string>探索</string>
             </attribute>
             <layout class="QGridLayout" name="gridLayout_5">
+             <item row="2" column="0">
+              <widget class="Line" name="line_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QCheckBox" name="checkBox_2">
+               <property name="text">
+                <string>结束后打BOSS</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QPlainTextEdit" name="plainTextEdit_2">
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="plainText">
+                <string>把狗粮队长放在最左边，点开需要打的章节，然后开始。
+
+支持自动换狗粮，只打经验怪。
+
+最好把“合并相同式神”选项关闭。</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="checkBox_3">
+               <property name="text">
+                <string>换狗粮拖放式神进度条，进度：</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QSlider" name="horizontalSlider">
+               <property name="sliderPosition">
+                <number>10</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
              <item row="1" column="0">
               <widget class="QGroupBox" name="groupBox_3">
                <property name="minimumSize">
@@ -217,58 +271,26 @@
                </layout>
               </widget>
              </item>
-             <item row="3" column="0">
-              <widget class="QCheckBox" name="checkBox_3">
-               <property name="text">
-                <string>换狗粮拖放式神进度条，进度：</string>
-               </property>
-               <property name="checked">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QSlider" name="horizontalSlider">
-               <property name="sliderPosition">
-                <number>10</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
-             </item>
              <item row="6" column="0">
-              <widget class="QCheckBox" name="checkBox_2">
-               <property name="text">
-                <string>结束后打BOSS</string>
+              <widget class="QComboBox" name="comboBox">
+               <property name="currentIndex">
+                <number>1</number>
                </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QPlainTextEdit" name="plainTextEdit_2">
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-               <property name="readOnly">
-                <bool>true</bool>
-               </property>
-               <property name="plainText">
-                <string>把狗粮队长放在最左边，点开需要打的章节，然后开始。
-
-支持自动换狗粮，只打经验怪。
-
-最好把“合并相同式神”选项关闭。</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="0">
-              <widget class="Line" name="line_4">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
+               <item>
+                <property name="text">
+                 <string>更换素材</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>更换N卡</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>更换R卡</string>
+                </property>
+               </item>
               </widget>
              </item>
             </layout>
@@ -441,7 +463,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>300</width>
+     <width>359</width>
      <height>23</height>
     </rect>
    </property>

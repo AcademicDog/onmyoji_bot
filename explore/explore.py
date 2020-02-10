@@ -20,6 +20,7 @@ class ExploreFight(Fighter):
         self.slide_shikigami = conf.getboolean('explore', 'slide_shikigami')
         self.slide_shikigami_progress = conf.getint('explore', 'slide_shikigami_progress')
         self.zhunbei_delay = conf.getfloat('explore', 'zhunbei_delay')
+        self.change_shikigami = conf.getint('explore', 'change_shikigami')
 
     def next_scene(self):
         '''
@@ -60,8 +61,13 @@ class ExploreFight(Fighter):
         self.yys.mouse_click_bg(*TansuoPos.quanbu_btn)
         time.sleep(1)
 
-        # 点击“N”卡
-        self.yys.mouse_click_bg(*TansuoPos.n_tab_btn)
+        # 点击卡片
+        if self.change_shikigami == 1:
+            self.yys.mouse_click_bg(*TansuoPos.n_tab_btn)
+        elif self.change_shikigami == 0:
+            self.yys.mouse_click_bg(*TansuoPos.s_tab_btn)
+        elif self.change_shikigami == 2:
+            self.yys.mouse_click_bg(*TansuoPos.r_tab_btn)
         time.sleep(1)
 
         # 拖放进度条

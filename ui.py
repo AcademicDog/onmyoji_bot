@@ -69,6 +69,8 @@ class MyMainWindow(QMainWindow):
                       str(self.ui.horizontalSlider.value()))
         self.conf.set('explore', 'zhunbei_delay',
                       str(self.ui.lineEdit_3.text()))
+        self.conf.set('explore', 'change_shikigami',
+                      str(self.ui.comboBox.currentIndex()))
 
     def get_conf(self):
         # 添加配置
@@ -91,7 +93,7 @@ class MyMainWindow(QMainWindow):
         self.get_conf()
 
         subprocess.Popen("cmd.exe /c start onmyoji.exe")
-        #os.system("onmyoji.exe")
+        # os.system("onmyoji.exe")
 
     def stop_onmyoji(self):
         os._exit(0)
