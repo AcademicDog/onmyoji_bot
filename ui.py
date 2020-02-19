@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from Ui_onmyoji import Ui_MainWindow
+from gui.tkui import Application
 
 import configparser
 import ctypes
@@ -7,6 +6,7 @@ import logging
 import os
 import subprocess
 import sys
+import tkinter as tk
 import tools.logsystem
 
 
@@ -18,11 +18,9 @@ def is_admin():
         return False
 
 
-class MyMainWindow(QMainWindow):
-    def __init__(self, parent=None):
-        super(MyMainWindow, self).__init__(parent)
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
+class MyBattle(Application):
+    def __init__(self, master):
+        Application.__init__(self, master)
         self.conf = configparser.ConfigParser()
 
     def set_conf(self):
@@ -30,47 +28,33 @@ class MyMainWindow(QMainWindow):
         设置参数至配置文件
         '''
         # 运行参数
-        section = self.ui.tabWidget.currentIndex()
+        section = self.section.index('current')
         self.conf.set('DEFAULT', 'run_section', str(section))
 
         # 一般参数
         self.conf.set('watchdog', 'watchdog_enable',
-                      str(self.ui.checkBox.isChecked()))
-        self.conf.set('watchdog', 'max_win_time', str(self.ui.lineEdit.text()))
+                      str(self.watchdog_enable.get()))
+        self.conf.set('watchdog', 'max_win_time', str(self.max_win_time.get()))
         self.conf.set('watchdog', 'max_op_time',
-                      str(self.ui.lineEdit_2.text()))
+                      str(self.max_op_time.get()))
 
         self.conf.set('others', 'debug_enable', str(
-            self.ui.checkBox_4.isChecked()))
+            self.debug_enable.get()))
 
         # 御魂参数
-        if self.ui.mitama_single.isChecked():
-            # 单刷
-            self.conf.set('DEFAULT', 'run_mode', '0')
-
-        elif self.ui.mitama_driver.isChecked():
-            # 司机
-            self.conf.set('DEFAULT', 'run_mode', '1')
-
-        elif self.ui.mitama_passenger.isChecked():
-            # 乘客
-            self.conf.set('DEFAULT', 'run_mode', '2')
-
-        elif self.ui.mitama_dual.isChecked():
-            # 双开
-            self.conf.set('DEFAULT', 'run_mode', '3')
+        self.conf.set('DEFAULT', 'run_mode', str(self.run_mode.get()))
 
         # 探索参数
         self.conf.set('explore', 'fight_boss_enable',
-                      str(self.ui.checkBox_2.isChecked()))
+                      str(self.fight_boss_enable.get()))
         self.conf.set('explore', 'slide_shikigami',
-                      str(self.ui.checkBox_3.isChecked()))
+                      str(self.slide_shikigami.get()))
         self.conf.set('explore', 'slide_shikigami_progress',
-                      str(self.ui.horizontalSlider.value()))
+                      str(self.slide_shikigami_progress.get()))
         self.conf.set('explore', 'zhunbei_delay',
-                      str(self.ui.lineEdit_3.text()))
+                      str(self.zhunbei_delay.get()))
         self.conf.set('explore', 'change_shikigami',
-                      str(self.ui.comboBox.currentIndex()))
+                      str(self.change_shikigami))
 
     def get_conf(self):
         # 添加配置
@@ -91,6 +75,9 @@ class MyMainWindow(QMainWindow):
     def start_onmyoji(self):
         # 读取主要副本
         self.get_conf()
+
+        # 显示参数
+        self.show_params()
 
         subprocess.Popen("cmd.exe /c start onmyoji.exe")
         # os.system("onmyoji.exe")
@@ -115,17 +102,15 @@ def my_excepthook(exc_type, exc_value, tb):
 
 
 if __name__ == "__main__":
-
     try:
         # 检测管理员权限
         if is_admin():
             sys.excepthook = my_excepthook
 
             # 设置战斗参数
-            app = QApplication(sys.argv)
-            myWin = MyMainWindow()
-            myWin.show()
-            sys.exit(app.exec_())
+            root = tk.Tk()
+            app = MyBattle(root)
+            app.mainloop()
 
         else:
             ctypes.windll.shell32.ShellExecuteW(

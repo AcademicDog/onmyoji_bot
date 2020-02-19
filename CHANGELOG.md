@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.0.1.0219
+#### Fixes (bugs & defects):
+*  抛弃PyQt，用tkinter重写ui，以减小文件体积。
+
 ## v1.0.1.0211
 #### New features:
 *  根据[#39](https://github.com/AcademicDog/onmyoji_bot/issues/39)，增加了更换素材和R卡的选项。
