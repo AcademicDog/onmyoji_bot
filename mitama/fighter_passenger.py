@@ -24,6 +24,9 @@ class FighterPassenger(Fighter):
             # 检测是否进入战斗
             self.check_battle()
 
+            # 在战斗中，标记己方式神
+            self.mitama_team_click()
+
             # 已经进入战斗，乘客自动点怪
             self.click_monster()
 

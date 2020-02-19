@@ -26,6 +26,9 @@ class SingleFight(Fighter):
             # 检测是否进入战斗
             self.check_battle()
 
+            # 在战斗中，标记己方式神
+            self.mitama_team_click()
+            
             # 在战斗中，自动点怪
             self.click_monster()
 

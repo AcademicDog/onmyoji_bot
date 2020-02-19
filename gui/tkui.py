@@ -132,7 +132,7 @@ class Application(tk.Frame):
                        value=3).grid(row=1, column=1, sticky=tk.W)
 
         # 游戏副本
-        submode = tk.LabelFrame(self.frame0, text='副本（调试中）', padx=5, pady=5)
+        submode = tk.LabelFrame(self.frame0, text='副本（调试中）')
         submode.pack(padx=5, pady=5, fill=tk.BOTH, expand=True)
         tk.Radiobutton(submode, text='八岐大蛇', variable=self.run_mode,
                        value=0).grid(row=0, column=0, sticky=tk.W)
@@ -140,6 +140,17 @@ class Application(tk.Frame):
                        value=1).grid(row=0, column=1, sticky=tk.W)
         tk.Radiobutton(submode, text='卑弥呼', variable=self.run_mode,
                        value=2).grid(row=1, column=0, sticky=tk.W)
+
+        # 标记式神
+        mitama_mark = tk.Frame(self.frame0, padx=5, pady=5)
+        mitama_mark.pack(fill=tk.X, expand=True)
+        tk.Label(mitama_mark, text='标记己方式神:').pack(side=tk.LEFT)
+        self.mitama_team_mark = ttk.Combobox(mitama_mark, width = 10)
+        self.mitama_team_mark['value'] = (
+            '不标记', '第1个式神', '第2个式神', '第3个式神', '第4个式神', '第5个式神')
+        self.mitama_team_mark.pack(fill=tk.X, expand=True, padx=2)
+        self.mitama_team_mark.current(0)
+        self.mitama_team_mark.config(state='readonly')
 
     def create_frame1(self):
         '''
@@ -251,6 +262,8 @@ class Application(tk.Frame):
                            str(self.max_win_time.get()))
         self.params.insert(tk.END, '\nmax_op_time: ' +
                            str(self.max_op_time.get()))
+        self.params.insert(tk.END, '\nmitama_team_mark: ' +
+                           str(self.mitama_team_mark.current()))
         self.params.insert(tk.END, '\nfight_boss_enable: ' +
                            str(self.fight_boss_enable.get()))
         self.params.insert(tk.END, '\nslide_shikigami: ' +
@@ -260,7 +273,7 @@ class Application(tk.Frame):
         self.params.insert(tk.END, '\nzhunbei_delay: ' +
                            str(self.zhunbei_delay.get()))
         self.params.insert(tk.END, '\nchange_shikigami: ' +
-                           str(self.change_shikigami))
+                           str(self.cmb.current()))
         self.params.insert(tk.END, '\ndebug_enable: ' +
                            str(self.debug_enable.get())+'\n')
         self.params.insert(tk.END, '##########################\n\n')

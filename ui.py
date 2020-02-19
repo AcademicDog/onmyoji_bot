@@ -43,6 +43,8 @@ class MyBattle(Application):
 
         # 御魂参数
         self.conf.set('DEFAULT', 'run_mode', str(self.run_mode.get()))
+        self.conf.set('mitama', 'mitama_team_mark',
+                      str(self.mitama_team_mark.current()))
 
         # 探索参数
         self.conf.set('explore', 'fight_boss_enable',
@@ -54,12 +56,13 @@ class MyBattle(Application):
         self.conf.set('explore', 'zhunbei_delay',
                       str(self.zhunbei_delay.get()))
         self.conf.set('explore', 'change_shikigami',
-                      str(self.change_shikigami))
+                      str(self.cmb.current()))
 
     def get_conf(self):
         # 添加配置
         try:
             self.conf.add_section('watchdog')
+            self.conf.add_section('mitama')
             self.conf.add_section('explore')
             self.conf.add_section('others')
         except:

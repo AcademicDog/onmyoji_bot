@@ -31,6 +31,9 @@ class DriverFighter(Fighter):
                              YuhunPos.kaishizhandou_btn, mood2.get1mood()/1000)
             self.log.writeinfo('Driver: 已进入战斗')
 
+            # 在战斗中，标记己方式神
+            self.mitama_team_click()
+            
             # 已经进入战斗，司机自动点怪
             self.click_monster()
 

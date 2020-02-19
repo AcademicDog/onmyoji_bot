@@ -30,6 +30,7 @@ class Fighter:
         quit_game_enable = conf.getboolean('watchdog', 'watchdog_enable')
         self.max_op_time = conf.getint('watchdog', 'max_op_time')
         self.max_win_time = conf.getint('watchdog', 'max_win_time')
+        self.mitama_team_mark = conf.getint('mitama', 'mitama_team_mark')
 
         # 启动日志
         self.log = WriteLog()
@@ -64,6 +65,39 @@ class Fighter:
         self.yys.wait_game_img('img\\JIE-SU.png', self.max_win_time)
         self.log.writeinfo(self.name + "战斗结束")
 
+    def mitama_team_click(self):
+        '''
+        御魂标记己方式神
+        '''
+        num = self.mitama_team_mark
+        if num > 0:
+            # 100 1040
+            # 125 50
+            # 御魂场景获取标记位置
+            min = (num - 1) * 105 + (num - 1) * 100 + 95
+            max = min + 50
+            pos = (min, 355), (max, 425)
+            
+            start_time = time.time()
+            while time.time() - start_time <= 3:
+                x1 = pos[0][0] - 100
+                y1 = pos[0][1] - 250
+                x2 = pos[1][0] + 100
+                y2 = pos[1][1]
+                exp_pos = self.yys.find_color(
+                    ((x1, y1), (x2, y2)), (134, 227, 96), 5)
+                # print('颜色位置', exp_pos)
+                if exp_pos != -1:
+                    self.log.writeinfo(self.name + '标记式神成功')
+                    return True
+                else:
+                    # 点击指定位置并等待下一轮
+                    self.yys.mouse_click_bg(*pos)
+                    self.log.writeinfo(self.name + '标记式神')
+                    time.sleep(0.4)
+
+            self.log.writewarning(self.name + '标记式神失败')
+    
     def click_monster(self):
         # 点击怪物
         pass

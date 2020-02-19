@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.0.1.0220
+#### New features:
+*  根据[#22](https://github.com/AcademicDog/onmyoji_bot/issues/22)，增加了御魂标记己方式神的选项。
+#### Fixes (bugs & defects):
+*  修复了上一个版本无法选择所上卡片的bug。
+*  修复了UI中某些元素没对齐的bug。
+
 ## v1.0.1.0219
 #### Fixes (bugs & defects):
 *  抛弃PyQt，用tkinter重写ui，以减小文件体积。
