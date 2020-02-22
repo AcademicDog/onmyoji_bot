@@ -43,6 +43,7 @@ class MyBattle(Application):
 
         # 御魂参数
         self.conf.set('DEFAULT', 'run_mode', str(self.run_mode.get()))
+        self.conf.set('mitama', 'run_submode', str(self.run_submode.get()))
         self.conf.set('mitama', 'mitama_team_mark',
                       str(self.mitama_team_mark.current()))
 

@@ -13,6 +13,7 @@ class Application(tk.Frame):
         # 初始化参数
         self.run_section = 0
         self.run_mode = tk.IntVar()
+        self.run_submode = tk.IntVar()
 
         self.watchdog_enable = tk.BooleanVar()
         self.max_win_time = tk.IntVar()
@@ -27,6 +28,7 @@ class Application(tk.Frame):
         self.debug_enable = tk.BooleanVar()
 
         self.run_mode.set(0)
+        self.run_submode.set(0)
         self.watchdog_enable.set(True)
         self.max_win_time.set(100)
         self.max_op_time.set(20)
@@ -132,20 +134,20 @@ class Application(tk.Frame):
                        value=3).grid(row=1, column=1, sticky=tk.W)
 
         # 游戏副本
-        submode = tk.LabelFrame(self.frame0, text='副本（调试中）')
+        submode = tk.LabelFrame(self.frame0, text='副本')
         submode.pack(padx=5, pady=5, fill=tk.BOTH, expand=True)
-        tk.Radiobutton(submode, text='八岐大蛇', variable=self.run_mode,
+        tk.Radiobutton(submode, text='八岐大蛇', variable=self.run_submode,
                        value=0).grid(row=0, column=0, sticky=tk.W)
-        tk.Radiobutton(submode, text='业原火', variable=self.run_mode,
+        tk.Radiobutton(submode, text='业原火', variable=self.run_submode,
                        value=1).grid(row=0, column=1, sticky=tk.W)
-        tk.Radiobutton(submode, text='卑弥呼', variable=self.run_mode,
+        tk.Radiobutton(submode, text='卑弥呼', variable=self.run_submode,
                        value=2).grid(row=1, column=0, sticky=tk.W)
 
         # 标记式神
         mitama_mark = tk.Frame(self.frame0, padx=5, pady=5)
         mitama_mark.pack(fill=tk.X, expand=True)
         tk.Label(mitama_mark, text='标记己方式神:').pack(side=tk.LEFT)
-        self.mitama_team_mark = ttk.Combobox(mitama_mark, width = 10)
+        self.mitama_team_mark = ttk.Combobox(mitama_mark, width=10)
         self.mitama_team_mark['value'] = (
             '不标记', '第1个式神', '第2个式神', '第3个式神', '第4个式神', '第5个式神')
         self.mitama_team_mark.pack(fill=tk.X, expand=True, padx=2)
@@ -256,6 +258,8 @@ class Application(tk.Frame):
         self.params.insert(tk.END, 'run_section: ' +
                            str(self.section.index('current')))
         self.params.insert(tk.END, '\nrun_mode: '+str(self.run_mode.get()))
+        self.params.insert(tk.END, '\nrun_submode: ' +
+                           str(self.run_submode.get()))
         self.params.insert(tk.END, '\nwatchdog_enable: ' +
                            str(self.watchdog_enable.get()))
         self.params.insert(tk.END, '\nmax_win_time: ' +

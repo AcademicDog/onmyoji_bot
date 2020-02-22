@@ -1,6 +1,7 @@
 from gameLib.game_ctl import GameControl
+from gameLib.game_scene import GameScene
 from tools.logsystem import WriteLog
-from tools.game_pos import TansuoPos
+from tools.game_pos import TansuoPos, YuhunPos
 
 import configparser
 import logging
@@ -10,7 +11,7 @@ import time
 import win32gui
 
 
-class Fighter:
+class Fighter(GameScene):
 
     def __init__(self, name='', emyc=0, hwnd=0):
         '''
@@ -47,6 +48,8 @@ class Fighter:
         self.log.writeinfo(self.name + '激活窗口成功')
         time.sleep(0.5)
 
+        # 绑定场景
+
         # 自检
         debug_enable = conf.getboolean('others', 'debug_enable')
         if debug_enable:
@@ -77,7 +80,7 @@ class Fighter:
             min = (num - 1) * 105 + (num - 1) * 100 + 95
             max = min + 50
             pos = (min, 355), (max, 425)
-            
+
             start_time = time.time()
             while time.time() - start_time <= 3:
                 x1 = pos[0][0] - 100
@@ -97,7 +100,7 @@ class Fighter:
                     time.sleep(0.4)
 
             self.log.writewarning(self.name + '标记式神失败')
-    
+
     def click_monster(self):
         # 点击怪物
         pass
@@ -117,6 +120,39 @@ class Fighter:
         start_time = time.time()
         while time.time()-start_time <= self.max_op_time and self.run:
             result = self.yys.find_game_img(img_path)
+            if not appear:
+                result = not result
+            if result:
+                self.log.writeinfo(self.name + '点击 ' + tag + ' 成功')
+                return True
+            else:
+                # 点击指定位置并等待下一轮
+                self.yys.mouse_click_bg(pos, pos_end)
+                self.log.writeinfo(self.name + '点击 ' + tag)
+            time.sleep(step_time)
+        self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
+
+        # 提醒玩家点击失败，并在5s后退出
+        self.yys.activate_window()
+        time.sleep(5)
+        self.yys.quit_game()
+
+    def click_until_knn(self, tag, img_path, pos, pos_end=None, step_time=0.5, appear=True, thread=0):
+        '''
+        在某一时间段内，后台点击鼠标，直到出现某一图片出现或消失
+            :param tag: 按键名
+            :param img_path: 图片路径
+            :param pos: (x,y) 鼠标单击的坐标
+            :param pos_end=None: (x,y) 若pos_end不为空，则鼠标单击以pos为左上角坐标pos_end为右下角坐标的区域内的随机位置
+            :step_time=0.5: 查询间隔
+            :appear: 图片出现或消失：Ture-出现；False-消失
+            :thread: 检测阈值
+            :return: 成功返回True, 失败退出游戏
+        '''
+        # 在指定时间内反复监测画面并点击
+        start_time = time.time()
+        while time.time()-start_time <= self.max_op_time and self.run:
+            result = self.yys.find_game_img_knn(img_path, thread=thread)
             if not appear:
                 result = not result
             if result:
@@ -155,81 +191,3 @@ class Fighter:
         y1 = random.randint(436, 486)
         self.yys.mouse_drag_bg((x0, y0), (x1, y1))
         logging.info(self.name + '水平滑动界面')
-
-    def get_scene(self):
-        '''
-        识别当前场景
-            :return: 返回场景名称:1-庭院; 2-探索界面; 3-章节界面; 4-探索内
-        '''
-        # 拒绝悬赏
-        self.yys.rejectbounty()
-
-        # 分别识别庭院、探索、章节页、探索内
-        maxVal, maxLoc = self.yys.find_multi_img(
-            'img/JIA-CHENG.png', 'img/JUE-XING.png', 'img/TAN-SUO.png', 'img/YING-BING.png')
-
-        scene_cof = max(maxVal)
-        if scene_cof > 0.97:
-            scene = maxVal.index(scene_cof)
-            return scene + 1
-        else:
-            return 0
-
-    def switch_to_scene(self, scene):
-        '''
-        切换场景
-            :param scene: 需要切换到的场景:1-庭院; 2-探索界面; 3-章节界面; 4-探索内
-            :return: 切换成功返回True；切换失败直接退出
-        '''
-        scene_now = self.get_scene()
-        logging.info(self.name + '目前场景：' + str(scene_now))
-        if scene_now == scene:
-            return True
-        if scene_now == 1:
-            # 庭院中
-            if scene == 2 or scene == 3 or scene == 4:
-                # 先将界面划到最右边
-                self.slide_x_scene(800)
-                time.sleep(2)
-                self.slide_x_scene(800)
-
-                # 点击探索灯笼进入探索界面
-                self.click_until('探索灯笼', 'img/JUE-XING.png', *
-                                 TansuoPos.tansuo_denglong, 2)
-
-                # 递归
-                self.switch_to_scene(scene)
-
-        if scene_now == 2:
-            # 探索界面
-            if scene == 3 or scene == 4:
-                # 点击最后章节
-                self.click_until('最后章节', 'img/TAN-SUO.png',
-                                 *TansuoPos.last_chapter, 2)
-
-                # 递归
-                self.switch_to_scene(scene)
-
-        if scene_now == 3:
-            # 章节界面
-            if scene == 4:
-                # 点击探索按钮
-                self.click_until('探索按钮', 'img/YING-BING.png',
-                                 *TansuoPos.tansuo_btn, 2)
-
-                # 递归
-                self.switch_to_scene(scene)
-
-        if scene_now == 4:
-            # 探索内
-            if scene == 3:
-                # 点击退出探索
-                self.click_until('退出按钮', 'img\\QUE-REN.png',
-                                 *TansuoPos.quit_btn, 2)
-
-                # 点击确认
-                self.click_until('确认按钮', 'img\\QUE-REN.png',
-                                 *TansuoPos.confirm_btn, 2, False)
-
-                # 递归
-                self.switch_to_scene(scene)

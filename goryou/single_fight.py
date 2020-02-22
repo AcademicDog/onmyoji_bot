@@ -19,11 +19,11 @@ class GoryouFight(Fighter):
         mood3 = ut.Mood(3)
         while self.run:
             # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
-            self.yys.wait_game_img('img\\TIAO-ZHAN_YL.png',
-                                   self.max_win_time)
+            self.yys.wait_game_img_knn('img\\TIAO-ZHAN.png',
+                                       self.max_win_time, thread=20)
             mood1.moodsleep()
-            self.yys.mouse_click_bg(*YuhunPos.tiaozhan_btn)
-            logging.info('点击 挑战按钮')
+            self.click_until_knn('挑战按钮', 'img\\TIAO-ZHAN.png',
+                                 *YuhunPos.tiaozhan_btn, appear=False, thread=20)
 
             # 检测是否进入战斗
             self.check_battle()
@@ -38,6 +38,6 @@ class GoryouFight(Fighter):
             mood2.moodsleep()
 
             # 在战斗结算页面
-            self.click_until('结算', 'img\\TIAO-ZHAN_YL.png',
-                             *CommonPos.second_position, mood3.get1mood()/1000)
+            self.click_until_knn('结算', 'img\\TIAO-ZHAN.png',
+                                 *CommonPos.second_position, mood3.get1mood()/1000, thread=20)
             logging.info("回到选择界面")

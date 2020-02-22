@@ -4,10 +4,11 @@ class GamePos():
         self.pos_end=pos_end
 
 class CommonPos():
-    second_position = (943, 56), (1111, 452)  # 第二次结算所点击的位置
+    second_position = (1000, 100), (1111, 452)  # 第二次结算所点击的位置
 
 class TansuoPos():
     last_chapter = (934, 493), (1108, 572)  # 列表最后一章
+    quit_last_chapter = (913, 114), (948, 148)  # 退出最后一章
     tansuo_btn=(787,458),(890,500) #探索按钮
     tansuo_denglong = (424, 118), (462, 158)  # 探索灯笼
     ready_btn = (1000, 460), (1069, 513)  # 准备按钮
@@ -28,3 +29,7 @@ class TansuoPos():
 class YuhunPos():
     tiaozhan_btn = (995, 533), (1055, 595)    # 御魂挑战按钮
     kaishizhandou_btn = (1048, 535), (1113, 604)   # 御魂开始战斗按钮
+    yuhun_menu = (148, 568), (206, 620)    # 御魂菜单
+    yuhun_btn = (147, 152), (327, 408)    # 御魂选项
+    yeyuanhuo_btn = (476, 125), (708, 427)    # 业原火选项
+    beimihu_btn = (838, 141), (1048, 407)    # 卑弥呼

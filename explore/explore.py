@@ -16,9 +16,11 @@ class ExploreFight(Fighter):
         # 读取配置文件
         conf = configparser.ConfigParser()
         conf.read('conf.ini')
-        self.fight_boss_enable = conf.getboolean('explore', 'fight_boss_enable')
+        self.fight_boss_enable = conf.getboolean(
+            'explore', 'fight_boss_enable')
         self.slide_shikigami = conf.getboolean('explore', 'slide_shikigami')
-        self.slide_shikigami_progress = conf.getint('explore', 'slide_shikigami_progress')
+        self.slide_shikigami_progress = conf.getint(
+            'explore', 'slide_shikigami_progress')
         self.zhunbei_delay = conf.getfloat('explore', 'zhunbei_delay')
         self.change_shikigami = conf.getint('explore', 'change_shikigami')
 
@@ -100,7 +102,12 @@ class ExploreFight(Fighter):
         exp_pos = self.yys.find_color(
             ((2, 205), (1127, 545)), (140, 122, 44), 2)
         if exp_pos == -1:
-            return -1
+            exp_pos = self.yys.find_img_knn(
+                'img\\EXP.png', 1, (2, 205), (1127, 545))
+            if exp_pos == (0, 0):
+                return -1
+            else:
+                exp_pos = (exp_pos[0]+2, exp_pos[1]+205)
 
         # 查找经验怪攻打图标位置
         find_pos = self.yys.find_game_img(
