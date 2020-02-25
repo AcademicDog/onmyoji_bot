@@ -62,3 +62,6 @@ class DriverFighter(Fighter):
                     time.sleep(0.2)
                     self.yys.mouse_click_bg((674, 384))
                     self.log.writeinfo('Driver: 自动邀请')
+
+            # 检查游戏次数
+            self.check_times()

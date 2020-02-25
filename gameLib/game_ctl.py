@@ -24,10 +24,10 @@ class GameControl():
         self.hwnd = hwnd
         self.quit_game_enable = quit_game_enable
         self.debug_enable = False
-        #user32 = ctypes.windll.user32
-        # user32.SetProcessDPIAware()
         l1, t1, r1, b1 = win32gui.GetWindowRect(self.hwnd)
+        #print(l1,t1, r1,b1)
         l2, t2, r2, b2 = win32gui.GetClientRect(self.hwnd)
+        #print(l2,t2,r2,b2)
         self._client_h = b2 - t2
         self._client_w = r2 - l2
         self._border_l = ((r1 - l1) - (r2 - l2)) // 2

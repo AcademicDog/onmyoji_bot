@@ -5,6 +5,7 @@ from tools.game_pos import TansuoPos, YuhunPos
 
 import configparser
 import logging
+import os
 import random
 import threading
 import time
@@ -32,6 +33,9 @@ class Fighter(GameScene):
         self.max_op_time = conf.getint('watchdog', 'max_op_time')
         self.max_win_time = conf.getint('watchdog', 'max_win_time')
         self.mitama_team_mark = conf.getint('mitama', 'mitama_team_mark')
+        self.max_times = conf.getint('DEFAULT', 'max_times')
+        self.end_operation = conf.getint('DEFAULT', 'end_operation')
+        self.run_times = 0
 
         # 启动日志
         self.log = WriteLog()
@@ -67,6 +71,24 @@ class Fighter(GameScene):
         self.log.writeinfo(self.name + '检测是战斗是否结束')
         self.yys.wait_game_img('img\\JIE-SU.png', self.max_win_time)
         self.log.writeinfo(self.name + "战斗结束")
+
+    def check_times(self):
+        '''
+        监测游戏次数是否达到最大次数
+        '''
+        self.run_times = self.run_times + 1
+        logging.info('游戏已运行'+str(self.run_times)+'次')
+        if(self.run_times == self.max_times):
+            if(self.end_operation == 0):
+                logging.warning('关闭脚本(次数已满)...')
+                self.run = False
+                os._exit(0)
+            elif(self.end_operation == 1):
+                logging.warning('关闭游戏(次数已满)...')
+                self.yys.quit_game()
+                logging.warning('关闭脚本(次数已满)...')
+                self.run = False
+                os._exit(0)
 
     def mitama_team_click(self):
         '''

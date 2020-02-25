@@ -43,6 +43,8 @@ class MyBattle(Application):
 
         # 御魂参数
         self.conf.set('DEFAULT', 'run_mode', str(self.run_mode.get()))
+        self.conf.set('DEFAULT', 'max_times', str(self.max_times.get()))
+        self.conf.set('DEFAULT', 'end_operation', str(self.end_operation.current()))
         self.conf.set('mitama', 'run_submode', str(self.run_submode.get()))
         self.conf.set('mitama', 'mitama_team_mark',
                       str(self.mitama_team_mark.current()))
@@ -110,6 +112,20 @@ if __name__ == "__main__":
         # 检测管理员权限
         if is_admin():
             sys.excepthook = my_excepthook
+
+            # Query DPI Awareness (Windows 10 and 8)
+            awareness = ctypes.c_int()
+            errorCode = ctypes.windll.shcore.GetProcessDpiAwareness(
+                0, ctypes.byref(awareness))
+
+            # Set DPI Awareness  (Windows 10 and 8)
+            errorCode = ctypes.windll.shcore.SetProcessDpiAwareness(1)
+            # the argument is the awareness level, which can be 0, 1 or 2:
+            # for 1-to-1 pixel control I seem to need it to be non-zero (I'm using level 2)
+
+            # Set DPI Awareness  (Windows 7 and Vista)
+            success = ctypes.windll.user32.SetProcessDPIAware()
+            # behaviour on later OSes is undefined, although when I run it on my Windows 10 machine, it seems to work with effects identical to SetProcessDpiAwareness(1)
 
             # 设置战斗参数
             root = tk.Tk()

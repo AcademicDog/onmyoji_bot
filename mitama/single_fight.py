@@ -3,6 +3,7 @@ from tools.game_pos import CommonPos, YuhunPos
 import tools.utilities as ut
 
 import configparser
+import logging
 
 
 class SingleFight(Fighter):
@@ -54,3 +55,6 @@ class SingleFight(Fighter):
             self.click_until_knn('结算', 'img\\TIAO-ZHAN.png',
                                  *CommonPos.second_position, mood3.get1mood()/1000, thread=20)
             self.log.writeinfo("回到选择界面")
+
+            # 检查游戏次数
+            self.check_times()

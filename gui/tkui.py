@@ -7,6 +7,7 @@ class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
         self.master = master
+        self.master.iconbitmap('img/icon/OnmyojiBot.ico')
         self.master.wm_title('OnmyojiBot')
         self.pack()
 
@@ -14,6 +15,7 @@ class Application(tk.Frame):
         self.run_section = 0
         self.run_mode = tk.IntVar()
         self.run_submode = tk.IntVar()
+        self.max_times = tk.IntVar()
 
         self.watchdog_enable = tk.BooleanVar()
         self.max_win_time = tk.IntVar()
@@ -29,6 +31,7 @@ class Application(tk.Frame):
 
         self.run_mode.set(0)
         self.run_submode.set(0)
+        self.max_times.set(0)
         self.watchdog_enable.set(True)
         self.max_win_time.set(100)
         self.max_op_time.set(20)
@@ -52,6 +55,9 @@ class Application(tk.Frame):
         self.create_frame1()
         self.create_frame2()
         self.create_frame3()
+
+        # 创建次数菜单
+        self.create_times()
 
         # 创建高级菜单
         self.create_advance()
@@ -113,7 +119,7 @@ class Application(tk.Frame):
         self.frame3 = tk.Frame(self.section)
         self.section.add(self.frame3, text='关于')
 
-        self.section.pack(fill=tk.BOTH)
+        self.section.pack(fill=tk.BOTH, expand=True)
 
     def create_frame0(self):
         '''
@@ -169,11 +175,11 @@ class Application(tk.Frame):
         '''
         # 提示文本
         textframe = tk.Frame(self.frame2)
-        textframe.pack(expand=True, fill=tk.X)
+        textframe.pack(expand=True, fill=tk.BOTH)
         s = tk.Scrollbar(textframe)
         s.pack(side=tk.RIGHT)
         text = tk.Text(textframe, height=5, width=21)
-        text.pack(side=tk.LEFT, expand=True, fill=tk.X)
+        text.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
         text.insert(tk.INSERT, '把狗粮队长放在最左边，点开需要打的章节，然后开始。\n')
         text.insert(tk.INSERT, '支持自动换狗粮，只打经验怪。\n')
         text.insert(tk.END, '最好把“合并相同式神”选项关闭。\n')
@@ -211,6 +217,22 @@ class Application(tk.Frame):
         text.insert(
             tk.END, '网址：https://github.com/AcademicDog/onmyoji_bot\n\n交流Q群：592055060')
         text.config(state=tk.DISABLED)
+
+    def create_times(self):
+        '''
+        游戏次数
+        '''
+        times = tk.LabelFrame(self.main_frame1, text='次数设置')
+        times.pack(padx=5, fill=tk.X, anchor=tk.W)
+        timeframe1 = tk.Frame(times)
+        timeframe1.pack(anchor=tk.W)
+        tk.Label(timeframe1, text='游戏次数(0=无数次):').pack(side=tk.LEFT)
+        tk.Entry(timeframe1, width=6, textvariable=self.max_times).pack()
+        self.end_operation = ttk.Combobox(times)
+        self.end_operation['value'] = ('结束后关闭脚本', '结束后关闭脚本和游戏')
+        self.end_operation.pack(fill=tk.X, padx=2, pady=2)
+        self.end_operation.current(0)
+        self.end_operation.config(state='readonly')
 
     def create_advance(self):
         '''
@@ -260,6 +282,9 @@ class Application(tk.Frame):
         self.params.insert(tk.END, '\nrun_mode: '+str(self.run_mode.get()))
         self.params.insert(tk.END, '\nrun_submode: ' +
                            str(self.run_submode.get()))
+        self.params.insert(tk.END, '\nmax_times: ' + str(self.max_times.get()))
+        self.params.insert(tk.END, '\nend_operation: ' +
+                           str(self.end_operation.current()))
         self.params.insert(tk.END, '\nwatchdog_enable: ' +
                            str(self.watchdog_enable.get()))
         self.params.insert(tk.END, '\nmax_win_time: ' +

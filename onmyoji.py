@@ -83,6 +83,14 @@ if __name__ == "__main__":
             sys.excepthook = my_excepthook
             logging.info('UAC pass')
 
+            # Query DPI Awareness (Windows 10 and 8)
+            awareness = ctypes.c_int()
+            errorCode = ctypes.windll.shcore.GetProcessDpiAwareness(
+                0, ctypes.byref(awareness))
+
+            # Set DPI Awareness  (Windows 10 and 8)
+            errorCode = ctypes.windll.shcore.SetProcessDpiAwareness(0)
+
             # 设置战斗参数
             init()
 

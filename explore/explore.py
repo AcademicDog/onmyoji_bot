@@ -222,3 +222,6 @@ class ExploreFight(Fighter):
             self.switch_to_scene(3)
             self.log.writeinfo('结束本轮探索')
             time.sleep(0.5)
+
+            # 检查游戏次数
+            self.check_times()

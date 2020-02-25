@@ -41,3 +41,6 @@ class GoryouFight(Fighter):
             self.click_until_knn('结算', 'img\\TIAO-ZHAN.png',
                                  *CommonPos.second_position, mood3.get1mood()/1000, thread=20)
             logging.info("回到选择界面")
+
+            # 检查游戏次数
+            self.check_times()

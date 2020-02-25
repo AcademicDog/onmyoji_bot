@@ -63,3 +63,6 @@ class FighterPassenger(Fighter):
                     elif self.yys.find_game_img('img\\JIE-SHOU.png'):
                         self.yys.mouse_click_bg((125, yuhun_loc[1]))
                         self.log.writeinfo('Passenger: 接受邀请')
+            
+            # 检查游戏次数
+            self.check_times()
