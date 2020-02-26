@@ -2,6 +2,7 @@ from gameLib.game_ctl import GameControl
 from gameLib.game_scene import GameScene
 from tools.logsystem import WriteLog
 from tools.game_pos import TansuoPos, YuhunPos
+import tools.utilities as ut
 
 import configparser
 import logging
@@ -67,10 +68,17 @@ class Fighter(GameScene):
         self.log.writeinfo(self.name + '已进入战斗')
 
     def check_end(self):
-        # 检测是否打完
+        '''
+        检测是否打完
+            :return: 胜利页面返回0；奖励页面返回1
+        '''
         self.log.writeinfo(self.name + '检测是战斗是否结束')
-        self.yys.wait_game_img('img\\JIE-SU.png', self.max_win_time)
-        self.log.writeinfo(self.name + "战斗结束")
+        if self.yys.wait_game_img_knn('img/SHENG-LI.png', self.max_win_time, False, 8):
+            logging.info('战斗成功')
+            return 0
+        elif self.yys.wait_game_img_knn('img/TIAO-DAN.png', 2, thread=20):
+            logging.info('本轮战斗结束')
+            return 1
 
     def check_times(self):
         '''
@@ -89,6 +97,30 @@ class Fighter(GameScene):
                 logging.warning('关闭脚本(次数已满)...')
                 self.run = False
                 os._exit(0)
+
+    def get_reward(self, mood, state):
+        '''
+        结算处理
+            :param mood: 状态函数
+            :param state: 上一步的状态。0-战斗成功页面; 1-领取奖励页面
+        '''
+        if state == 0:
+            self.click_until_knn('奖励', 'img/TIAO-DAN.png', ut.firstposition(), None, mood.get1mood()/1000, thread=20)
+        start_time = time.time()
+        while time.time()-start_time <= self.max_op_time and self.run:
+            result = self.yys.find_game_img_knn('img/TIAO-DAN.png', thread=2)
+            if not result:
+                logging.info(self.name + '结算成功')
+                return
+            else:
+                self.yys.mouse_click_bg(ut.secondposition())
+                self.log.writeinfo(self.name + '点击结算')
+            mood.moodsleep()
+        self.log.writewarning(self.name + '点击结算失败!')
+        # 提醒玩家点击失败，并在5s后退出
+        self.yys.activate_window()
+        time.sleep(5)
+        self.yys.quit_game()
 
     def mitama_team_click(self):
         '''
@@ -151,7 +183,7 @@ class Fighter(GameScene):
                 # 点击指定位置并等待下一轮
                 self.yys.mouse_click_bg(pos, pos_end)
                 self.log.writeinfo(self.name + '点击 ' + tag)
-            time.sleep(step_time)
+            ut.mysleep(step_time*1000)
         self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
 
         # 提醒玩家点击失败，并在5s后退出
@@ -184,7 +216,7 @@ class Fighter(GameScene):
                 # 点击指定位置并等待下一轮
                 self.yys.mouse_click_bg(pos, pos_end)
                 self.log.writeinfo(self.name + '点击 ' + tag)
-            time.sleep(step_time)
+            ut.mysleep(step_time*1000)
         self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
 
         # 提醒玩家点击失败，并在5s后退出

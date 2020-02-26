@@ -56,8 +56,6 @@ class MyBattle(Application):
                       str(self.slide_shikigami.get()))
         self.conf.set('explore', 'slide_shikigami_progress',
                       str(self.slide_shikigami_progress.get()))
-        self.conf.set('explore', 'zhunbei_delay',
-                      str(self.zhunbei_delay.get()))
         self.conf.set('explore', 'change_shikigami',
                       str(self.cmb.current()))
 

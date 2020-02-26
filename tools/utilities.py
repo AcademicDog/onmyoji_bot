@@ -80,5 +80,8 @@ def mysleep(slpa, slpb=0):
     randomly sleep for a short time between `slpa` and `slpa + slpb` \n
     because of the legacy reason, slpa and slpb are in millisecond
     '''
-    slp = random.randint(slpa, slpa+slpb)
+    if slpb == 0:
+        slp = random.randint(int(0.5*slpa), int(1.5*slpa))
+    else:
+        slp = random.randint(slpa, slpa+slpb)
     time.sleep(slp/1000)

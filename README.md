@@ -14,6 +14,8 @@
 
 同时感谢sup817ch的图像识别思路，本项目game_ctl模块基于其[工作基础](https://github.com/sup817ch/AutoOnmyoji)。
 
+感谢Abc为本程序提供了应用图标。
+
 # 注意事项
 
 环境：python 3.7, 32 bit；yys PC端 默认分辨率 (1136x640)；win 10系统，屏幕(1920x1080)，显示设置100%。

@@ -21,7 +21,6 @@ class ExploreFight(Fighter):
         self.slide_shikigami = conf.getboolean('explore', 'slide_shikigami')
         self.slide_shikigami_progress = conf.getint(
             'explore', 'slide_shikigami_progress')
-        self.zhunbei_delay = conf.getfloat('explore', 'zhunbei_delay')
         self.change_shikigami = conf.getint('explore', 'change_shikigami')
 
     def next_scene(self):
@@ -161,14 +160,11 @@ class ExploreFight(Fighter):
                     return -1
 
             # 攻击怪
-            self.yys.mouse_click_bg(fight_pos)
-            if not self.yys.wait_game_img('img\\ZHUN-BEI.png', self.zhunbei_delay, False):
-                break
+            self.yys.mouse_click_bg(fight_pos)            
             self.log.writeinfo('已进入战斗')
-            time.sleep(1)
 
             # 等待式神准备
-            #self.yys.wait_game_color(((1024,524),(1044, 544)), (138,198,233), 30)
+            self.yys.wait_game_img_knn('img\\ZHUN-BEI.png', thread=30)
             logging.info('式神准备完成')
 
             # 检查狗粮经验
@@ -179,15 +175,11 @@ class ExploreFight(Fighter):
                              TansuoPos.ready_btn, mood1.get1mood()/1000)
 
             # 检查是否打完
-            self.check_end()
+            state = self.check_end()
             mood1.moodsleep()
 
             # 在战斗结算页面
-            self.yys.mouse_click_bg(ut.firstposition())
-            self.click_until('结算', 'img/JIN-BI.png',
-                             *CommonPos.second_position, mood2.get1mood()/1000)
-            self.click_until('结算', 'img/JIN-BI.png',
-                             *CommonPos.second_position, mood2.get1mood()/1000, False)
+            self.get_reward(mood2, state)
 
             # 返回结果
             if boss:

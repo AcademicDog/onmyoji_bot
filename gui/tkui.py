@@ -24,7 +24,6 @@ class Application(tk.Frame):
         self.fight_boss_enable = tk.BooleanVar()
         self.slide_shikigami = tk.BooleanVar()
         self.slide_shikigami_progress = tk.IntVar()
-        self.zhunbei_delay = tk.IntVar()
         self.change_shikigami = 1
 
         self.debug_enable = tk.BooleanVar()
@@ -38,7 +37,6 @@ class Application(tk.Frame):
         self.fight_boss_enable.set(False)
         self.slide_shikigami.set(True)
         self.slide_shikigami_progress.set(10)
-        self.zhunbei_delay.set(3)
         self.debug_enable.set(False)
 
         # 创建菜单栏
@@ -186,13 +184,6 @@ class Application(tk.Frame):
         s.config(command=text.yview)
         text.config(yscrollcommand=s.set, state=tk.DISABLED)
 
-        # 延迟设置
-        delay = tk.LabelFrame(self.frame2, text='延迟设置')
-        delay.pack(fill=tk.X)
-        tk.Label(delay, text='满级狗粮识别延迟:').grid(row=0, column=0)
-        tk.Entry(delay, textvariable=self.zhunbei_delay,
-                 width=5).grid(row=0, column=1)
-
         # 换狗粮设置
         tk.Checkbutton(self.frame2, text='换狗粮拖放式神进度条，进度:',
                        variable=self.slide_shikigami).pack(anchor=tk.W)
@@ -299,8 +290,6 @@ class Application(tk.Frame):
                            str(self.slide_shikigami.get()))
         self.params.insert(tk.END, '\nslide_shikigami_progress: ' +
                            str(self.slide_shikigami_progress.get()))
-        self.params.insert(tk.END, '\nzhunbei_delay: ' +
-                           str(self.zhunbei_delay.get()))
         self.params.insert(tk.END, '\nchange_shikigami: ' +
                            str(self.cmb.current()))
         self.params.insert(tk.END, '\ndebug_enable: ' +

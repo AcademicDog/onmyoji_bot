@@ -32,14 +32,11 @@ class GoryouFight(Fighter):
             self.click_monster()
 
             # 检测是否打完
-            logging.info(self.name + '检测是战斗是否结束')
-            self.yys.wait_game_img('img\\JIN-BI.png', self.max_win_time)
-            logging.info(self.name + "战斗结束")
+            state = self.check_end()
             mood2.moodsleep()
 
             # 在战斗结算页面
-            self.click_until_knn('结算', 'img\\TIAO-ZHAN.png',
-                                 *CommonPos.second_position, mood3.get1mood()/1000, thread=20)
+            self.get_reward(mood3, state)
             logging.info("回到选择界面")
 
             # 检查游戏次数
