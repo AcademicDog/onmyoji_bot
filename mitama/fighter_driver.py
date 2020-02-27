@@ -27,13 +27,13 @@ class DriverFighter(Fighter):
             # 司机点击开始战斗，需要锁定御魂阵容
             mood1.moodsleep()
             self.log.writeinfo('Driver: 点击开始战斗按钮')
-            self.click_until('开始战斗按钮', 'img\\ZI-DONG.png', *
-                             YuhunPos.kaishizhandou_btn, mood2.get1mood()/1000)
+            self.click_until('开始战斗按钮', 'img\\KAI-SHI-ZHAN-DOU.png', *
+                             YuhunPos.kaishizhandou_btn, mood2.get1mood()/1000, False)
             self.log.writeinfo('Driver: 已进入战斗')
 
             # 在战斗中，标记己方式神
             self.mitama_team_click()
-            
+
             # 已经进入战斗，司机自动点怪
             self.click_monster()
 

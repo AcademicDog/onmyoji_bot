@@ -1,6 +1,8 @@
 from gameLib.image_proc import match_img_knn
+import configparser
 import ctypes
 import logging
+import os
 import sys
 import time
 import random
@@ -32,6 +34,12 @@ class GameControl():
         self._client_w = r2 - l2
         self._border_l = ((r1 - l1) - (r2 - l2)) // 2
         self._border_t = ((b1 - t1) - (b2 - t2)) - self._border_l
+        conf = configparser.ConfigParser()
+        conf.read('conf.ini')
+        self.client = conf.getint('DEFAULT', 'client')
+        if self.client == 1:
+            os.system('adb connect 127.0.0.1:7555')
+            os.system('adb devices')
 
     def window_full_shot(self, file_name=None, gray=0):
         """
@@ -49,8 +57,12 @@ class GameControl():
                 self.bmp.CreateCompatibleBitmap(
                     self.srcdc, self._client_w, self._client_h)
                 self.memdc.SelectObject(self.bmp)
-            self.memdc.BitBlt((0, 0), (self._client_w, self._client_h), self.srcdc,
-                              (self._border_l, self._border_t), win32con.SRCCOPY)
+            if self.client == 0:
+                self.memdc.BitBlt((0, 0), (self._client_w, self._client_h), self.srcdc,
+                                  (self._border_l, self._border_t), win32con.SRCCOPY)
+            else:
+                self.memdc.BitBlt((0, -35), (self._client_w, self._client_h), self.srcdc,
+                                  (self._border_l, self._border_t), win32con.SRCCOPY)
             if file_name != None:
                 self.bmp.SaveBitmapFile(self.memdc, file_name)
                 return
@@ -84,8 +96,12 @@ class GameControl():
         bmp = win32ui.CreateBitmap()
         bmp.CreateCompatibleBitmap(srcdc, w, h)
         memdc.SelectObject(bmp)
-        memdc.BitBlt((0, 0), (w, h), srcdc,
-                     (pos1[0]+self._border_l, pos1[1]+self._border_t), win32con.SRCCOPY)
+        if self.client == 0:
+            memdc.BitBlt((0, 0), (w, h), srcdc,
+                         (pos1[0]+self._border_l, pos1[1]+self._border_t), win32con.SRCCOPY)
+        else:
+            memdc.BitBlt((0, -35), (w, h), srcdc,
+                         (pos1[0]+self._border_l, pos1[1]+self._border_t), win32con.SRCCOPY)
         if file_name != None:
             bmp.SaveBitmapFile(memdc, file_name)
             srcdc.DeleteDC()
@@ -314,23 +330,21 @@ class GameControl():
             self.img = cv2.rectangle(img, pos, pos_end, (0, 255, 0), 3)
 
         if pos_end == None:
-            win32gui.SendMessage(
-                self.hwnd, win32con.WM_MOUSEMOVE, 0, win32api.MAKELONG(pos[0], pos[1]))
-            win32gui.SendMessage(
-                self.hwnd, win32con.WM_LBUTTONDOWN, 0, win32api.MAKELONG(pos[0], pos[1]))
-            time.sleep(random.randint(20, 80)/1000)
-            win32gui.SendMessage(
-                self.hwnd, win32con.WM_LBUTTONUP, 0, win32api.MAKELONG(pos[0], pos[1]))
+            pos_rand = pos
         else:
             pos_rand = (random.randint(
                 pos[0], pos_end[0]), random.randint(pos[1], pos_end[1]))
+        if self.client == 0:
             win32gui.SendMessage(self.hwnd, win32con.WM_MOUSEMOVE,
                                  0, win32api.MAKELONG(pos_rand[0], pos_rand[1]))
-            win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONDOWN, 0, win32api.MAKELONG(
-                pos_rand[0], pos_rand[1]))
+            win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONDOWN,
+                                 0, win32api.MAKELONG(pos_rand[0], pos_rand[1]))
             time.sleep(random.randint(20, 80)/1000)
             win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONUP,
                                  0, win32api.MAKELONG(pos_rand[0], pos_rand[1]))
+        else:
+            command = str(pos_rand[0]) + ' ' + str(pos_rand[1])
+            os.system('adb shell input tap ' + command)
 
     def mouse_drag_bg(self, pos1, pos2):
         """
@@ -338,18 +352,23 @@ class GameControl():
             :param pos1: (x,y) 起点坐标
             :param pos2: (x,y) 终点坐标
         """
-        move_x = np.linspace(pos1[0], pos2[0], num=20, endpoint=True)[0:]
-        move_y = np.linspace(pos1[1], pos2[1], num=20, endpoint=True)[0:]
-        win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONDOWN,
-                             0, win32api.MAKELONG(pos1[0], pos1[1]))
-        for i in range(20):
-            x = int(round(move_x[i]))
-            y = int(round(move_y[i]))
-            win32gui.SendMessage(
-                self.hwnd, win32con.WM_MOUSEMOVE, 0, win32api.MAKELONG(x, y))
-            time.sleep(0.01)
-        win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONUP,
-                             0, win32api.MAKELONG(pos2[0], pos2[1]))
+        if self.client == 0:
+            move_x = np.linspace(pos1[0], pos2[0], num=20, endpoint=True)[0:]
+            move_y = np.linspace(pos1[1], pos2[1], num=20, endpoint=True)[0:]
+            win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONDOWN,
+                                 0, win32api.MAKELONG(pos1[0], pos1[1]))
+            for i in range(20):
+                x = int(round(move_x[i]))
+                y = int(round(move_y[i]))
+                win32gui.SendMessage(
+                    self.hwnd, win32con.WM_MOUSEMOVE, 0, win32api.MAKELONG(x, y))
+                time.sleep(0.01)
+            win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONUP,
+                                 0, win32api.MAKELONG(pos2[0], pos2[1]))
+        else:
+            command = str(pos1[0])+' ' + str(pos1[1]-35) + \
+                ' '+str(pos2[0])+' '+str(pos2[1]-35)
+            os.system('adb shell input swipe '+command)
 
     def wait_game_img(self, img_path, max_time=100, quit=True):
         """
@@ -431,7 +450,13 @@ class GameControl():
         if not self.run:
             return False
         if self.quit_game_enable:
-            win32gui.SendMessage(self.hwnd, win32con.WM_DESTROY, 0, 0)  # 退出游戏
+            logging.info('退出游戏，最后显示已保存至/img/full.png')
+            if self.client == 0:
+                win32gui.SendMessage(
+                    self.hwnd, win32con.WM_DESTROY, 0, 0)  # 退出游戏
+            else:
+                os.system(
+                    'adb shell am force-stop com.netease.onmyoji.netease_simulator')
         sys.exit(0)
 
     def takescreenshot(self):

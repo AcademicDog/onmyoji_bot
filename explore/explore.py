@@ -1,5 +1,5 @@
 from gameLib.fighter import Fighter
-from tools.game_pos import CommonPos, TansuoPos
+from tools.game_pos import TansuoPos
 import tools.utilities as ut
 
 import configparser

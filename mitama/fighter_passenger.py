@@ -1,5 +1,5 @@
 from gameLib.fighter import Fighter
-from tools.game_pos import CommonPos, TansuoPos
+from tools.game_pos import TansuoPos
 import tools.utilities as ut
 
 import logging
@@ -40,7 +40,7 @@ class FighterPassenger(Fighter):
             # 等待下一轮
             logging.info('Passenger: 等待下一轮')
             start_time = time.time()
-            while time.time() - start_time <= 20 and self.run:
+            while time.time() - start_time <= 5 and self.run:
                 # 检测是否回到队伍中
                 if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', 1, False)):
                     self.log.writeinfo('Passenger: 进入队伍')
@@ -48,7 +48,7 @@ class FighterPassenger(Fighter):
 
                 # 检测是否有御魂邀请
                 yuhun_loc = self.yys.wait_game_img(
-                    'img\\YU-HUN.png', 0.1, False)
+                    'img\\YU-HUN.png', 1, False)
                 if yuhun_loc:
                     # 点击自动接受邀请
                     if self.yys.find_game_img('img\\ZI-DONG-JIE-SHOU.png'):

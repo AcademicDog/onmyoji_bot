@@ -28,6 +28,7 @@ class MyBattle(Application):
         设置参数至配置文件
         '''
         # 运行参数
+        self.conf.set('DEFAULT', 'client', str(self.client.current()))
         section = self.section.index('current')
         self.conf.set('DEFAULT', 'run_section', str(section))
 
@@ -44,7 +45,8 @@ class MyBattle(Application):
         # 御魂参数
         self.conf.set('DEFAULT', 'run_mode', str(self.run_mode.get()))
         self.conf.set('DEFAULT', 'max_times', str(self.max_times.get()))
-        self.conf.set('DEFAULT', 'end_operation', str(self.end_operation.current()))
+        self.conf.set('DEFAULT', 'end_operation',
+                      str(self.end_operation.current()))
         self.conf.set('mitama', 'run_submode', str(self.run_submode.get()))
         self.conf.set('mitama', 'mitama_team_mark',
                       str(self.mitama_team_mark.current()))

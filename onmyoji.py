@@ -18,6 +18,19 @@ def init():
     # 读取配置文件
     conf.read('conf.ini', encoding="utf-8")
 
+    # 设置缩放
+    # Query DPI Awareness (Windows 10 and 8)
+    awareness = ctypes.c_int()
+    errorCode = ctypes.windll.shcore.GetProcessDpiAwareness(
+        0, ctypes.byref(awareness))
+
+    # Set DPI Awareness  (Windows 10 and 8)
+    client = conf.getint('DEFAULT', 'client')
+    if client == 0:
+        errorCode = ctypes.windll.shcore.SetProcessDpiAwareness(0)
+    else:
+        errorCode = ctypes.windll.shcore.SetProcessDpiAwareness(1)
+
     # 读取主要副本
     section = conf.getint('DEFAULT', 'run_section')
 
@@ -58,6 +71,7 @@ def is_admin():
     except:
         return False
 
+
 def my_excepthook(exc_type, exc_value, tb):
     msg = ' Traceback (most recent call last):\n'
     while tb:
@@ -82,14 +96,6 @@ if __name__ == "__main__":
             # 注册插件，获取权限
             sys.excepthook = my_excepthook
             logging.info('UAC pass')
-
-            # Query DPI Awareness (Windows 10 and 8)
-            awareness = ctypes.c_int()
-            errorCode = ctypes.windll.shcore.GetProcessDpiAwareness(
-                0, ctypes.byref(awareness))
-
-            # Set DPI Awareness  (Windows 10 and 8)
-            errorCode = ctypes.windll.shcore.SetProcessDpiAwareness(0)
 
             # 设置战斗参数
             init()

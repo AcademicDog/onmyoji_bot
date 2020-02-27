@@ -45,6 +45,9 @@ class Application(tk.Frame):
         # 创建标题
         self.create_title()
 
+        # 创建客户端选项
+        self.create_client()
+
         # 创建选项卡
         self.create_section()
 
@@ -95,6 +98,16 @@ class Application(tk.Frame):
         self.main_frame1.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.main_frame2.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
+    def create_client(self):
+        '''
+        创建客户端选项
+        '''
+        self.client = ttk.Combobox(self.main_frame2)
+        self.client['value'] = ('阴阳师桌面版-默认分辨率', 'MuMu模拟器-1136*640 (100%缩放)')
+        self.client.pack(fill=tk.X, padx=2, pady=2)
+        self.client.current(0)
+        self.client.config(state='readonly')
+    
     def create_section(self):
         '''
         创建主选项卡
@@ -267,8 +280,9 @@ class Application(tk.Frame):
 
     def show_params(self):
         self.params.config(state=tk.NORMAL)
-        self.params.insert(tk.END, '##########################\n')
-        self.params.insert(tk.END, 'run_section: ' +
+        self.params.insert(tk.END, '########1.0.1.0228########\n')
+        self.params.insert(tk.END, 'client: ' + str(self.client.current()))
+        self.params.insert(tk.END, '\nrun_section: ' +
                            str(self.section.index('current')))
         self.params.insert(tk.END, '\nrun_mode: '+str(self.run_mode.get()))
         self.params.insert(tk.END, '\nrun_submode: ' +

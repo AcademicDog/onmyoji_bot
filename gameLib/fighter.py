@@ -30,6 +30,7 @@ class Fighter(GameScene):
         # 读取配置文件
         conf = configparser.ConfigParser()
         conf.read('conf.ini')
+        self.client = conf.getint('DEFAULT', 'client')
         quit_game_enable = conf.getboolean('watchdog', 'watchdog_enable')
         self.max_op_time = conf.getint('watchdog', 'max_op_time')
         self.max_win_time = conf.getint('watchdog', 'max_win_time')
@@ -43,7 +44,12 @@ class Fighter(GameScene):
 
         # 绑定窗口
         if hwnd == 0:
-            hwnd = win32gui.FindWindow(0, u'阴阳师-网易游戏')
+            if self.client == 0:
+                hwnd = win32gui.FindWindow(0, u'阴阳师-网易游戏')
+            elif self.client == 1:
+                hwnd = win32gui.FindWindow(0, u'阴阳师 - MuMu模拟器')
+                # TansuoPos.InitPosWithClient__()
+                # YuhunPos.InitPosWithClient__()
         self.yys = GameControl(hwnd, quit_game_enable)
         self.log.writeinfo(self.name + '绑定窗口成功')
         self.log.writeinfo(self.name + str(hwnd))
@@ -73,11 +79,20 @@ class Fighter(GameScene):
             :return: 胜利页面返回0；奖励页面返回1
         '''
         self.log.writeinfo(self.name + '检测是战斗是否结束')
-        if self.yys.wait_game_img_knn('img/SHENG-LI.png', self.max_win_time, False, 8):
-            logging.info('战斗成功')
+        start_time = time.time()
+        while time.time()-start_time <= self.max_win_time and self.run:
+            maxVal, maxLoc = self.yys.find_multi_img(
+                'img/SHENG-LI.png', 'img/TIAO-DAN.png', 'img/JIN-BI.png')
+            end_cof = max(maxVal)
+            if end_cof > 0.9:
+                myend = maxVal.index(end_cof)
+                break
+            ut.mysleep(800)
+        if myend in [0]:
+            logging.info(self.name + '战斗成功')
             return 0
-        elif self.yys.wait_game_img_knn('img/TIAO-DAN.png', 2, thread=20):
-            logging.info('本轮战斗结束')
+        elif myend in [1, 2]:
+            logging.info(self.name + '本轮战斗结束')
             return 1
 
     def check_times(self):
@@ -85,16 +100,16 @@ class Fighter(GameScene):
         监测游戏次数是否达到最大次数
         '''
         self.run_times = self.run_times + 1
-        logging.info('游戏已运行'+str(self.run_times)+'次')
+        logging.info(self.name + '游戏已运行'+str(self.run_times)+'次')
         if(self.run_times == self.max_times):
             if(self.end_operation == 0):
-                logging.warning('关闭脚本(次数已满)...')
+                logging.warning(self.name + '关闭脚本(次数已满)...')
                 self.run = False
                 os._exit(0)
             elif(self.end_operation == 1):
-                logging.warning('关闭游戏(次数已满)...')
+                logging.warning(self.name + '关闭游戏(次数已满)...')
                 self.yys.quit_game()
-                logging.warning('关闭脚本(次数已满)...')
+                logging.warning(self.name + '关闭脚本(次数已满)...')
                 self.run = False
                 os._exit(0)
 
@@ -105,9 +120,14 @@ class Fighter(GameScene):
             :param state: 上一步的状态。0-战斗成功页面; 1-领取奖励页面
         '''
         if state == 0:
-            self.click_until_knn('奖励', 'img/TIAO-DAN.png', ut.firstposition(), None, mood.get1mood()/1000, thread=20)
+            self.click_until('奖励', 'img/TIAO-DAN.png',
+                             ut.firstposition(), None, mood.get1mood()/1000)
         start_time = time.time()
         while time.time()-start_time <= self.max_op_time and self.run:
+            maxVal, maxLoc = self.yys.find_multi_img(
+                'img/FA-SONG-XIAO-XI.png', 'img/ZHI-LIAO-LIANG.png', 'JIE-SUAN-JIA-CHENG.png')
+            if max(maxVal) > 0.9:
+                self.yys.mouse_click_bg((35, 295), (140, 475))
             result = self.yys.find_game_img_knn('img/TIAO-DAN.png', thread=2)
             if not result:
                 logging.info(self.name + '结算成功')
@@ -159,7 +179,7 @@ class Fighter(GameScene):
         # 点击怪物
         pass
 
-    def click_until(self, tag, img_path, pos, pos_end=None, step_time=0.5, appear=True):
+    def click_until(self, tag, img_path, pos, pos_end=None, step_time=0.8, appear=True):
         '''
         在某一时间段内，后台点击鼠标，直到出现某一图片出现或消失
             :param tag: 按键名
@@ -191,7 +211,7 @@ class Fighter(GameScene):
         time.sleep(5)
         self.yys.quit_game()
 
-    def click_until_knn(self, tag, img_path, pos, pos_end=None, step_time=0.5, appear=True, thread=0):
+    def click_until_knn(self, tag, img_path, pos, pos_end=None, step_time=0.8, appear=True, thread=0):
         '''
         在某一时间段内，后台点击鼠标，直到出现某一图片出现或消失
             :param tag: 按键名

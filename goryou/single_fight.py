@@ -1,5 +1,5 @@
 from gameLib.fighter import Fighter
-from tools.game_pos import CommonPos, YuhunPos
+from tools.game_pos import YuhunPos
 import tools.utilities as ut
 
 import logging
