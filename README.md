@@ -8,6 +8,13 @@
 
 目前已开通项目网站，请访问🌍[此地址](https://academicdog.github.io/onmyoji_bot/)获取最新信息。
 
+# 紧急通知
+
+```diff
++ 1.0.1.0224及以前的版本有封号风险，请尽快更新
+- 1.0.1.0224及以前的版本有封号风险，请尽快更新
+```
+
 # 特别感谢
 
 特别感谢society765在本项目中给与的启发，本项目在其[工作基础](https://github.com/society765/yys-auto-yuhun)上修改完成。
