@@ -78,18 +78,20 @@ class Fighter(GameScene):
         检测是否打完
             :return: 胜利页面返回0；奖励页面返回1
         '''
+        self.yys.rejectbounty()
         self.log.writeinfo(self.name + '检测是战斗是否结束')
         start_time = time.time()
         while time.time()-start_time <= self.max_win_time and self.run:
             maxVal, maxLoc = self.yys.find_multi_img(
-                'img/SHENG-LI.png', 'img/TIAO-DAN.png', 'img/JIN-BI.png')
+                'img/SHENG-LI.png', 'img/TIAO-DAN.png', 'img/JIN-BI.png', 'img/JIE-SU.png')
             end_cof = max(maxVal)
             if end_cof > 0.9:
                 myend = maxVal.index(end_cof)
                 break
-            ut.mysleep(800)
-        if myend in [0]:
+            time.sleep(0.5)
+        if myend in [0, 3]:
             logging.info(self.name + '战斗成功')
+            self.yys.mouse_click_bg(*ut.firstposition())
             return 0
         elif myend in [1, 2]:
             logging.info(self.name + '本轮战斗结束')
@@ -120,12 +122,14 @@ class Fighter(GameScene):
             :param state: 上一步的状态。0-战斗成功页面; 1-领取奖励页面
         '''
         if state == 0:
-            self.click_until('奖励', 'img/TIAO-DAN.png',
-                             ut.firstposition(), None, mood.get1mood()/1000)
+            self.click_until('奖励', 'img/TIAO-DAN.png', *
+                             ut.firstposition(), mood.get1mood()/1000)
+        mood.moodsleep()
+        self.yys.mouse_click_bg(ut.secondposition())
         start_time = time.time()
         while time.time()-start_time <= self.max_op_time and self.run:
             maxVal, maxLoc = self.yys.find_multi_img(
-                'img/FA-SONG-XIAO-XI.png', 'img/ZHI-LIAO-LIANG.png', 'JIE-SUAN-JIA-CHENG.png')
+                'img/FA-SONG-XIAO-XI.png', 'img/ZHI-LIAO-LIANG.png', 'img/JIE-SUAN-JIA-CHENG.png')
             if max(maxVal) > 0.9:
                 self.yys.mouse_click_bg((35, 295), (140, 475))
             result = self.yys.find_game_img_knn('img/TIAO-DAN.png', thread=2)

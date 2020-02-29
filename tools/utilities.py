@@ -49,14 +49,12 @@ def firstposition():
     获得点击位置，扣除御魂部分
         :return: 返回随机位置坐标
     '''
-    w = 1136
-    h = 640
-    while True:
-        position = (random.randint(0, w), random.randint(50, h))
-        if position[0] < 332 or position[0] > 931:
-            return position
-        elif position[1] < 350 or position[1] > 462:
-            return position
+    safe_area = {
+        1: ((20, 106), (211, 552)),
+        2: ((931, 60), (1120, 620))}
+
+    index = random.randint(1, 2)
+    return safe_area[index]
 
 
 def secondposition():

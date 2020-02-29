@@ -85,7 +85,7 @@ class MyBattle(Application):
         # 显示参数
         self.show_params()
 
-        subprocess.Popen("cmd.exe /c start onmyoji.exe")
+        subprocess.Popen("cmd.exe /c start Core.exe")
         # os.system("onmyoji.exe")
 
     def stop_onmyoji(self):

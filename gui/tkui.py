@@ -77,10 +77,15 @@ class Application(tk.Frame):
 
         # 创建菜单项
         menu1 = tk.Menu(menubar, tearoff=0)
-        menu1.add_command(label='About', command=self.say_hi)
+        menu1.add_command(label='关于', command=self.say_hi)
 
         # 链接
-        menubar.add_cascade(label="File", menu=menu1)
+        menubar.add_cascade(label="文件", menu=menu1)
+
+        # 高级选项
+        menu2 = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="高级", menu=menu2)
+        menu2.add_command(label='自定义延迟', command=self.delay_dialog)
 
         # 设置
         self.master.config(menu=menubar)
@@ -107,7 +112,7 @@ class Application(tk.Frame):
         self.client.pack(fill=tk.X, padx=2, pady=2)
         self.client.current(0)
         self.client.config(state='readonly')
-    
+
     def create_section(self):
         '''
         创建主选项卡
@@ -280,7 +285,7 @@ class Application(tk.Frame):
 
     def show_params(self):
         self.params.config(state=tk.NORMAL)
-        self.params.insert(tk.END, '########1.0.1.0228########\n')
+        self.params.insert(tk.END, '########1.0.1.0229########\n')
         self.params.insert(tk.END, 'client: ' + str(self.client.current()))
         self.params.insert(tk.END, '\nrun_section: ' +
                            str(self.section.index('current')))
@@ -319,12 +324,66 @@ class Application(tk.Frame):
         tk.messagebox.showinfo(
             "OnmyojiBot", '网址：https://github.com/AcademicDog/onmyoji_bot\n\n交流Q群：592055060')
 
+    def delay_dialog(self):
+        pw = DelayDialog(self)
+        self.wait_window(pw)
+
     def start_onmyoji(self):
         self.show_params()
 
     def stop_onmyoji(self):
         pass
 
+class DelayDialog(tk.Toplevel):
+    def __init__(self, parent):
+        super().__init__()
+        self.title('延迟设置')        
+        self.parent = parent
+
+        # 延迟机制
+        row1 = tk.Frame(self)
+        row1.pack(fill=tk.X)
+        tk.Label(row1, text='延迟机制：').pack(anchor=tk.W)
+        text = tk.Text(row1, height=8, width=40)
+        text.pack(expand=True, fill=tk.BOTH)        
+        text.insert(tk.INSERT, '1-总共5级延迟，脚本随机从1-5级延迟中选择一级作为主延迟，\
+同时在1-3级延迟中选择一级作为副延迟。\n\n')
+        text.insert(tk.INSERT, '2-每5分钟刷新选择，计算单位毫秒。\n\n')
+        text.insert(tk.END, '3-主延迟用于截图、识图等一般操作的延迟，副延迟主要用于结算。\n\n')
+        text.config(state=tk.DISABLED)
+
+        # 参数设置
+        row2 = tk.Frame(self)
+        row2.pack(fill=tk.X)
+        tk.Label(row2, text='一级: ').grid(row=0, column=0)
+        tk.Label(row2, text='最低').grid(row=0, column=1)
+        tk.Entry(row2, width=7).grid(row=0, column=3)
+        tk.Label(row2, text='最高').grid(row=0, column=4)
+        tk.Entry(row2, width=7).grid(row=0, column=5)
+
+        tk.Label(row2, text='二级: ').grid(row=2, column=0)
+        tk.Label(row2, text='最低').grid(row=2, column=1)
+        tk.Entry(row2, width=7).grid(row=2, column=3)
+        tk.Label(row2, text='最高').grid(row=2, column=4)
+        tk.Entry(row2, width=7).grid(row=2, column=5)
+
+        tk.Label(row2, text='三级: ').grid(row=3, column=0)
+        tk.Label(row2, text='最低').grid(row=3, column=1)
+        tk.Entry(row2, width=7).grid(row=3, column=3)
+        tk.Label(row2, text='最高').grid(row=3, column=4)
+        tk.Entry(row2, width=7).grid(row=3, column=5)
+
+        tk.Label(row2, text='四级: ').grid(row=4, column=0)
+        tk.Label(row2, text='最低').grid(row=4, column=1)
+        tk.Entry(row2, width=7).grid(row=4, column=3)
+        tk.Label(row2, text='最高').grid(row=4, column=4)
+        tk.Entry(row2, width=7).grid(row=4, column=5)
+
+        tk.Label(row2, text='五级: ').grid(row=5, column=0)
+        tk.Label(row2, text='最低').grid(row=5, column=1)
+        tk.Entry(row2, width=7).grid(row=5, column=3)
+        tk.Label(row2, text='最高').grid(row=5, column=4)
+        tk.Entry(row2, width=7).grid(row=5, column=5)
 
 if __name__ == "__main__":
     root = tk.Tk()

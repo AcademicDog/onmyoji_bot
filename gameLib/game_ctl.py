@@ -5,6 +5,7 @@ import logging
 import os
 import sys
 import time
+import traceback
 import random
 import cv2
 import numpy as np
@@ -76,8 +77,10 @@ class GameControl():
                     return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
                 else:
                     return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
-        except:
-            pass
+        except Exception:
+            logging.warning('window_full_shot执行失败')
+            a = traceback.format_exc()
+            logging.warning(a)
 
     def window_part_shot(self, pos1, pos2, file_name=None, gray=0):
         """
@@ -143,7 +146,10 @@ class GameControl():
                     r2, g2, b2 = pixel[:3]
                     if abs(r1-r2) <= tolerance and abs(g1-g2) <= tolerance and abs(b1-b2) <= tolerance:
                         return x+region[0][0], y+region[0][1]
-                except:
+                except Exception:
+                    logging.warning('find_color执行失败')
+                    a = traceback.format_exc()
+                    logging.warning(a)                    
                     return -1
         return -1
 
@@ -193,7 +199,10 @@ class GameControl():
             minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
             # print(maxLoc)
             return maxVal, maxLoc
-        except:
+        except Exception:
+            logging.warning('find_img执行失败')
+            a = traceback.format_exc()
+            logging.warning(a)
             return 0, 0
 
     def find_img_knn(self, img_template_path, part=0, pos1=None, pos2=None, gray=0, thread=0):
@@ -224,7 +233,10 @@ class GameControl():
             maxLoc = match_img_knn(img_template, img_src, thread)
             # print(maxLoc)
             return maxLoc
-        except:
+        except Exception:
+            logging.warning('find_img_knn执行失败')
+            a = traceback.format_exc()
+            logging.warning(a)
             return -1
 
     def find_multi_img(self, *img_template_path, part=0, pos1=None, pos2=None, gray=0):
@@ -260,7 +272,10 @@ class GameControl():
                 minVal, maxVal, minLoc, maxLoc = cv2.minMaxLoc(res)
                 maxVal_list.append(maxVal)
                 maxLoc_list.append(maxLoc)
-            except:
+            except Exception:
+                logging.warning('find_multi_img执行失败')
+                a = traceback.format_exc()
+                logging.warning(a)                
                 maxVal_list.append(0)
                 maxLoc_list.append(0)
         # 返回列表
@@ -450,13 +465,13 @@ class GameControl():
         if not self.run:
             return False
         if self.quit_game_enable:
-            logging.info('退出游戏，最后显示已保存至/img/full.png')
             if self.client == 0:
                 win32gui.SendMessage(
                     self.hwnd, win32con.WM_DESTROY, 0, 0)  # 退出游戏
             else:
                 os.system(
                     'adb shell am force-stop com.netease.onmyoji.netease_simulator')
+        logging.info('退出，最后显示已保存至/img/full.png')
         sys.exit(0)
 
     def takescreenshot(self):

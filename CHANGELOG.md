@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v1.0.1.0229
+#### New features:
+*  增加了更详细的调试信息显示。
+#### Fixes (bugs & defects):
+*  进一步提高了结算可靠性。
+*  进一步提高了结算速度。
+
 ## v1.0.1.0227
 #### New features:
 *  新增对MuMu模拟器的支持。
