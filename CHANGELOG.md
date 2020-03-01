@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v1.0.1.0301
+#### New features:
+*  增加延迟设定选项。
+#### Fixes (bugs & defects):
+*  根据[#48](https://github.com/AcademicDog/onmyoji_bot/issues/48)，优化了御魂司机的标记。
+
 ## v1.0.1.0229
 #### New features:
 *  增加了更详细的调试信息显示。

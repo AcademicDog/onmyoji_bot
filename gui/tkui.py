@@ -1,3 +1,4 @@
+import json
 import tkinter as tk
 import tkinter.messagebox
 from tkinter import ttk
@@ -340,16 +341,25 @@ class DelayDialog(tk.Toplevel):
         self.title('延迟设置')        
         self.parent = parent
 
+        # 参数
+        self.delay = {
+            1: [tk.IntVar(value=1000), tk.IntVar(value=1500)],
+            2: [tk.IntVar(value=1300), tk.IntVar(value=2100)],
+            3: [tk.IntVar(value=1800), tk.IntVar(value=3000)],
+            4: [tk.IntVar(value=2500), tk.IntVar(value=4000)],
+            5: [tk.IntVar(value=3000), tk.IntVar(value=5000)]}
+
         # 延迟机制
         row1 = tk.Frame(self)
         row1.pack(fill=tk.X)
         tk.Label(row1, text='延迟机制：').pack(anchor=tk.W)
-        text = tk.Text(row1, height=8, width=40)
+        text = tk.Text(row1, height=11, width=40)
         text.pack(expand=True, fill=tk.BOTH)        
-        text.insert(tk.INSERT, '1-总共5级延迟，脚本随机从1-5级延迟中选择一级作为主延迟，\
-同时在1-3级延迟中选择一级作为副延迟。\n\n')
-        text.insert(tk.INSERT, '2-每5分钟刷新选择，计算单位毫秒。\n\n')
+        text.insert(tk.END, '1-总共5级延迟，脚本随机从1-5级延迟中选择一级作为主延迟，\
+同时在1-3级延迟中选择一级作为副延迟。在此基础上乘以随机系数。\n\n')
+        text.insert(tk.END, '2-每5分钟刷新选择，计算单位毫秒。\n\n')
         text.insert(tk.END, '3-主延迟用于截图、识图等一般操作的延迟，副延迟主要用于结算。\n\n')
+        text.insert(tk.END, '4-不要纠结为什么每次重开这个表格都不变，参数存在delay.json。\n\n')
         text.config(state=tk.DISABLED)
 
         # 参数设置
@@ -357,33 +367,54 @@ class DelayDialog(tk.Toplevel):
         row2.pack(fill=tk.X)
         tk.Label(row2, text='一级: ').grid(row=0, column=0)
         tk.Label(row2, text='最低').grid(row=0, column=1)
-        tk.Entry(row2, width=7).grid(row=0, column=3)
+        tk.Entry(row2, width=7, textvariable=self.delay[1][0]).grid(row=0, column=3)
         tk.Label(row2, text='最高').grid(row=0, column=4)
-        tk.Entry(row2, width=7).grid(row=0, column=5)
+        tk.Entry(row2, width=7, textvariable=self.delay[1][1]).grid(row=0, column=5)
 
-        tk.Label(row2, text='二级: ').grid(row=2, column=0)
+        tk.Label(row2, text='二级: ').grid(row=1, column=0)
+        tk.Label(row2, text='最低').grid(row=1, column=1)
+        tk.Entry(row2, width=7, textvariable=self.delay[2][0]).grid(row=1, column=3)
+        tk.Label(row2, text='最高').grid(row=1, column=4)
+        tk.Entry(row2, width=7, textvariable=self.delay[2][1]).grid(row=1, column=5)
+
+        tk.Label(row2, text='三级: ').grid(row=2, column=0)
         tk.Label(row2, text='最低').grid(row=2, column=1)
-        tk.Entry(row2, width=7).grid(row=2, column=3)
+        tk.Entry(row2, width=7, textvariable=self.delay[3][0]).grid(row=2, column=3)
         tk.Label(row2, text='最高').grid(row=2, column=4)
-        tk.Entry(row2, width=7).grid(row=2, column=5)
+        tk.Entry(row2, width=7, textvariable=self.delay[3][1]).grid(row=2, column=5)
 
-        tk.Label(row2, text='三级: ').grid(row=3, column=0)
+        tk.Label(row2, text='四级: ').grid(row=3, column=0)
         tk.Label(row2, text='最低').grid(row=3, column=1)
-        tk.Entry(row2, width=7).grid(row=3, column=3)
+        tk.Entry(row2, width=7, textvariable=self.delay[4][0]).grid(row=3, column=3)
         tk.Label(row2, text='最高').grid(row=3, column=4)
-        tk.Entry(row2, width=7).grid(row=3, column=5)
+        tk.Entry(row2, width=7, textvariable=self.delay[4][1]).grid(row=3, column=5)
 
-        tk.Label(row2, text='四级: ').grid(row=4, column=0)
+        tk.Label(row2, text='五级: ').grid(row=4, column=0)
         tk.Label(row2, text='最低').grid(row=4, column=1)
-        tk.Entry(row2, width=7).grid(row=4, column=3)
+        tk.Entry(row2, width=7, textvariable=self.delay[5][0]).grid(row=4, column=3)
         tk.Label(row2, text='最高').grid(row=4, column=4)
-        tk.Entry(row2, width=7).grid(row=4, column=5)
+        tk.Entry(row2, width=7, textvariable=self.delay[5][1]).grid(row=4, column=5)
 
-        tk.Label(row2, text='五级: ').grid(row=5, column=0)
-        tk.Label(row2, text='最低').grid(row=5, column=1)
-        tk.Entry(row2, width=7).grid(row=5, column=3)
-        tk.Label(row2, text='最高').grid(row=5, column=4)
-        tk.Entry(row2, width=7).grid(row=5, column=5)
+        # 按钮
+        row3 = tk.Frame(self)
+        row3.pack(anchor=tk.E)
+        tk.Button(row3, text='确定', command=self.confirm).grid(row=0, column=0)
+        tk.Button(row3, text='取消', command=self.cancel).grid(row=0, column=1)
+
+    def confirm(self):
+        mydelay ={
+            1: [self.delay[1][0].get(), self.delay[1][1].get() - self.delay[1][0].get()],
+            2: [self.delay[2][0].get(), self.delay[2][1].get() - self.delay[2][0].get()],
+            3: [self.delay[3][0].get(), self.delay[3][1].get() - self.delay[3][0].get()],
+            4: [self.delay[4][0].get(), self.delay[4][1].get() - self.delay[4][0].get()],
+            5: [self.delay[5][0].get(), self.delay[5][1].get() - self.delay[5][0].get()]}
+        jsObj = json.dumps(mydelay) 
+        with open('delay.json', 'w') as f:
+            f.write(jsObj)
+        self.destroy()
+
+    def cancel(self):
+        self.destroy()
 
 if __name__ == "__main__":
     root = tk.Tk()

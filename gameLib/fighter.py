@@ -175,7 +175,7 @@ class Fighter(GameScene):
                     # 点击指定位置并等待下一轮
                     self.yys.mouse_click_bg(*pos)
                     self.log.writeinfo(self.name + '标记式神')
-                    time.sleep(0.4)
+                    ut.mysleep(500)
 
             self.log.writewarning(self.name + '标记式神失败')
 

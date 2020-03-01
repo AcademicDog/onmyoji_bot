@@ -29,7 +29,9 @@ class DriverFighter(Fighter):
             self.log.writeinfo('Driver: 点击开始战斗按钮')
             self.click_until('开始战斗按钮', 'img\\KAI-SHI-ZHAN-DOU.png', *
                              YuhunPos.kaishizhandou_btn, mood2.get1mood()/1000, False)
-            self.log.writeinfo('Driver: 已进入战斗')
+            
+            # 检测是否进入战斗
+            self.check_battle()
 
             # 在战斗中，标记己方式神
             self.mitama_team_click()
