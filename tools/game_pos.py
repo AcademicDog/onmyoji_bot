@@ -23,8 +23,12 @@ class TansuoPos():
     s_tab_btn = (33, 264), (82, 307)  # 素材标签
     r_tab_btn = (216, 322), (259, 366)  # r卡标签
     n_slide = (168, 615), (784, 615)  # n卡进度条，从头至尾
+    gouliang_left = (161, 174), (322, 288)  # 左边狗粮位置
     gouliang_middle = (397, 218), (500, 349)  # 中间狗粮位置
     gouliang_right = (628, 293), (730, 430)  # 右边狗粮位置
+    gouliang_leftback = (0, 273), (150, 393)  # 左后狗粮位置
+    gouliang_rightback = (433, 462), (567, 569)  # 右后狗粮位置
+    yaoqing_comfirm = (601, 361), (746, 406)  # 继续邀请按钮
 
     @staticmethod
     def InitPosWithClient__():

@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v1.0.1.0304
+#### New features:
+*  探索双开
+#### Fixes (bugs & defects):
+*  修复了探索副本中不停反复点击准备按钮的问题。
+*  修复了部分玩家BitBlt失败的问题。
+*  优化了结算
+
 ## v1.0.1.0301
 #### New features:
 *  增加延迟设定选项。

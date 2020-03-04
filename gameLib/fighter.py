@@ -78,10 +78,13 @@ class Fighter(GameScene):
         检测是否打完
             :return: 胜利页面返回0；奖励页面返回1
         '''
-        self.yys.rejectbounty()
         self.log.writeinfo(self.name + '检测是战斗是否结束')
         start_time = time.time()
+        myend = -1
         while time.time()-start_time <= self.max_win_time and self.run:
+            # 拒绝悬赏
+            self.yys.rejectbounty()
+
             maxVal, maxLoc = self.yys.find_multi_img(
                 'img/SHENG-LI.png', 'img/TIAO-DAN.png', 'img/JIN-BI.png', 'img/JIE-SU.png')
             end_cof = max(maxVal)
@@ -91,7 +94,6 @@ class Fighter(GameScene):
             time.sleep(0.5)
         if myend in [0, 3]:
             logging.info(self.name + '战斗成功')
-            self.yys.mouse_click_bg(*ut.firstposition())
             return 0
         elif myend in [1, 2]:
             logging.info(self.name + '本轮战斗结束')
@@ -121,25 +123,45 @@ class Fighter(GameScene):
             :param mood: 状态函数
             :param state: 上一步的状态。0-战斗成功页面; 1-领取奖励页面
         '''
+        # 初始化结算点
+        mypos = ut.secondposition()
         if state == 0:
-            self.click_until('奖励', 'img/TIAO-DAN.png', *
-                             ut.firstposition(), mood.get1mood()/1000)
-        mood.moodsleep()
-        self.yys.mouse_click_bg(ut.secondposition())
+            self.yys.mouse_click_bg(mypos)
+            logging.info(self.name + '点击结算')
+            mood.moodsleep()
         start_time = time.time()
         while time.time()-start_time <= self.max_op_time and self.run:
+            # 拒绝悬赏
+            self.yys.rejectbounty()
+
+            while True:
+                newpos = (mypos[0] + random.randint(-50, 50),
+                          mypos[1] + random.randint(-50, 50))
+                if ut.checkposition(newpos):
+                    mypos = newpos
+                    break
+
+            # 点击一次结算
+            self.yys.mouse_click_bg(mypos)
+            logging.info(self.name + '点击结算')
+            mood.moodsleep()
+
+            # 错误纠正
             maxVal, maxLoc = self.yys.find_multi_img(
-                'img/FA-SONG-XIAO-XI.png', 'img/ZHI-LIAO-LIANG.png', 'img/JIE-SUAN-JIA-CHENG.png')
+                'img/FA-SONG-XIAO-XI.png', 'img/ZHI-LIAO-LIANG.png')
             if max(maxVal) > 0.9:
                 self.yys.mouse_click_bg((35, 295), (140, 475))
-            result = self.yys.find_game_img_knn('img/TIAO-DAN.png', thread=2)
-            if not result:
+                logging.info(self.name + '错误纠正')
+                mood.moodsleep()
+                continue
+
+            # 正常结算
+            maxVal, maxLoc = self.yys.find_multi_img(
+                'img/SHENG-LI.png', 'img/TIAO-DAN.png', 'img/JIN-BI.png', 'img/JIE-SU.png')
+            if max(maxVal) < 0.9:
                 logging.info(self.name + '结算成功')
                 return
-            else:
-                self.yys.mouse_click_bg(ut.secondposition())
-                self.log.writeinfo(self.name + '点击结算')
-            mood.moodsleep()
+
         self.log.writewarning(self.name + '点击结算失败!')
         # 提醒玩家点击失败，并在5s后退出
         self.yys.activate_window()
@@ -197,20 +219,20 @@ class Fighter(GameScene):
         # 在指定时间内反复监测画面并点击
         start_time = time.time()
         while time.time()-start_time <= self.max_op_time and self.run:
+            # 点击指定位置
+            self.yys.mouse_click_bg(pos, pos_end)
+            self.log.writeinfo(self.name + '点击 ' + tag)
+            ut.mysleep(step_time*1000)
+
             result = self.yys.find_game_img(img_path)
             if not appear:
                 result = not result
             if result:
                 self.log.writeinfo(self.name + '点击 ' + tag + ' 成功')
                 return True
-            else:
-                # 点击指定位置并等待下一轮
-                self.yys.mouse_click_bg(pos, pos_end)
-                self.log.writeinfo(self.name + '点击 ' + tag)
-            ut.mysleep(step_time*1000)
-        self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
 
         # 提醒玩家点击失败，并在5s后退出
+        self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
         self.yys.activate_window()
         time.sleep(5)
         self.yys.quit_game()
@@ -230,20 +252,20 @@ class Fighter(GameScene):
         # 在指定时间内反复监测画面并点击
         start_time = time.time()
         while time.time()-start_time <= self.max_op_time and self.run:
+            # 点击指定位置并等待下一轮
+            self.yys.mouse_click_bg(pos, pos_end)
+            self.log.writeinfo(self.name + '点击 ' + tag)
+            ut.mysleep(step_time*1000)
+
             result = self.yys.find_game_img_knn(img_path, thread=thread)
             if not appear:
                 result = not result
             if result:
                 self.log.writeinfo(self.name + '点击 ' + tag + ' 成功')
                 return True
-            else:
-                # 点击指定位置并等待下一轮
-                self.yys.mouse_click_bg(pos, pos_end)
-                self.log.writeinfo(self.name + '点击 ' + tag)
-            ut.mysleep(step_time*1000)
-        self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
 
         # 提醒玩家点击失败，并在5s后退出
+        self.log.writewarning(self.name + '点击 ' + tag + ' 失败!')
         self.yys.activate_window()
         time.sleep(5)
         self.yys.quit_game()

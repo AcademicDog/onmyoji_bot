@@ -92,7 +92,19 @@ def secondposition():
     获得点击位置，扣除御魂部分
         :return: 返回随机位置坐标
     '''
-    return (random.randint(887, 1111), random.randint(56, 452))
+    return (random.randint(970, 1111), random.randint(100, 452))
+
+
+def checkposition(pos):
+    '''
+    校核结算位置
+        :param pos: (x, y)位置坐标
+        :return: 如果合适返回True，否则返回False
+    '''
+    if pos[0] < 1111 and pos[0] > 970:
+        if pos[1] < 452 and pos[1] > 100:
+            return True
+    return False
 
 
 def mysleep(slpa, slpb=0):

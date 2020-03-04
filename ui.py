@@ -52,6 +52,9 @@ class MyBattle(Application):
                       str(self.mitama_team_mark.current()))
 
         # 探索参数
+        self.conf.set('explore', 'explore_mode', str(self.explore_mode.get()))
+        self.conf.set('explore', 'gouliang', str(self.gouliang))
+        self.conf.set('explore', 'gouliang_b', str(self.gouliang_b))
         self.conf.set('explore', 'fight_boss_enable',
                       str(self.fight_boss_enable.get()))
         self.conf.set('explore', 'slide_shikigami',
@@ -79,11 +82,11 @@ class MyBattle(Application):
             self.conf.write(configfile)
 
     def start_onmyoji(self):
-        # 读取主要副本
-        self.get_conf()
-
         # 显示参数
         self.show_params()
+
+        # 读取主要副本
+        self.get_conf()
 
         subprocess.Popen("cmd.exe /c start Core.exe")
         # os.system("onmyoji.exe")

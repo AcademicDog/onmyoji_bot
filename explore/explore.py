@@ -9,13 +9,34 @@ import time
 
 
 class ExploreFight(Fighter):
-    def __init__(self):
-        # 初始化
-        Fighter.__init__(self)
+    def __init__(self, hwnd=0, mode=0):
+        '''
+        初始化
+            :param hwnd=0: 指定窗口句柄：0-否；其他-窗口句柄
+            :param mode=0: 狗粮模式：0-正常模式，1-组队后排狗粮
+        '''
+        Fighter.__init__(self, hwnd=hwnd)
 
         # 读取配置文件
         conf = configparser.ConfigParser()
         conf.read('conf.ini')
+
+        # 读取狗粮配置
+        if mode == 0:
+            raw_gouliang = conf.get('explore', 'gouliang')
+        else:
+            raw_gouliang = conf.get('explore', 'gouliang_b')
+        if len(raw_gouliang) == 2:
+            self.gouliang = None
+        elif len(raw_gouliang) == 3:
+            self.gouliang = [int(raw_gouliang[1])]
+        elif len(raw_gouliang) == 6:
+            self.gouliang = [int(raw_gouliang[1]), int(raw_gouliang[4])]
+        elif len(raw_gouliang) == 9:
+            self.gouliang = [int(raw_gouliang[1]), int(
+                raw_gouliang[4]), int(raw_gouliang[7])]
+
+        # 读取其他配置
         self.fight_boss_enable = conf.getboolean(
             'explore', 'fight_boss_enable')
         self.slide_shikigami = conf.getboolean('explore', 'slide_shikigami')
@@ -36,18 +57,34 @@ class ExploreFight(Fighter):
     def check_exp_full(self):
         '''
         检查狗粮经验，并自动换狗粮
+        狗粮序列，1-左; 2-中; 3-右; 4-左后; 5-右后
         '''
-        # 狗粮经验判断, gouliang1是中间狗粮，gouliang2是右边狗粮
-        gouliang1 = self.yys.find_game_img(
-            'img\\MAN1.png', 1, *TansuoPos.gouliang_middle, 1)
-        gouliang2 = self.yys.find_game_img(
-            'img\\MAN2.png', 1, *TansuoPos.gouliang_right, 1)
+        if self.gouliang == None:
+            return
 
-        # print(gouliang1)
-        # print(gouliang2)
+        # 狗粮经验判断
+        gouliang = []
+        if 1 in self.gouliang:
+            gouliang.append(self.yys.find_game_img(
+                'img\\MAN2.png', 1, *TansuoPos.gouliang_left, 1, 0.8))
+        if 2 in self.gouliang:
+            gouliang.append(self.yys.find_game_img(
+                'img\\MAN2.png', 1, *TansuoPos.gouliang_middle, 1, 0.8))
+        if 3 in self.gouliang:
+            gouliang.append(self.yys.find_game_img(
+                'img\\MAN2.png', 1, *TansuoPos.gouliang_right, 1, 0.8))
+        if 4 in self.gouliang:
+            gouliang.append(self.yys.find_game_img(
+                'img\\MAN2.png', 1, *TansuoPos.gouliang_leftback, 1, 0.8))
+        if 5 in self.gouliang:
+            gouliang.append(self.yys.find_game_img(
+                'img\\MAN2.png', 1, *TansuoPos.gouliang_rightback, 1, 0.8))
 
         # 如果都没满则退出
-        if not gouliang1 and not gouliang2:
+        res = False
+        for item in gouliang:
+            res = res or bool(item)
+        if not res:
             return
 
         # 开始换狗粮
@@ -84,13 +121,22 @@ class ExploreFight(Fighter):
 
             self.yys.mouse_drag_bg(
                 TansuoPos.n_slide[0], (pos_end_x, pos_end_y))
+            time.sleep(1)
 
         # 更换狗粮
-        if gouliang1:
-            self.yys.mouse_drag_bg((309, 520), (554, 315))
-        if gouliang2:
-            time.sleep(1)
-            self.yys.mouse_drag_bg((191, 520), (187, 315))
+        for i in range(0, len(self.gouliang)):
+            if gouliang[i]:
+                if self.gouliang[i] == 1:
+                    self.yys.mouse_drag_bg((422, 520), (955, 315))
+                elif self.gouliang[i] == 2:
+                    self.yys.mouse_drag_bg((309, 520), (554, 315))
+                elif self.gouliang[i] == 3:
+                    self.yys.mouse_drag_bg((191, 520), (167, 315))
+                elif self.gouliang[i] == 4:
+                    self.yys.mouse_drag_bg((309, 520), (829, 315))
+                elif self.gouliang[i] == 5:
+                    self.yys.mouse_drag_bg((191, 520), (301, 315))
+                ut.mysleep(1000)
 
     def find_exp_moster(self):
         '''
@@ -160,7 +206,7 @@ class ExploreFight(Fighter):
                     return -1
 
             # 攻击怪
-            self.yys.mouse_click_bg(fight_pos)            
+            self.click_until('怪', 'img/YING-BING.png', fight_pos, step_time=0.3, appear=False)
             self.log.writeinfo('已进入战斗')
 
             # 等待式神准备
@@ -171,8 +217,8 @@ class ExploreFight(Fighter):
             self.check_exp_full()
 
             # 点击准备，直到进入战斗
-            self.click_until('准备按钮', 'img\\ZI-DONG.png', *
-                             TansuoPos.ready_btn, mood1.get1mood()/1000)
+            self.click_until('准备按钮', 'img/ZHUN-BEI.png', *
+                             TansuoPos.ready_btn, mood1.get1mood()/1000, False)
 
             # 检查是否打完
             state = self.check_end()
@@ -204,6 +250,7 @@ class ExploreFight(Fighter):
                 if result == 1:
                     continue
                 elif result == 2:
+                    time.sleep(1)
                     break
                 else:
                     self.log.writeinfo('移动至下一个场景')

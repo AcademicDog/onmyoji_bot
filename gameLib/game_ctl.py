@@ -30,7 +30,7 @@ class GameControl():
         l1, t1, r1, b1 = win32gui.GetWindowRect(self.hwnd)
         #print(l1,t1, r1,b1)
         l2, t2, r2, b2 = win32gui.GetClientRect(self.hwnd)
-        #print(l2,t2,r2,b2)
+        # print(l2,t2,r2,b2)
         self._client_h = b2 - t2
         self._client_w = r2 - l2
         self._border_l = ((r1 - l1) - (r2 - l2)) // 2
@@ -42,6 +42,15 @@ class GameControl():
             os.system('adb connect 127.0.0.1:7555')
             os.system('adb devices')
 
+    def init_mem(self):
+        self.hwindc = win32gui.GetWindowDC(self.hwnd)
+        self.srcdc = win32ui.CreateDCFromHandle(self.hwindc)
+        self.memdc = self.srcdc.CreateCompatibleDC()
+        self.bmp = win32ui.CreateBitmap()
+        self.bmp.CreateCompatibleBitmap(
+            self.srcdc, self._client_w, self._client_h)
+        self.memdc.SelectObject(self.bmp)
+
     def window_full_shot(self, file_name=None, gray=0):
         """
         窗口截图
@@ -51,13 +60,7 @@ class GameControl():
         """
         try:
             if (not hasattr(self, 'memdc')):
-                self.hwindc = win32gui.GetWindowDC(self.hwnd)
-                self.srcdc = win32ui.CreateDCFromHandle(self.hwindc)
-                self.memdc = self.srcdc.CreateCompatibleDC()
-                self.bmp = win32ui.CreateBitmap()
-                self.bmp.CreateCompatibleBitmap(
-                    self.srcdc, self._client_w, self._client_h)
-                self.memdc.SelectObject(self.bmp)
+                self.init_mem()
             if self.client == 0:
                 self.memdc.BitBlt((0, 0), (self._client_w, self._client_h), self.srcdc,
                                   (self._border_l, self._border_t), win32con.SRCCOPY)
@@ -78,6 +81,7 @@ class GameControl():
                 else:
                     return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
         except Exception:
+            self.init_mem()
             logging.warning('window_full_shot执行失败')
             a = traceback.format_exc()
             logging.warning(a)
@@ -149,7 +153,7 @@ class GameControl():
                 except Exception:
                     logging.warning('find_color执行失败')
                     a = traceback.format_exc()
-                    logging.warning(a)                    
+                    logging.warning(a)
                     return -1
         return -1
 
@@ -275,7 +279,7 @@ class GameControl():
             except Exception:
                 logging.warning('find_multi_img执行失败')
                 a = traceback.format_exc()
-                logging.warning(a)                
+                logging.warning(a)
                 maxVal_list.append(0)
                 maxLoc_list.append(0)
         # 返回列表
@@ -492,7 +496,7 @@ class GameControl():
             return True
         return False
 
-    def find_game_img(self, img_path, part=0, pos1=None, pos2=None, gray=0):
+    def find_game_img(self, img_path, part=0, pos1=None, pos2=None, gray=0, thread=0.9):
         '''
         查找图片
             :param img_path: 查找路径
@@ -500,12 +504,13 @@ class GameControl():
             :param pos1=None: 欲查找范围的左上角坐标
             :param pos2=None: 欲查找范围的右下角坐标
             :param gray=0: 是否查找黑白图片，0：查找彩色图片，1：查找黑白图片
+            :param thread=0.9: 自定义阈值
             :return: 查找成功返回位置坐标，否则返回False
         '''
         self.rejectbounty()
         maxVal, maxLoc = self.find_img(img_path, part, pos1, pos2, gray)
         # print(maxVal)
-        if maxVal > 0.9:
+        if maxVal > thread:
             return maxLoc
         else:
             return False

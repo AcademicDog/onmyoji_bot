@@ -1,4 +1,7 @@
 from explore.explore import ExploreFight
+from explore.explore_passenger import ExplorePassenger
+from explore.explore_leader import ExploreLeader
+from explore.explore_dual import ExploreDual
 from goryou.single_fight import GoryouFight
 from mitama.dual import DualFighter
 from mitama.fighter_driver import DriverFighter
@@ -59,7 +62,19 @@ def init():
 
     elif section == 2:
         # 探索
-        fight = ExploreFight()
+        mode = conf.getint('explore', 'explore_mode')
+        if mode == 0:
+            # 单刷
+            fight = ExploreFight()
+        elif mode == 1:
+            # 单人队长
+            fight = ExploreLeader()
+        elif mode == 2:
+            # 单人队员
+            fight = ExplorePassenger()
+        elif mode == 3:
+            # 双开
+            fight = ExploreDual()
 
     fight.start()
 

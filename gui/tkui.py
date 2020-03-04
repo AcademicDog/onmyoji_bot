@@ -22,6 +22,12 @@ class Application(tk.Frame):
         self.max_win_time = tk.IntVar()
         self.max_op_time = tk.IntVar()
 
+        self.explore_mode = tk.IntVar(value=0)
+        self.gouliang_1 = tk.BooleanVar(value=False)
+        self.gouliang_2 = tk.BooleanVar(value=True)
+        self.gouliang_3 = tk.BooleanVar(value=True)
+        self.gouliang_4 = tk.BooleanVar(value=False)
+        self.gouliang_5 = tk.BooleanVar(value=False)
         self.fight_boss_enable = tk.BooleanVar()
         self.slide_shikigami = tk.BooleanVar()
         self.slide_shikigami_progress = tk.IntVar()
@@ -78,15 +84,18 @@ class Application(tk.Frame):
 
         # 创建菜单项
         menu1 = tk.Menu(menubar, tearoff=0)
-        menu1.add_command(label='关于', command=self.say_hi)
-
-        # 链接
         menubar.add_cascade(label="文件", menu=menu1)
+        menu1.add_command(label='关于', command=self.say_hi)
 
         # 高级选项
         menu2 = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="高级", menu=menu2)
         menu2.add_command(label='自定义延迟', command=self.delay_dialog)
+
+        # 帮助
+        menu3 = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label='帮助', menu=menu3)
+        menu3.add_command(label='使用说明', command=self.help)
 
         # 设置
         self.master.config(menu=menubar)
@@ -157,7 +166,7 @@ class Application(tk.Frame):
                        value=3).grid(row=1, column=1, sticky=tk.W)
 
         # 游戏副本
-        submode = tk.LabelFrame(self.frame0, text='副本')
+        submode = tk.LabelFrame(self.frame0, text='副本(请锁定阵容)')
         submode.pack(padx=5, pady=5, fill=tk.BOTH, expand=True)
         tk.Radiobutton(submode, text='八岐大蛇', variable=self.run_submode,
                        value=0).grid(row=0, column=0, sticky=tk.W)
@@ -190,18 +199,41 @@ class Application(tk.Frame):
         '''
         探索参数
         '''
-        # 提示文本
-        textframe = tk.Frame(self.frame2)
-        textframe.pack(expand=True, fill=tk.BOTH)
-        s = tk.Scrollbar(textframe)
-        s.pack(side=tk.RIGHT)
-        text = tk.Text(textframe, height=5, width=21)
-        text.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
-        text.insert(tk.INSERT, '把狗粮队长放在最左边，点开需要打的章节，然后开始。\n')
-        text.insert(tk.INSERT, '支持自动换狗粮，只打经验怪。\n')
-        text.insert(tk.END, '最好把“合并相同式神”选项关闭。\n')
-        s.config(command=text.yview)
-        text.config(yscrollcommand=s.set, state=tk.DISABLED)
+        # 副本选择
+        submode = tk.LabelFrame(self.frame2, text='模式')
+        submode.pack(fill=tk.BOTH, expand=True)
+        tk.Radiobutton(submode, text='单刷', variable=self.explore_mode,
+                       value=0, command=lambda: self.gouliang_state(1)).grid(row=0, column=0, sticky=tk.W)
+        tk.Radiobutton(submode, text='单人队长', variable=self.explore_mode,
+                       value=1, command=lambda: self.gouliang_state(2)).grid(row=0, column=1, sticky=tk.W)
+        tk.Radiobutton(submode, text='单人队员', variable=self.explore_mode,
+                       value=2, command=lambda: self.gouliang_state(1)).grid(row=1, column=0, sticky=tk.W)
+        tk.Radiobutton(submode, text='桌面版双开', variable=self.explore_mode,
+                       value=3, command=lambda: self.gouliang_state(3)).grid(row=1, column=1, sticky=tk.W)
+
+        # 狗粮设置
+        food = tk.LabelFrame(self.frame2, text='更换狗粮 (勿锁定阵容)')
+        food.pack(fill=tk.BOTH, expand=True)
+        self.gouliang_l = tk.Checkbutton(
+            food, text='左', variable=self.gouliang_1)
+        self.gouliang_l.grid(row=0, column=0)
+        self.gouliang_m = tk.Checkbutton(
+            food, text='中', variable=self.gouliang_2)
+        self.gouliang_m.grid(row=0, column=1)
+        self.gouliang_r = tk.Checkbutton(
+            food, text='右', variable=self.gouliang_3)
+        self.gouliang_r.grid(row=0, column=2)
+        tk.Label(food, text='单人/队员').grid(row=0, column=3, sticky=tk.W)
+
+        self.gouliang_lb = tk.Checkbutton(
+            food, text='左', variable=self.gouliang_4)
+        self.gouliang_lb.grid(row=1, column=0)
+        self.gouliang_rb = tk.Checkbutton(
+            food, text='右', variable=self.gouliang_5)
+        self.gouliang_rb.grid(row=1, column=2)
+        tk.Label(food, text='队长').grid(row=1, column=3, sticky=tk.W)
+        self.gouliang_lb.config(state=tk.DISABLED)
+        self.gouliang_rb.config(state=tk.DISABLED)
 
         # 换狗粮设置
         tk.Checkbutton(self.frame2, text='换狗粮拖放式神进度条，进度:',
@@ -226,6 +258,8 @@ class Application(tk.Frame):
         text.pack(expand=True, fill=tk.BOTH)
         text.insert(
             tk.END, '网址：https://github.com/AcademicDog/onmyoji_bot\n\n交流Q群：592055060')
+        text.insert(
+            tk.END, '\n\n如果觉得脚本动作太慢，请到高级菜单自定义延迟。')
         text.config(state=tk.DISABLED)
 
     def create_times(self):
@@ -285,8 +319,9 @@ class Application(tk.Frame):
                   command=self.stop_onmyoji).pack(fill=tk.X)
 
     def show_params(self):
+        self.get_gouliang()
         self.params.config(state=tk.NORMAL)
-        self.params.insert(tk.END, '########1.0.1.0229########\n')
+        self.params.insert(tk.END, '########1.0.1.0304########\n')
         self.params.insert(tk.END, 'client: ' + str(self.client.current()))
         self.params.insert(tk.END, '\nrun_section: ' +
                            str(self.section.index('current')))
@@ -304,6 +339,10 @@ class Application(tk.Frame):
                            str(self.max_op_time.get()))
         self.params.insert(tk.END, '\nmitama_team_mark: ' +
                            str(self.mitama_team_mark.current()))
+        self.params.insert(tk.END, '\nexplore_mode: ' +
+                           str(self.explore_mode.get()))
+        self.params.insert(tk.END, '\ngouliang: ' + str(self.gouliang))
+        self.params.insert(tk.END, '\ngouliang_b: ' + str(self.gouliang_b))
         self.params.insert(tk.END, '\nfight_boss_enable: ' +
                            str(self.fight_boss_enable.get()))
         self.params.insert(tk.END, '\nslide_shikigami: ' +
@@ -329,16 +368,73 @@ class Application(tk.Frame):
         pw = DelayDialog(self)
         self.wait_window(pw)
 
+    def help(self):
+        '''
+        使用说明
+        '''
+        tk.messagebox.showinfo(
+            "使用说明", '详细使用说明请参考https://academicdog.github.io/onmyoji_bot/')
+
+    def gouliang_state(self, state):
+        '''
+        禁用狗粮选项
+            :param state: 1-仅启用3狗粮，2-禁用3狗粮，3-全启用
+        '''
+        if state == 1:
+            self.gouliang_4.set(False)
+            self.gouliang_5.set(False)
+            self.gouliang_l.config(state=tk.NORMAL)
+            self.gouliang_m.config(state=tk.NORMAL)
+            self.gouliang_r.config(state=tk.NORMAL)
+            self.gouliang_lb.config(state=tk.DISABLED)
+            self.gouliang_rb.config(state=tk.DISABLED)
+        elif state == 2:
+            self.gouliang_1.set(False)
+            self.gouliang_2.set(False)
+            self.gouliang_3.set(False)
+            self.gouliang_l.config(state=tk.DISABLED)
+            self.gouliang_m.config(state=tk.DISABLED)
+            self.gouliang_r.config(state=tk.DISABLED)
+            self.gouliang_lb.config(state=tk.NORMAL)
+            self.gouliang_rb.config(state=tk.NORMAL)
+        elif state == 3:
+            self.gouliang_l.config(state=tk.NORMAL)
+            self.gouliang_m.config(state=tk.NORMAL)
+            self.gouliang_r.config(state=tk.NORMAL)
+            self.gouliang_lb.config(state=tk.NORMAL)
+            self.gouliang_rb.config(state=tk.NORMAL)
+
+    def get_gouliang(self):
+        '''
+        计算狗粮坐标
+        '''
+        # 前狗粮
+        self.gouliang = []
+        if self.gouliang_1.get():
+            self.gouliang.append(1)
+        if self.gouliang_2.get():
+            self.gouliang.append(2)
+        if self.gouliang_3.get():
+            self.gouliang.append(3)
+        
+        # 后狗粮
+        self.gouliang_b = []
+        if self.gouliang_4.get():
+            self.gouliang_b.append(4)
+        if self.gouliang_5.get():
+            self.gouliang_b.append(5)
+
     def start_onmyoji(self):
         self.show_params()
 
     def stop_onmyoji(self):
         pass
 
+
 class DelayDialog(tk.Toplevel):
     def __init__(self, parent):
         super().__init__()
-        self.title('延迟设置')        
+        self.title('延迟设置')
         self.parent = parent
 
         # 参数
@@ -354,7 +450,7 @@ class DelayDialog(tk.Toplevel):
         row1.pack(fill=tk.X)
         tk.Label(row1, text='延迟机制：').pack(anchor=tk.W)
         text = tk.Text(row1, height=11, width=40)
-        text.pack(expand=True, fill=tk.BOTH)        
+        text.pack(expand=True, fill=tk.BOTH)
         text.insert(tk.END, '1-总共5级延迟，脚本随机从1-5级延迟中选择一级作为主延迟，\
 同时在1-3级延迟中选择一级作为副延迟。在此基础上乘以随机系数。\n\n')
         text.insert(tk.END, '2-每5分钟刷新选择，计算单位毫秒。\n\n')
@@ -367,33 +463,43 @@ class DelayDialog(tk.Toplevel):
         row2.pack(fill=tk.X)
         tk.Label(row2, text='一级: ').grid(row=0, column=0)
         tk.Label(row2, text='最低').grid(row=0, column=1)
-        tk.Entry(row2, width=7, textvariable=self.delay[1][0]).grid(row=0, column=3)
+        tk.Entry(row2, width=7, textvariable=self.delay[1][0]).grid(
+            row=0, column=3)
         tk.Label(row2, text='最高').grid(row=0, column=4)
-        tk.Entry(row2, width=7, textvariable=self.delay[1][1]).grid(row=0, column=5)
+        tk.Entry(row2, width=7, textvariable=self.delay[1][1]).grid(
+            row=0, column=5)
 
         tk.Label(row2, text='二级: ').grid(row=1, column=0)
         tk.Label(row2, text='最低').grid(row=1, column=1)
-        tk.Entry(row2, width=7, textvariable=self.delay[2][0]).grid(row=1, column=3)
+        tk.Entry(row2, width=7, textvariable=self.delay[2][0]).grid(
+            row=1, column=3)
         tk.Label(row2, text='最高').grid(row=1, column=4)
-        tk.Entry(row2, width=7, textvariable=self.delay[2][1]).grid(row=1, column=5)
+        tk.Entry(row2, width=7, textvariable=self.delay[2][1]).grid(
+            row=1, column=5)
 
         tk.Label(row2, text='三级: ').grid(row=2, column=0)
         tk.Label(row2, text='最低').grid(row=2, column=1)
-        tk.Entry(row2, width=7, textvariable=self.delay[3][0]).grid(row=2, column=3)
+        tk.Entry(row2, width=7, textvariable=self.delay[3][0]).grid(
+            row=2, column=3)
         tk.Label(row2, text='最高').grid(row=2, column=4)
-        tk.Entry(row2, width=7, textvariable=self.delay[3][1]).grid(row=2, column=5)
+        tk.Entry(row2, width=7, textvariable=self.delay[3][1]).grid(
+            row=2, column=5)
 
         tk.Label(row2, text='四级: ').grid(row=3, column=0)
         tk.Label(row2, text='最低').grid(row=3, column=1)
-        tk.Entry(row2, width=7, textvariable=self.delay[4][0]).grid(row=3, column=3)
+        tk.Entry(row2, width=7, textvariable=self.delay[4][0]).grid(
+            row=3, column=3)
         tk.Label(row2, text='最高').grid(row=3, column=4)
-        tk.Entry(row2, width=7, textvariable=self.delay[4][1]).grid(row=3, column=5)
+        tk.Entry(row2, width=7, textvariable=self.delay[4][1]).grid(
+            row=3, column=5)
 
         tk.Label(row2, text='五级: ').grid(row=4, column=0)
         tk.Label(row2, text='最低').grid(row=4, column=1)
-        tk.Entry(row2, width=7, textvariable=self.delay[5][0]).grid(row=4, column=3)
+        tk.Entry(row2, width=7, textvariable=self.delay[5][0]).grid(
+            row=4, column=3)
         tk.Label(row2, text='最高').grid(row=4, column=4)
-        tk.Entry(row2, width=7, textvariable=self.delay[5][1]).grid(row=4, column=5)
+        tk.Entry(row2, width=7, textvariable=self.delay[5][1]).grid(
+            row=4, column=5)
 
         # 按钮
         row3 = tk.Frame(self)
@@ -402,19 +508,20 @@ class DelayDialog(tk.Toplevel):
         tk.Button(row3, text='取消', command=self.cancel).grid(row=0, column=1)
 
     def confirm(self):
-        mydelay ={
+        mydelay = {
             1: [self.delay[1][0].get(), self.delay[1][1].get() - self.delay[1][0].get()],
             2: [self.delay[2][0].get(), self.delay[2][1].get() - self.delay[2][0].get()],
             3: [self.delay[3][0].get(), self.delay[3][1].get() - self.delay[3][0].get()],
             4: [self.delay[4][0].get(), self.delay[4][1].get() - self.delay[4][0].get()],
             5: [self.delay[5][0].get(), self.delay[5][1].get() - self.delay[5][0].get()]}
-        jsObj = json.dumps(mydelay) 
+        jsObj = json.dumps(mydelay)
         with open('delay.json', 'w') as f:
             f.write(jsObj)
         self.destroy()
 
     def cancel(self):
         self.destroy()
+
 
 if __name__ == "__main__":
     root = tk.Tk()
