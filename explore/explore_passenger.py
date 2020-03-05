@@ -1,8 +1,8 @@
 from explore.explore import ExploreFight
 from tools.game_pos import TansuoPos
+from tools.logsystem import MyLog
 import tools.utilities as ut
 
-import logging
 import time
 
 
@@ -16,7 +16,7 @@ class ExplorePassenger(ExploreFight):
         初始化
         '''
         ExploreFight.__init__(self, hwnd=hwnd)
-        self.name = 'Passenger: '
+        self.log = MyLog.plogger
 
     def start(self):
         '''
@@ -25,19 +25,19 @@ class ExplorePassenger(ExploreFight):
         mood = ut.Mood(3)
         scene = self.get_scene()
         if scene == 4:
-            logging.info('Passenger: 已进入探索，就绪')
+            self.log.info('已进入探索，就绪')
         else:
-            logging.warning('Passenger: 请检查是否进入探索内，退出')
+            self.log.warning('请检查是否进入探索内，退出')
             return
 
         while self.run:
             # 检测当前场景
-            maxVal_list, maxLoc_list = self.yys.find_multi_img(
+            maxVal_list, _ = self.yys.find_multi_img(
                 'img/DUI.png', 'img/YING-BING.png')
             # print(maxVal_list)
             if maxVal_list[0] < 0.8 and maxVal_list[1] > 0.8:
                 # 队长退出，则跟着退出
-                logging.info('Passenger: 队长已退出，跟随退出')
+                self.log.info('队长已退出，跟随退出')
                 self.switch_to_scene(3)
 
                 # 等待邀请
@@ -47,7 +47,7 @@ class ExplorePassenger(ExploreFight):
                     # 点击接受邀请
                     if self.yys.find_game_img('img/JIE-SHOU.png'):
                         self.yys.mouse_click_bg((js_loc[0]+33, js_loc[1]+34))
-                        self.log.writeinfo('Passenger: 接受邀请')
+                        self.log.info('接受邀请')
 
                 # 检查游戏次数
                 self.check_times()
@@ -55,7 +55,7 @@ class ExplorePassenger(ExploreFight):
             elif maxVal_list[0] > 0.8 and maxVal_list[1] < 0.8:
                 # 进入战斗，等待式神准备
                 self.yys.wait_game_img_knn('img/ZHUN-BEI.png', thread=30)
-                logging.info('Passenger: 式神准备完成')
+                self.log.info('式神准备完成')
 
                 # 检查狗粮经验
                 self.check_exp_full()

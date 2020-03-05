@@ -39,7 +39,7 @@ class ExploreDual():
         for hwnd in hwndlist:
             yys = GameControl(hwnd)
             if yys.find_game_img('img/DUI.png', 1, (68, 242), (135, 306), thread=0.8):
-                self.driver = ExploreLeader(hwnd=hwnd)
+                self.driver = ExploreLeader(hwnd=hwnd, delay=True)
                 hwndlist.remove(hwnd)
                 logging.info('发现队长')
                 break

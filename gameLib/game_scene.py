@@ -1,6 +1,5 @@
 from tools.game_pos import TansuoPos, YuhunPos
 
-import logging
 import time
 
 
@@ -42,7 +41,7 @@ class GameScene():
             :return: 切换成功返回True；切换失败直接退出
         '''
         scene_now = self.get_scene()
-        logging.info(self.name + '目前场景：' + str(scene_now))
+        self.log.info('目前场景：' + str(scene_now))
         if scene_now == scene:
             return True
         if scene_now == 1:
@@ -92,8 +91,8 @@ class GameScene():
             # 探索内
             if scene == 3:
                 # 点击退出探索
-                self.click_until('退出按钮', 'img\\QUE-REN.png',
-                                 *TansuoPos.quit_btn, 2)
+                self.click_until_multi('退出按钮', 'img/QUE-REN.png', 'img/TAN-SUO.png',
+                                 pos=TansuoPos.quit_btn[0], pos_end=TansuoPos.quit_btn[1], step_time=2)
 
                 # 点击确认
                 self.click_until('确认按钮', 'img\\QUE-REN.png',
@@ -106,18 +105,18 @@ class GameScene():
             if scene == 6:
                 # 点击御魂
                 self.click_until_knn('御魂选项', 'img/TIAO-ZHAN.png',
-                                 *YuhunPos.yuhun_btn, 2, thread=20)
+                                     *YuhunPos.yuhun_btn, 2, thread=20)
                 # 递归
                 self.switch_to_scene(scene)
             elif scene == 7:
                 # 点击业原火
                 self.click_until_knn('业原火选项', 'img/TIAO-ZHAN.png',
-                                 *YuhunPos.yeyuanhuo_btn, 2, thread=20)
+                                     *YuhunPos.yeyuanhuo_btn, 2, thread=20)
                 # 递归
                 self.switch_to_scene(scene)
             elif scene == 8:
                 # 点击卑弥呼
                 self.click_until_knn('卑弥呼选项', 'img/TIAO-ZHAN.png',
-                                 *YuhunPos.beimihu_btn, 2, thread=20)
+                                     *YuhunPos.beimihu_btn, 2, thread=20)
                 # 递归
                 self.switch_to_scene(scene)

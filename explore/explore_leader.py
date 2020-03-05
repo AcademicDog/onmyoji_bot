@@ -1,8 +1,8 @@
 from explore.explore import ExploreFight
 from tools.game_pos import TansuoPos
 import tools.utilities as ut
+from tools.logsystem import MyLog
 
-import logging
 import random
 import time
 
@@ -12,12 +12,16 @@ class ExploreLeader(ExploreFight):
     组队探索队长
     '''
 
-    def __init__(self, hwnd=0):
+    def __init__(self, hwnd=0, delay=False):
         '''
         初始化
+            :param hwnd=0: 指定窗口句柄：0-否；其他-窗口句柄
+            :param mode=0: 狗粮模式：0-正常模式，1-组队后排狗粮
+            :param delay=False: 完成一轮探索后，是否等待1s再邀请下一轮
         '''
         ExploreFight.__init__(self, hwnd=hwnd, mode=1)
-        self.name = 'Leader: '
+        self.delay = delay
+        self.log = MyLog.dlogger
 
     def prev_scene(self):
         '''
@@ -38,9 +42,9 @@ class ExploreLeader(ExploreFight):
         mood3 = ut.Mood()
         scene = self.get_scene()
         if scene == 4:
-            logging.info('Leader: 已进入探索，就绪')
+            self.log.info('已进入探索，就绪')
         else:
-            logging.warning('Leader: 请检查是否进入探索内，退出')
+            self.log.warning('请检查是否进入探索内，退出')
             return
 
         while self.run:
@@ -49,7 +53,7 @@ class ExploreLeader(ExploreFight):
                 'img/DUI.png', 'img/YING-BING.png')
             if maxVal_list[0] < 0.8 and maxVal_list[1] > 0.8:
                 # 队长退出，结束
-                logging.warning('Leader: 队员已退出，脚本结束')
+                self.log.warning('队员已退出，脚本结束')
                 self.yys.quit_game()
 
             # 开始打怪
@@ -65,7 +69,7 @@ class ExploreLeader(ExploreFight):
                 elif result == 2:
                     break
                 else:
-                    self.log.writeinfo('Leader: 移动至下一个场景')
+                    self.log.info('移动至下一个场景')
                     self.next_scene()
                     i += 1
 
@@ -77,11 +81,11 @@ class ExploreLeader(ExploreFight):
                     fight_pos = self.yys.find_game_img('img/FIGHT.png')
                 # 攻击怪
                 self.yys.mouse_click_bg(fight_pos)
-                self.log.writeinfo('Leader: 已进入战斗')
+                self.log.info('已进入战斗')
 
                 # 等待式神准备
                 self.yys.wait_game_img_knn('img/ZHUN-BEI.png', thread=30)
-                logging.info('Leader: 式神准备完成')
+                self.log.info('式神准备完成')
 
                 # 检查狗粮经验
                 self.check_exp_full()
@@ -98,7 +102,7 @@ class ExploreLeader(ExploreFight):
                 self.get_reward(mood2, state)
 
             # 退出探索
-            self.log.writeinfo('Leader: 结束本轮探索')
+            self.log.info('结束本轮探索')
             # 点击退出探索
             self.click_until('退出按钮', 'img/QUE-REN.png',
                              *TansuoPos.quit_btn, 2)
@@ -106,6 +110,10 @@ class ExploreLeader(ExploreFight):
             self.click_until('确认按钮', 'img/QUE-REN.png',
                              *TansuoPos.confirm_btn, 2, False)
 
+            # 等待司机退出1s
+            if self.delay:
+                time.sleep(1)
+            
             # 下一轮自动邀请
             self.yys.wait_game_img('img/QUE-DING.png', self.max_win_time)
             time.sleep(0.5)

@@ -189,7 +189,7 @@ class ExploreFight(Fighter):
             mood1.moodsleep()
             # 查看是否进入探索界面
             self.yys.wait_game_img('img\\YING-BING.png')
-            self.log.writeinfo('进入探索页面')
+            self.log.info('进入探索页面')
 
             # 寻找经验怪，未找到则寻找boss，再未找到则退出
             fight_pos = self.find_exp_moster()
@@ -199,19 +199,19 @@ class ExploreFight(Fighter):
                     fight_pos = self.find_boss()
                     boss = True
                     if fight_pos == -1:
-                        self.log.writeinfo('未找到经验怪和boss')
+                        self.log.info('未找到经验怪和boss')
                         return -2
                 else:
-                    self.log.writeinfo('未找到经验怪')
+                    self.log.info('未找到经验怪')
                     return -1
 
             # 攻击怪
             self.click_until('怪', 'img/YING-BING.png', fight_pos, step_time=0.3, appear=False)
-            self.log.writeinfo('已进入战斗')
+            self.log.info('已进入战斗')
 
             # 等待式神准备
             self.yys.wait_game_img_knn('img\\ZHUN-BEI.png', thread=30)
-            logging.info('式神准备完成')
+            self.log.info('式神准备完成')
 
             # 检查狗粮经验
             self.check_exp_full()
@@ -250,16 +250,15 @@ class ExploreFight(Fighter):
                 if result == 1:
                     continue
                 elif result == 2:
-                    time.sleep(1)
                     break
                 else:
-                    self.log.writeinfo('移动至下一个场景')
+                    self.log.info('移动至下一个场景')
                     self.next_scene()
                     i += 1
 
             # 退出探索
             self.switch_to_scene(3)
-            self.log.writeinfo('结束本轮探索')
+            self.log.info('结束本轮探索')
             time.sleep(0.5)
 
             # 检查游戏次数

@@ -1,12 +1,15 @@
 import json
 import tkinter as tk
 import tkinter.messagebox
+import webbrowser
 from tkinter import ttk
 
 
 class Application(tk.Frame):
     def __init__(self, master=None):
         super().__init__(master)
+        self.url = 'http://www.onmyojibot.com'
+        self.source_url = 'https://github.com/AcademicDog/onmyoji_bot'
         self.master = master
         self.master.iconbitmap('img/icon/OnmyojiBot.ico')
         self.master.wm_title('OnmyojiBot')
@@ -85,7 +88,8 @@ class Application(tk.Frame):
         # 创建菜单项
         menu1 = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="文件", menu=menu1)
-        menu1.add_command(label='关于', command=self.say_hi)
+        menu1.add_command(label='启动', command=self.start_onmyoji)
+        menu1.add_command(label='退出', command=self.stop_onmyoji)
 
         # 高级选项
         menu2 = tk.Menu(menubar, tearoff=0)
@@ -95,7 +99,10 @@ class Application(tk.Frame):
         # 帮助
         menu3 = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label='帮助', menu=menu3)
+        menu3.add_command(label='关于', command=self.say_hi)
         menu3.add_command(label='使用说明', command=self.help)
+        menu3.add_separator()
+        menu3.add_command(label='捐赠', command=self.donate)
 
         # 设置
         self.master.config(menu=menubar)
@@ -105,7 +112,7 @@ class Application(tk.Frame):
         tk.Label(self.master, text='OnmyojiBot',
                  font='Helvetica 20 bold').pack(anchor=tk.W)
         tk.Label(
-            self.master, text='https://github.com/AcademicDog/onmyoji_bot').pack(anchor=tk.W)
+            self.master, text=self.url).pack(anchor=tk.W)
 
         # 主页面
         self.main_frame1 = tk.Frame(self.master)
@@ -257,9 +264,13 @@ class Application(tk.Frame):
         text = tk.Text(self.frame3, height=5, width=25)
         text.pack(expand=True, fill=tk.BOTH)
         text.insert(
-            tk.END, '网址：https://github.com/AcademicDog/onmyoji_bot\n\n交流Q群：592055060')
+            tk.END, '网站：%s\n\n' % (self.url))
         text.insert(
-            tk.END, '\n\n如果觉得脚本动作太慢，请到高级菜单自定义延迟。')
+            tk.END, '源码：%s\n\n' % (self.source_url))
+        text.insert(
+            tk.END, '交流Q群：592055060\n\n')
+        text.insert(
+            tk.END, '如果觉得脚本动作太慢，请到高级菜单自定义延迟。')
         text.config(state=tk.DISABLED)
 
     def create_times(self):
@@ -362,7 +373,7 @@ class Application(tk.Frame):
         测试
         '''
         tk.messagebox.showinfo(
-            "OnmyojiBot", '网址：https://github.com/AcademicDog/onmyoji_bot\n\n交流Q群：592055060')
+            "OnmyojiBot", '网站：%s\n\n源码：%s\n\n交流Q群：592055060' % (self.url, self.source_url))
 
     def delay_dialog(self):
         pw = DelayDialog(self)
@@ -372,8 +383,19 @@ class Application(tk.Frame):
         '''
         使用说明
         '''
-        tk.messagebox.showinfo(
-            "使用说明", '详细使用说明请参考https://academicdog.github.io/onmyoji_bot/')
+        Q = tk.messagebox.askyesno(
+            "使用说明", '详细使用说明请参考%s\n\n是否访问？' % (self.url))
+        if Q:
+            webbrowser.open(self.url)
+
+    def donate(self):
+        '''
+        捐赠
+        '''
+        Q = tk.messagebox.askyesno(
+            "捐赠", '量力而行，1分就够。\n\n前往捐赠？')
+        if Q:
+            webbrowser.open(self.url)
 
     def gouliang_state(self, state):
         '''
@@ -416,7 +438,7 @@ class Application(tk.Frame):
             self.gouliang.append(2)
         if self.gouliang_3.get():
             self.gouliang.append(3)
-        
+
         # 后狗粮
         self.gouliang_b = []
         if self.gouliang_4.get():
@@ -455,7 +477,7 @@ class DelayDialog(tk.Toplevel):
 同时在1-3级延迟中选择一级作为副延迟。在此基础上乘以随机系数。\n\n')
         text.insert(tk.END, '2-每5分钟刷新选择，计算单位毫秒。\n\n')
         text.insert(tk.END, '3-主延迟用于截图、识图等一般操作的延迟，副延迟主要用于结算。\n\n')
-        text.insert(tk.END, '4-不要纠结为什么每次重开这个表格都不变，参数存在delay.json。\n\n')
+        text.insert(tk.END, '4-不要纠结为什么每次重开这个表格都不变，参数存在delay.json，重启有效。\n\n')
         text.config(state=tk.DISABLED)
 
         # 参数设置

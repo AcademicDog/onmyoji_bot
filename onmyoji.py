@@ -7,13 +7,13 @@ from mitama.dual import DualFighter
 from mitama.fighter_driver import DriverFighter
 from mitama.fighter_passenger import FighterPassenger
 from mitama.single_fight import SingleFight
+from tools.logsystem import MyLog
 
 import configparser
 import ctypes
 import logging
 import os
 import sys
-import tools.logsystem
 
 
 def init():
@@ -103,12 +103,13 @@ def my_excepthook(exc_type, exc_value, tb):
 
 
 if __name__ == "__main__":
-    logging.info('python version: %s', sys.version)
-
     try:
         # 检测管理员权限
         if is_admin():
-            # 注册插件，获取权限
+            # 初始化日志
+            MyLog.init()
+
+            # 错误消息进日志
             sys.excepthook = my_excepthook
             logging.info('UAC pass')
 

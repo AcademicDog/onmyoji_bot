@@ -81,6 +81,7 @@ class GameControl():
                 else:
                     return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
         except Exception:
+            self.clean_mem()
             self.init_mem()
             logging.warning('window_full_shot执行失败')
             a = traceback.format_exc()
@@ -475,15 +476,17 @@ class GameControl():
             else:
                 os.system(
                     'adb shell am force-stop com.netease.onmyoji.netease_simulator')
-        logging.info('退出，最后显示已保存至/img/full.png')
+        logging.info('退出，最后显示已保存至/img/screenshots文件夹')
         sys.exit(0)
 
     def takescreenshot(self):
         '''
         截图
         '''
-        img_src_path = 'img\\full.png'
+        name = time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())
+        img_src_path = 'img/screenshots/%s.png' %(name)
         self.window_full_shot(img_src_path)
+        logging.info('截图已保存至img/screenshots/%s.png' %(name))
 
     def rejectbounty(self):
         '''

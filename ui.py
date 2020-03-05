@@ -1,4 +1,5 @@
 from gui.tkui import Application
+from tools.logsystem import MyLog
 
 import configparser
 import ctypes
@@ -7,7 +8,6 @@ import os
 import subprocess
 import sys
 import tkinter as tk
-import tools.logsystem
 
 
 def is_admin():
@@ -114,7 +114,12 @@ if __name__ == "__main__":
     try:
         # 检测管理员权限
         if is_admin():
+            # 初始化日志
+            MyLog.init()
+
+            # 错误消息进日志
             sys.excepthook = my_excepthook
+            logging.info('获取管理员权限')
 
             # Query DPI Awareness (Windows 10 and 8)
             awareness = ctypes.c_int()

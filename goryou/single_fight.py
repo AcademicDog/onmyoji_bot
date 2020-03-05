@@ -10,7 +10,7 @@ class GoryouFight(Fighter):
 
     def __init__(self, done=1, emyc=0):
         # 初始化
-        Fighter.__init__(self, '', emyc)
+        Fighter.__init__(self)
 
     def start(self):
         '''单人战斗主循环'''

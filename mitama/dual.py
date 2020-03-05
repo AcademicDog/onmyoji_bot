@@ -1,7 +1,6 @@
 from gameLib.game_ctl import GameControl
 from mitama.fighter_driver import DriverFighter
 from mitama.fighter_passenger import FighterPassenger
-from tools.logsystem import WriteLog
 
 import logging
 import threading
@@ -43,7 +42,7 @@ class DualFighter():
                 self.driver = DriverFighter(hwnd=hwnd)
                 hwndlist.remove(hwnd)
                 logging.info('发现司机')
-        self.passenger = FighterPassenger(hwnd=hwndlist[0])
+        self.passenger = FighterPassenger(hwnd=hwndlist[0], mark=False)
         logging.info('发现乘客')
 
     def start(self):

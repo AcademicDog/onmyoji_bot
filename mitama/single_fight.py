@@ -3,7 +3,6 @@ from tools.game_pos import YuhunPos
 import tools.utilities as ut
 
 import configparser
-import logging
 
 
 class SingleFight(Fighter):
@@ -11,7 +10,7 @@ class SingleFight(Fighter):
 
     def __init__(self, done=1, emyc=0):
         # 初始化
-        Fighter.__init__(self, '', emyc)
+        Fighter.__init__(self, emyc)
 
         # 读取配置文件
         conf = configparser.ConfigParser()
@@ -53,7 +52,7 @@ class SingleFight(Fighter):
 
             # 在战斗结算页面
             self.get_reward(mood3, state)
-            self.log.writeinfo("回到选择界面")
+            self.log.info("回到选择界面")
 
             # 检查游戏次数
             self.check_times()
