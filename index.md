@@ -135,6 +135,13 @@ ui.exe是程序界面，主要作用是生成onmyoji.exe运行所需要的配置
 - ui.exe
 - conf_example.ini
 
+1.  将MuMu模拟器的分辨率设置为**1136x640**。
+
+* * *
+
+# 高级说明
+上述使用方法已经足够脚本的日常使用，如果只是刷刷本，这一章节可以略过。高级说明请访问[这里](https://academicdog.github.io/onmyoji_bot/advance.html)
+
 * * *
 
 # 注意事项
