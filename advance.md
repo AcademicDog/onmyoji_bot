@@ -5,6 +5,7 @@
 
 如果您对本[项目](https://github.com/AcademicDog/onmyoji_bot)感兴趣，欢迎加入[我们](https://github.com/AcademicDog/onmyoji_bot/graphs/contributors)！
 
+* * *
 
 # 高级说明
 前面的使用方法已经足够脚本的日常使用，如果只是刷刷本，这一章节可以略过。
