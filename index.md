@@ -9,7 +9,8 @@
 
 # 主要功能
 本工具用于阴阳师代肝，为各位阴阳师大佬养老护肝所用。
-<img align="right" width="220" src="https://raw.githubusercontent.com/AcademicDog/myresource/master/usage.png" alt="copy URL to clipboard" />
+<img align="right" width="220" src="https://onmyojibot.oss-cn-beijing.aliyuncs.com/usage.png
+" alt="copy URL to clipboard" />
 
 ### 特性
 
