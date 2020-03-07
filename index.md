@@ -102,7 +102,7 @@ ui.exe是程序界面，主要作用是生成onmyoji.exe运行所需要的配置
 
 # 捐赠
 
-您的赞助将成为开发的动力，勿以善小而不为。
+量力而行，1分就够。
 
 <img align="right" height="150" src="https://onmyojibot.oss-cn-beijing.aliyuncs.com/donate/any.jpg" />
 
@@ -110,4 +110,4 @@ ui.exe是程序界面，主要作用是生成onmyoji.exe运行所需要的配置
 
 <img align="right" height="150" src="https://onmyojibot.oss-cn-beijing.aliyuncs.com/donate/0.01.jpg" />
 
-同时请备注id，将来你的id将会出现在赞助者名单中。
+同时请备注id，将来你的id将会出现在[赞助者名单](https://academicdog.github.io/onmyoji_bot/sponsors.html)中。
