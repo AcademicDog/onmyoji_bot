@@ -61,8 +61,8 @@ class ExplorePassenger(ExploreFight):
                 self.check_exp_full()
 
                 # 点击准备，直到进入战斗
-                self.click_until_knn('准备按钮', 'img/ZI-DONG.png', *
-                                 TansuoPos.ready_btn, mood.get1mood()/1000, False, 30)
+                self.click_until('准备按钮', 'img/ZI-DONG.png', *
+                                 TansuoPos.ready_btn, mood.get1mood()/1000, True)
 
                 # 检测是否打完
                 state = self.check_end()
