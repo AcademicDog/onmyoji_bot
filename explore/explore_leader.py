@@ -105,10 +105,10 @@ class ExploreLeader(ExploreFight):
             self.log.info('结束本轮探索')
             # 点击退出探索
             self.click_until('退出按钮', 'img/QUE-REN.png',
-                             *TansuoPos.quit_btn, 2)
+                             *TansuoPos.quit_btn, 1)
             # 点击确认
             self.click_until('确认按钮', 'img/QUE-REN.png',
-                             *TansuoPos.confirm_btn, 2, False)
+                             *TansuoPos.confirm_btn, 1, False)
 
             # 等待司机退出1s
             if self.delay:

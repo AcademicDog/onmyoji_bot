@@ -92,11 +92,11 @@ class GameScene():
             if scene == 3:
                 # 点击退出探索
                 self.click_until_multi('退出按钮', 'img/QUE-REN.png', 'img/TAN-SUO.png',
-                                 pos=TansuoPos.quit_btn[0], pos_end=TansuoPos.quit_btn[1], step_time=2)
+                                 pos=TansuoPos.quit_btn[0], pos_end=TansuoPos.quit_btn[1], step_time=0.5)
 
                 # 点击确认
                 self.click_until('确认按钮', 'img\\QUE-REN.png',
-                                 *TansuoPos.confirm_btn, 2, False)
+                                 *TansuoPos.confirm_btn, 1, False)
                 # 递归
                 self.switch_to_scene(scene)
 
