@@ -39,7 +39,7 @@
 
 > 阴阳师PC版客户端，默认分辨率(1136x640) 或者 阴阳师MuMu模拟器，分辨率设置为(1136x640)
 >
-> Windows 10和Windows 7，屏幕(1920x1080)
+> Windows 10
 >
 > 如需运行源码，需要Python3 32位
 
@@ -66,28 +66,7 @@ ui.exe是程序界面，主要作用是生成onmyoji.exe运行所需要的配置
 
 # 使用方法
 
-使用方法请看[这里](https://academicdog.github.io/onmyoji_bot/how-to-use.html)。
-
-* * *
-
-# 高级说明
-上述使用方法已经足够脚本的日常使用，如果只是刷刷本，这一章节可以略过。
-
-高级说明请访问[这里](https://academicdog.github.io/onmyoji_bot/advance.html)。
-
-* * *
-
-# 注意事项
-
-1.  窗口现在可以完全后台，可以被遮挡，但是**不能最小化**。
-
-1.  游戏开启精细模式，不要开启游戏中的“模型描边”。
-
-1.  当使用高分辨率屏幕时，在阴阳师客户端程序兼容性选项里，不要勾选“替代高DPI缩放行为”，这个选项应该是默认不勾选的。
-
-1.  如果不想安装运行环境，可以访问下载最新已[编译](https://github.com/AcademicDog/onmyoji_bot/releases)版本，该版本有图形界面，同时注意.exe文件和/img文件夹应该放在同一目录后再运行。
-
-1.  如果下载缓慢，可以访问[网盘](https://pan.baidu.com/s/1jhHrjRGWmu9yOLq9ryApJA)下载，提取码：gyj9
+使用方法请看[这里](https://doc.onmyojibot.com/)。
 
 * * *
 
