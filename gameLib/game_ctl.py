@@ -81,7 +81,6 @@ class GameControl():
                 else:
                     return cv2.cvtColor(img, cv2.COLOR_BGRA2GRAY)
         except Exception:
-            self.clean_mem()
             self.init_mem()
             logging.warning('window_full_shot执行失败')
             a = traceback.format_exc()

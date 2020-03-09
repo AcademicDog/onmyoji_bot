@@ -42,6 +42,13 @@ class GameScene():
         '''
         scene_now = self.get_scene()
         self.log.info('目前场景：' + str(scene_now))
+
+        if scene_now == 0:
+            self.log.info('暂未识别场景，2s后重试一次')
+            time.sleep(2)
+            scene_now = self.get_scene()
+            self.log.info('目前场景：' + str(scene_now))
+
         if scene_now == scene:
             return True
         if scene_now == 1:
@@ -89,14 +96,14 @@ class GameScene():
 
         elif scene_now == 4:
             # 探索内
-            if scene == 3:
+            if scene in [2, 3]:
                 # 点击退出探索
-                self.click_until_multi('退出按钮', 'img/QUE-REN.png', 'img/TAN-SUO.png',
+                self.click_until_multi('退出按钮', 'img/QUE-REN.png', 'img/TAN-SUO.png', 'img/JUE-XING.png',
                                  pos=TansuoPos.quit_btn[0], pos_end=TansuoPos.quit_btn[1], step_time=0.5)
 
                 # 点击确认
                 self.click_until('确认按钮', 'img\\QUE-REN.png',
-                                 *TansuoPos.confirm_btn, 1, False)
+                                 *TansuoPos.confirm_btn, 2, False)
                 # 递归
                 self.switch_to_scene(scene)
 

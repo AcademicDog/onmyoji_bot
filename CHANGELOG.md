@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v1.0.1.030?
+#### Fixes (bugs & defects):
+* 修复探索乘客不能自动退出。
+
 ## v1.0.1.0307
 #### Fixes (bugs & defects):
 *  双开探索时，队长退出后等待1s再邀请队员。

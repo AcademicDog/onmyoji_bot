@@ -74,7 +74,7 @@ class ExploreLeader(ExploreFight):
                     i += 1
 
             if not ok:
-                # 没有经验怪，随便打一个                
+                # 没有经验怪，随便打一个
                 fight_pos = self.yys.find_game_img('img/FIGHT.png')
                 while not fight_pos:
                     self.prev_scene()
@@ -91,8 +91,8 @@ class ExploreLeader(ExploreFight):
                 self.check_exp_full()
 
                 # 点击准备，直到进入战斗
-                self.click_until('准备按钮', 'img/ZHUN-BEI.png', *
-                             TansuoPos.ready_btn, mood1.get1mood()/1000, False)
+                self.click_until_knn('准备按钮', 'img/ZHUN-BEI.png', *
+                                     TansuoPos.ready_btn, mood1.get1mood()/1000, False, 30)
 
                 # 检查是否打完
                 state = self.check_end()
@@ -104,16 +104,17 @@ class ExploreLeader(ExploreFight):
             # 退出探索
             self.log.info('结束本轮探索')
             # 点击退出探索
-            self.click_until('退出按钮', 'img/QUE-REN.png',
-                             *TansuoPos.quit_btn, 1)
+            self.click_until_multi('退出按钮', 'img/QUE-REN.png', 'img/TAN-SUO.png', 'img/JUE-XING.png',
+                                   pos=TansuoPos.quit_btn[0], pos_end=TansuoPos.quit_btn[1], step_time=0.5)
+
             # 点击确认
             self.click_until('确认按钮', 'img/QUE-REN.png',
-                             *TansuoPos.confirm_btn, 1, False)
+                             *TansuoPos.confirm_btn, 2, False)
 
             # 等待司机退出1s
             if self.delay:
                 time.sleep(1)
-            
+
             # 下一轮自动邀请
             self.yys.wait_game_img('img/QUE-DING.png', self.max_win_time)
             time.sleep(0.5)

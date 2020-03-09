@@ -18,6 +18,12 @@ class GoryouFight(Fighter):
         mood2 = ut.Mood()
         mood3 = ut.Mood(3)
         while self.run:
+            # 检测上一步是否结算成功，防止因跳蛋打开一瞬间没有检测到而引发的异常
+            maxVal, maxLoc = self.yys.find_multi_img(
+                'img/SHENG-LI.png', 'img/TIAO-DAN.png', 'img/JIN-BI.png', 'img/JIE-SU.png')
+            if max(maxVal) > 0.9:
+                self.get_reward(mood3, 1)
+
             # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
             self.yys.wait_game_img_knn('img\\TIAO-ZHAN.png',
                                        self.max_win_time, thread=20)

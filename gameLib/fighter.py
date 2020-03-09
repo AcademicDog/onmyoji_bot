@@ -229,7 +229,7 @@ class Fighter(GameScene):
                 return True
 
         # 提醒玩家点击失败，并在5s后退出
-        self.click_failed()
+        self.click_failed(tag)
 
     def click_until_multi(self, tag, *img_path, pos, pos_end=None, step_time=0.8):
         '''
@@ -255,7 +255,7 @@ class Fighter(GameScene):
                 return True
 
         # 提醒玩家点击失败，并在5s后退出
-        self.click_failed()
+        self.click_failed(tag)
 
     def click_until_knn(self, tag, img_path, pos, pos_end=None, step_time=0.8, appear=True, thread=0):
         '''
@@ -285,9 +285,9 @@ class Fighter(GameScene):
                 return True
 
         # 提醒玩家点击失败，并在5s后退出
-        self.click_failed()
+        self.click_failed(tag)
 
-    def click_failed(self):
+    def click_failed(self, tag):
         # 提醒玩家点击失败，并在5s后退出
         self.log.warning('点击 ' + tag + ' 失败!')
         self.yys.activate_window()

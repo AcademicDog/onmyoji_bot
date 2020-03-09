@@ -395,7 +395,7 @@ class Application(tk.Frame):
         Q = tk.messagebox.askyesno(
             "捐赠", '量力而行，1分就够。\n\n前往捐赠？')
         if Q:
-            webbrowser.open(self.url)
+            webbrowser.open('https://doc.onmyojibot.com/zh/latest/donate.html')
 
     def gouliang_state(self, state):
         '''

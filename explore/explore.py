@@ -217,8 +217,8 @@ class ExploreFight(Fighter):
             self.check_exp_full()
 
             # 点击准备，直到进入战斗
-            self.click_until('准备按钮', 'img/ZHUN-BEI.png', *
-                             TansuoPos.ready_btn, mood1.get1mood()/1000, False)
+            self.click_until_knn('准备按钮', 'img/ZHUN-BEI.png', *
+                            TansuoPos.ready_btn, mood1.get1mood()/1000, False, 30)
 
             # 检查是否打完
             state = self.check_end()
@@ -235,7 +235,7 @@ class ExploreFight(Fighter):
 
     def start(self):
         '''单人探索主循环'''
-        mood1 = ut.Mood(2)
+        mood1 = ut.Mood(3)
         mood2 = ut.Mood(3)
         while self.run:
             # 进入探索内
