@@ -385,8 +385,8 @@ class GameControl():
             win32gui.SendMessage(self.hwnd, win32con.WM_LBUTTONUP,
                                  0, win32api.MAKELONG(pos2[0], pos2[1]))
         else:
-            command = str(pos1[0])+' ' + str(pos1[1]-35) + \
-                ' '+str(pos2[0])+' '+str(pos2[1]-35)
+            command = str(pos1[0])+' ' + str(pos1[1]) + \
+                ' '+str(pos2[0])+' '+str(pos2[1])
             os.system('adb shell input swipe '+command)
 
     def wait_game_img(self, img_path, max_time=100, quit=True):
