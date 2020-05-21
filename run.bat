@@ -1,1 +1,1 @@
-python onmyoji.py
+python omj.py

@@ -22,8 +22,7 @@ class ExploreFight(Fighter):
         self.shikigami_type = conf.getboolean('explore', 'shikigami_type')
         self.zhunbei_delay = conf.getfloat('explore', 'zhunbei_delay')
 
-        self.shikigami_change_time = 0
-        self.willQuit = False
+        self.fight_count = 0
 
     def next_scene(self):
         '''
@@ -52,19 +51,6 @@ class ExploreFight(Fighter):
         if not gouliang1 and not gouliang2:
             return
 
-        rest = self.shikigami_brush_max - self.shikigami_change_time - 2
-        if gouliang1 and gouliang2:
-            # 刷满数量
-            if rest <= 0:
-                self.willQuit = True
-                return
-            elif rest <= 1:
-                gouliang2 = False
-        elif rest <= 0:
-            gouliang1 = False
-            gouliang2 = False
-            return
-
         # 开始换狗粮
         while self.run:
             # 点击狗粮位置
@@ -90,12 +76,11 @@ class ExploreFight(Fighter):
         '''
         变更式神
         '''
-        if gouliang1:
-            self.shikigami_change_time = self.shikigami_change_time + 1
-        if gouliang2:
-            self.shikigami_change_time = self.shikigami_change_time + 1
+        if self.shikigami_type == 0:
+            return
+
         # 换n卡
-        if self.shikigami_type == 1:
+        elif self.shikigami_type == 1:
             # 拖放进度条
             if self.slide_shikigami:
                 # 读取坐标范围
@@ -129,7 +114,7 @@ class ExploreFight(Fighter):
                     pos = TansuoPos.gouliang_passenger_right
                 self.yys.mouse_drag_bg(*pos)
 
-        # 换1星1级白蛋
+        # 换2星1级白蛋
         elif self.shikigami_type == 2:
             if gouliang1:
                 if self.mode == 0:
@@ -214,6 +199,21 @@ class ExploreFight(Fighter):
                      (find_pos[1]+exp_pos[1]-250))
         return fight_pos
 
+    def find_moster(self):
+        '''
+        寻找普通怪
+            :return: 成功返回攻打图标位置；失败返回-1
+        '''
+        # 查找攻打图标位置
+        find_pos = self.yys.find_game_img(
+            'img\\FIGHT.png', 1, (2, 115), (1127, 545))
+        if not find_pos:
+            return -1
+
+        # 返回攻打图标位置
+        fight_pos = ((find_pos[0]+2), (find_pos[1]++115))
+        return fight_pos
+
     def find_boss(self):
         '''
         寻找BOSS
@@ -240,24 +240,33 @@ class ExploreFight(Fighter):
             self.yys.wait_game_img('img\\YING-BING.png')
             self.log.writeinfo('进入探索页面')
 
-            # 寻找经验怪，未找到则寻找boss，再未找到则退出
-            fight_pos = self.find_exp_moster()
+            # 寻找普通或经验怪，未找到则寻找boss，再未找到则退出
+            if self.only_fight_exp:
+                fight_pos = self.find_exp_moster()
+            else:
+                fight_pos = self.find_moster()
             boss = False
             if fight_pos == -1:
                 if self.fight_boss_enable:
                     fight_pos = self.find_boss()
                     boss = True
                     if fight_pos == -1:
-                        self.log.writeinfo('未找到经验怪和boss')
+                        self.log.writeinfo('未找到你想刷的怪和boss')
                         return -2
                 else:
-                    self.log.writeinfo('未找到经验怪')
+                    self.log.writeinfo('未找到你想刷的怪')
                     return -1
 
             # 攻击怪
+            self.log.writeinfo('click')
             self.yys.mouse_click_bg(fight_pos)
-            if not self.yys.wait_game_img('img\\ZHUN-BEI.png', self.zhunbei_delay, False):
-                break
+            self.log.writeinfo(fight_pos)
+            if self.shikigami_type != 0:
+                if not self.yys.wait_game_img('img\\ZHUN-BEI.png', self.zhunbei_delay, False):
+                    break
+            else:
+                if not self.yys.wait_game_img('img\\ZI-DONG.png', self.zhunbei_delay, False):
+                    break
             self.log.writeinfo('已进入战斗')
             time.sleep(1)
 
@@ -266,11 +275,11 @@ class ExploreFight(Fighter):
             logging.info('式神准备完成')
 
             # 检查狗粮经验
-            self.check_exp_full()
-
-            # 点击准备，直到进入战斗
-            self.click_until('准备按钮', 'img\\ZI-DONG.png', *
-                             TansuoPos.ready_btn, mood1.get1mood()/1000)
+            if self.shikigami_type != 0:
+                self.check_exp_full()
+                # 点击准备，直到进入战斗
+                self.click_until('准备按钮', 'img\\ZI-DONG.png', *
+                                 TansuoPos.ready_btn, mood1.get1mood()/1000)
 
             # 检查是否打完
             self.check_end()
@@ -283,7 +292,8 @@ class ExploreFight(Fighter):
             self.click_until('结算', 'img/JIN-BI.png',
                              *CommonPos.second_position, mood2.get1mood()/1000, False)
 
-            if self.willQuit:
+            self.fight_count = self.fight_count + 1
+            if self.fight_count>=self.shikigami_brush_max:
                 if self.shikigami_brush_max_quit:
                     self.yys.activate_window()
                     time.sleep(5)

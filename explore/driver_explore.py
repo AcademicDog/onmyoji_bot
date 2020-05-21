@@ -17,7 +17,7 @@ class DriverExploreFight(ExploreFight):
     def start(self):
         '''司机探索主循环'''
         mood1 = ut.Mood(2)
-        mood2 = ut.Mood(3)
+        mood2 = ut.Mood(2)
         while self.run:
             # 进入探索内
             self.log.writeinfo('开始本轮探索')

@@ -1,5 +1,6 @@
 import sys
 import os
+import logging
 import ctypes
 
 from explore.single_explore import SingleExploreFight
@@ -28,12 +29,13 @@ def init():
     global shikigami_type
     global shikigami_brush_max
     global shikigami_brush_max_quit
+    global only_fight_exp
 
     multiPassenger = False
 
     try:
         # 选择打什么
-        section = int(input('\n选择刷什么(Ctrl-C跳过并单刷御魂：\n0-御魂\n1-探索\n'))
+        section = int(input('\n选择刷什么(Ctrl-C跳过并单刷御魂：\n0-御魂/业原火/御灵\n1-探索\n'))
         log.writeinfo('Section = %d', section)
         if section == 0:
             # 御魂模式选择
@@ -61,15 +63,21 @@ def init():
             #     mode=0
             mode=0
 
+            log.writewarning('提示！！！！探索建议手动刷，探索相关的脚本 防检测机制 不够完善')
             log.writewarning('狗粮队长请放中间')
-            shikigami_type=int(input('\n选择式神类型：\n1-N卡\n2-1级2星白蛋\n3-高级白蛋  （需要折叠相同式神）\n'))
+            shikigami_type=int(input('\n选择要自动换满级式神的类型：\n0-不替换满级式神（需锁定阵容）\n1-替换N卡（不能锁定阵容，需要关闭式神折叠）\n2-替换1级2星白蛋（不能锁定阵容，需要折叠相同式神）\n'))
             if shikigami_type!=1 and shikigami_type!=2 and shikigami_type!=3:
-                shikigami_type = 1
+                shikigami_type = 0
 
-            shikigami_brush_max=int(input('\n填写要刷的最大数量：\n'))
+            only_fight_exp=int(input('\是否只刷经验怪：\n1：是\n2：否\n'))
+            if only_fight_exp == 1:
+                only_fight_exp = True
+            else:
+                only_fight_exp = False
+
+            shikigami_brush_max=int(input('\n填写要刷的局数：\n'))
             if not shikigami_brush_max:
                 shikigami_brush_max = 999
-                shikigami_type = 1
 
             shikigami_brush_max_quit=int(input('\是否刷完关闭游戏：\n1：是\n2：否\n'))
             if shikigami_brush_max_quit == 1:
@@ -147,11 +155,25 @@ def tansuo():
         if shikigami_brush_max:
             fight.shikigami_brush_max = shikigami_brush_max
         fight.shikigami_brush_max_quit = shikigami_brush_max_quit
+        fight.only_fight_exp = only_fight_exp
         fight.start()
 
     except Exception as e:
         log.writeinfo(e)
         os.system("pause")
+
+def my_excepthook(exc_type, exc_value, tb):
+    msg = ' Traceback (most recent call last):\n'
+    while tb:
+        filename = tb.tb_frame.f_code.co_filename
+        name = tb.tb_frame.f_code.co_name
+        lineno = tb.tb_lineno
+        msg += '   File "%.500s", line %d, in %.500s\n' % (filename, lineno, name)
+        tb = tb.tb_next
+
+    msg += ' %s: %s\n' %(exc_type.__name__, exc_value)
+
+    logging.error(msg)
 
 if __name__ == "__main__":
     log.writeinfo('python version: %s', sys.version)
@@ -159,6 +181,8 @@ if __name__ == "__main__":
     try:
         # 检测管理员权限
         if is_admin():
+            sys.excepthook = my_excepthook
+
             # 注册插件，获取权限
             log.writeinfo('UAC pass')            
 

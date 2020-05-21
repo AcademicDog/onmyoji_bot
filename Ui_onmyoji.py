@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'd:\软件\github\onmyoji_bot\onmyoji.ui'
+# Form implementation generated from reading ui file 'd:\软件\github\onmyoji_bot\omj.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #

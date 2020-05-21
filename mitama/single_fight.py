@@ -1,6 +1,7 @@
 from gameLib.fighter import Fighter
 from tools.game_pos import CommonPos, YuhunPos
 import tools.utilities as ut
+import time
 
 
 class SingleFight(Fighter):
@@ -9,12 +10,19 @@ class SingleFight(Fighter):
     def __init__(self, done=1, emyc=0):
         # 初始化
         Fighter.__init__(self, '', emyc)
+        result = self.yys.find_game_img('img\\YE-YUAN-HUO.png')
+        if result:
+            self.fight_type = 'yeyuanhuo'
+        result2 = self.yys.find_game_img('img\\YU-LING.png')
+        if result2:
+            self.fight_type = 'yuling'
 
     def start(self):
         '''单人战斗主循环'''
         mood1 = ut.Mood()
-        mood2 = ut.Mood()
-        mood3 = ut.Mood(3)
+        mood2 = ut.Mood(2)
+        mood3 = ut.Mood(2)
+
         while self.run:
             # 在御魂主选单，点击“挑战”按钮, 需要使用“阵容锁定”！
             self.yys.wait_game_img('img\\TIAO-ZHAN.png',
@@ -35,6 +43,7 @@ class SingleFight(Fighter):
             # 检测是否打完
             self.check_end()
             mood2.moodsleep()
+            time.sleep(0.9)
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())

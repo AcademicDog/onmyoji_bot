@@ -17,8 +17,8 @@ class DriverFighter(Fighter):
         '''单人御魂司机'''
         # 设定点击疲劳度
         mood1 = ut.Mood()
-        mood2 = ut.Mood()
-        mood3 = ut.Mood(3)
+        mood2 = ut.Mood(2)
+        mood3 = ut.Mood(2)
 
         # 战斗主循环
 
@@ -42,9 +42,9 @@ class DriverFighter(Fighter):
                     result2 = self.yys.find_game_img('img\\FANG-JIAN-YAO-QING2.png')
                     if not (result or result2):
                         break
-                    else:
-                        self.log.writeinfo('有乘客未进入房间')
-                        self.log.writeinfo(result)
+                    # else:
+                    #    self.log.writeinfo('有乘客未进入房间')
+                    #    self.log.writeinfo(result)
                     time.sleep(0.5)
                     timenotout = time.time()-start_time <= self.max_op_time
 
@@ -55,7 +55,7 @@ class DriverFighter(Fighter):
 
             self.log.writeinfo('Driver: 点击开始战斗按钮')
             self.click_until('开始战斗按钮', 'img\\ZI-DONG.png', *
-                             YuhunPos.kaishizhandou_btn, mood2.get1mood()/1000)
+                             YuhunPos.kaishizhandou_btn, mood1.get1mood()/1000)
             self.log.writeinfo('Driver: 已进入战斗')
 
             # 已经进入战斗，乘客自动标记第二位式神
@@ -67,27 +67,25 @@ class DriverFighter(Fighter):
             # 检测是否打完
             self.check_end()
             mood2.moodsleep()
+            time.sleep(0.9)
 
             # 在战斗结算页面
             self.yys.mouse_click_bg(ut.firstposition())
-            start_time = time.time()
-            jiesuan_status = 0
-            while time.time() - start_time <= 20 and self.run:
-                if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', mood3.get1mood()/1000, False)):
-                    break
+            self.click_until('结算', ['img/JIN-BI.png','img\\MESSAGE.png','img\\XIE-ZHAN-DUI-WU'],
+                             *CommonPos.second_position, mood3.get1mood()/1000)
+            self.click_until('结算', 'img/JIN-BI.png',
+                            *CommonPos.second_position, mood3.get1mood()/1000, False)
 
-                # 点击结算
-                if jiesuan_status == 0:
-                    if not (self.yys.find_game_img('img\\MESSAGE.png') or self.yys.find_game_img('img\\JIA-CHENG.png') or self.yys.find_game_img('img\\XIE-ZHAN-DUI-WU.png')):
-                        self.yys.mouse_click_bg(*CommonPos.second_position)
-                        self.log.writeinfo('Driver: 点击结算')
-                    else:
-                        jiesuan_status = 1
-                        self.log.writeinfo('Driver: 点击结算成功，待进入队伍')
+            # 等待下一轮
+            logging.info('Driver: 等待下一轮')
+            start_time = time.time()
+            while time.time() - start_time <= 20 and self.run:
+                if(self.yys.wait_game_img('img\\XIE-ZHAN-DUI-WU.png', 1, False)):
+                    break
 
                 # 点击默认邀请
                 if self.yys.find_game_img('img\\ZI-DONG-YAO-QING.png'):
-                    self.yys.mouse_click_bg((497, 319))
+                    self.yys.mouse_click_bg((497, 319),(503, 325))
                     time.sleep(0.2)
-                    self.yys.mouse_click_bg((674, 384))
+                    self.yys.mouse_click_bg((674, 384),(680, 390))
                     self.log.writeinfo('Driver: 自动邀请')

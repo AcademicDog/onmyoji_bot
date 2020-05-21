@@ -27,12 +27,16 @@ class Fighter:
         self.name = name
         self.run = True
 
+        self.fight_type = 'default'
+
         # 读取配置文件
         conf = configparser.ConfigParser()
         conf.read(confPath)
         quit_game_enable = conf.getboolean('watchdog', 'watchdog_enable')
         self.max_op_time = conf.getint('watchdog', 'max_op_time')
         self.max_win_time = conf.getint('watchdog', 'max_win_time')
+        self.max_win_time_yeyuanhuo = conf.getint('watchdog', 'max_win_time_yeyuanhuo')
+        self.max_win_time_yuling = conf.getint('watchdog', 'max_win_time_yuling')
         self.sign_shikigami = conf.getboolean('common', 'sign_shikigami')
 
         # 启动日志
@@ -65,7 +69,12 @@ class Fighter:
     def check_end(self):
         # 检测是否打完
         self.log.writeinfo(self.name + '检测是战斗是否结束')
-        self.yys.wait_game_img('img\\JIE-SU.png', self.max_win_time)
+        if self.fight_type == 'yuling':
+            self.yys.wait_game_img('img\\JIN-BI.png', self.max_win_time_yuling)
+        elif self.fight_type == 'yeyuanhuo':
+            self.yys.wait_game_img('img\\JIE-SU.png', self.max_win_time_yeyuanhuo)
+        else:
+            self.yys.wait_game_img('img\\JIE-SU.png', self.max_win_time)
         self.log.writeinfo(self.name + "战斗结束")
 
     def click_monster(self):
@@ -96,7 +105,15 @@ class Fighter:
         # 在指定时间内反复监测画面并点击
         start_time = time.time()
         while time.time()-start_time <= self.max_op_time and self.run:
-            result = self.yys.find_game_img(img_path)
+            if isinstance(img_path,list):
+                i = 0
+                result = False
+                while i<len(img_path):
+                    if self.yys.find_game_img(img_path[i]):
+                        result = True
+                        break
+            else:
+                result = self.yys.find_game_img(img_path)
             if not appear:
                 result = not result
             if result:

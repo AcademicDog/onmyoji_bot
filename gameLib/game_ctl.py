@@ -395,7 +395,7 @@ class GameControl():
         '''
         maxVal, maxLoc = self.find_img('img\\XUAN-SHANG.png')
         if maxVal > 0.97:
-            self.mouse_click_bg((757, 460))
+            self.mouse_click_bg((757, 460),(763, 466))
             return True
         return False
 
