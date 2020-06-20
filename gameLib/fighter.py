@@ -112,6 +112,7 @@ class Fighter:
                     if self.yys.find_game_img(img_path[i]):
                         result = True
                         break
+                    i = i + 1
             else:
                 result = self.yys.find_game_img(img_path)
             if not appear:
@@ -132,6 +133,26 @@ class Fighter:
             self.yys.activate_window()
             time.sleep(5)
             self.yys.quit_game()
+
+    def wait_two_passenger(self):
+        '''
+        等2位乘客均进入房间
+        '''
+        # 在指定时间内反复监测画面并点击
+        start_time = time.time()
+        while time.time()-start_time <= self.max_op_time and self.run:
+            result = self.yys.find_game_img('img\\FANG-JIAN-YAO-QING.png')
+            result2 = self.yys.find_game_img('img\\FANG-JIAN-YAO-QING2.png')
+            if not (result or result2):
+                self.log.writeinfo('2位乘客均进入房间')
+                return True
+            ut.mysleep(500, 100)
+        self.log.writewarning('等待超时!')
+
+        # 提醒玩家点击失败，并在5s后退出
+        self.yys.activate_window()
+        time.sleep(5)
+        self.yys.quit_game()
 
     def activate(self):
         self.log.writewarning(self.name + '启动脚本')

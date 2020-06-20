@@ -374,6 +374,7 @@ class GameControl():
         """
         退出游戏
         """
+        logging.info('退出游戏')
         self.takescreenshot()  # 保存一下现场
         if not self.run:
             return False

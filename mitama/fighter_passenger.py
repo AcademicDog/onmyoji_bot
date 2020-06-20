@@ -36,10 +36,11 @@ class FighterPassenger(Fighter):
             time.sleep(0.9)
 
             # 等待下一轮
+            logging.info('Driver: 开始结算')
             self.yys.mouse_click_bg(ut.firstposition())
-            self.click_until('结算', ['img/JIN-BI.png','img\\MESSAGE.png','img\\XIE-ZHAN-DUI-WU'],
+            self.click_until('结算', ['img\\JIN-BI.png','img\\XIE-ZHAN-DUI-WU.png'],
                             *CommonPos.second_position, mood3.get1mood()/1000)
-            self.click_until('结算', 'img/JIN-BI.png',
+            self.click_until('结算', 'img\\JIN-BI.png',
                             *CommonPos.second_position, mood3.get1mood()/1000, False)
 
             # 等待下一轮

@@ -47,7 +47,7 @@ class PassengerExploreFight(ExploreFight):
                 self.yys.mouse_click_bg(ut.firstposition())
                 self.click_until('结算', 'img\\JIN-BI.png',
                                  *CommonPos.second_position, mood2.get1mood()/1000)
-                self.click_until('结算', 'img/JIN-BI.png',
+                self.click_until('结算', 'img\\JIN-BI.png',
                                  *CommonPos.second_position, mood2.get1mood()/1000, False)
 
 

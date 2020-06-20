@@ -4,7 +4,7 @@ class GamePos():
         self.pos_end=pos_end
 
 class CommonPos():
-    second_position = (960, 56), (1111, 452)  # 第二次结算所点击的位置
+    second_position = (960, 60), (1111, 452)  # 第二次结算所点击的位置
     shikigami_position_2 = (315, 390), (365, 506)  # 标记第二只式神的位置
 
 class TansuoPos():

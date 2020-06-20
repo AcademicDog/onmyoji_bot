@@ -50,35 +50,15 @@ def firstposition():
         :return: 返回随机位置坐标
     '''
     w = 1136
-    h = 640
+    h = 530
     while True:
         position = (random.randint(0, w), random.randint(50, h))
         if position[0] < 123 and position[1] <108:
             continue
-        if position[0] < 332 or position[0] > 931:
+        if position[0] < 210 or position[0] > 1083:
             return position
         elif position[1] < 260:
             return position
-
-
-def secondposition():
-    '''
-    获得点击位置，扣除御魂部分
-        :return: 返回随机位置坐标
-    '''
-    return (random.randint(956, 1111), random.randint(133, 452))
-    '''
-    while True:
-        position = (random.randint(0, w), random.randint(50, h - 90))
-        if position[0] < 123 and position[1] <108:
-            continue
-        if position[0] > 1020 and position[1] <80:
-            continue
-        if position[0] < 180 or position[0] > 956:
-            return position
-        elif position[1] < 112:
-            return position
-    '''
 
 
 def mysleep(slpa, slpb=0):

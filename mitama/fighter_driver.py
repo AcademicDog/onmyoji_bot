@@ -35,23 +35,7 @@ class DriverFighter(Fighter):
 
             # 全部队员进入房间才开始
             if self.multiPassenger:
-                start_time = time.time()
-                timenotout = True
-                while timenotout and self.run:
-                    result = self.yys.find_game_img('img\\FANG-JIAN-YAO-QING.png')
-                    result2 = self.yys.find_game_img('img\\FANG-JIAN-YAO-QING2.png')
-                    if not (result or result2):
-                        break
-                    # else:
-                    #    self.log.writeinfo('有乘客未进入房间')
-                    #    self.log.writeinfo(result)
-                    time.sleep(0.5)
-                    timenotout = time.time()-start_time <= self.max_op_time
-
-                if not timenotout:
-                    self.yys.activate_window()
-                    time.sleep(5)
-                    self.yys.quit_game()
+                self.wait_two_passenger()
 
             self.log.writeinfo('Driver: 点击开始战斗按钮')
             self.click_until('开始战斗按钮', 'img\\ZI-DONG.png', *
@@ -70,10 +54,11 @@ class DriverFighter(Fighter):
             time.sleep(0.9)
 
             # 在战斗结算页面
+            logging.info('Driver: 开始结算')
             self.yys.mouse_click_bg(ut.firstposition())
-            self.click_until('结算', ['img/JIN-BI.png','img\\MESSAGE.png','img\\XIE-ZHAN-DUI-WU'],
+            self.click_until('结算', ['img\\JIN-BI.png','img\\XIE-ZHAN-DUI-WU.png'],
                              *CommonPos.second_position, mood3.get1mood()/1000)
-            self.click_until('结算', 'img/JIN-BI.png',
+            self.click_until('结算', 'img\\JIN-BI.png',
                             *CommonPos.second_position, mood3.get1mood()/1000, False)
 
             # 等待下一轮
