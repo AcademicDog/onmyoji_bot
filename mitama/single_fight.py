@@ -11,11 +11,13 @@ class SingleFight(Fighter):
         # 初始化
         Fighter.__init__(self, '', emyc)
         result = self.yys.find_game_img('img\\YE-YUAN-HUO.png')
+        result2 = self.yys.find_game_img('img\\YU-LING.png')
         if result:
             self.fight_type = 'yeyuanhuo'
-        result2 = self.yys.find_game_img('img\\YU-LING.png')
-        if result2:
+        elif result2:
             self.fight_type = 'yuling'
+        else:
+            self.fight_type = 'yuhun1p'
 
     def start(self):
         '''单人战斗主循环'''

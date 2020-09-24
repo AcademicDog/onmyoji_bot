@@ -73,6 +73,8 @@ class Fighter:
             self.yys.wait_game_img('img\\JIN-BI.png', self.max_win_time_yuling)
         elif self.fight_type == 'yeyuanhuo':
             self.yys.wait_game_img('img\\JIE-SU.png', self.max_win_time_yeyuanhuo)
+        elif self.fight_type == 'yuhun1p':
+            self.yys.wait_game_img('img\\JIE-SU-1p.png', self.max_win_time)
         else:
             self.yys.wait_game_img('img\\JIE-SU.png', self.max_win_time)
         self.log.writeinfo(self.name + "战斗结束")
