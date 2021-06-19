@@ -76,8 +76,8 @@ class GameScene():
                 self.switch_to_scene(scene)
             elif scene in [5, 6, 7, 8]:
                 # 点击御魂按钮
-                self.click_until('御魂菜单', 'img/BA-QI-DA-SHE.png',
-                                 *YuhunPos.yuhun_menu, 2)
+                self.click_until_multi('御魂菜单', 'img/BA-QI-DA-SHE.png', 'img/TIAO-ZHAN.png',
+                                 pos = YuhunPos.yuhun_menu[0], pos_end=YuhunPos.yuhun_menu[1], step_time=2)
                 # 递归
                 self.switch_to_scene(scene)
 
