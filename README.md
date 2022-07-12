@@ -8,7 +8,7 @@
 
 目前已开通项目网站，请访问🌍[此地址](https://academicdog.github.io/onmyoji_bot/)获取最新信息。
 
-同时请访问🌍[此地址](https://doc.onmyojibot.com/zh/latest/)查看用法。
+同时请访问🌍[此地址](https://doc-onmyojibot.readthedocs.io/zh/latest/)查看用法。
 
 # 紧急通知
 
